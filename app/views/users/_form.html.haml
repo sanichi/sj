@@ -1,0 +1,8 @@
+:ruby
+  inputs = [
+    [:handle,     t("user.handle"),      :text],
+    [:password,   t("user.password"),    :password],
+    [:first_name, t("user.name.first"),  :text],
+    [:last_name,  t("user.name.last"),   :text],
+  ]
+= render "utils/crud/form", object: user, index: users_path, inputs: inputs, title: title, center: center(xl: 4, lg: 6, md: 8, sm: 10)

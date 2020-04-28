@@ -1,0 +1,19 @@
+- set_meta_tags title: @user.handle_extra
+
+.row
+  %div{class: center(xl: 4, lg: 6, md:8, sm: 10)}
+    %section
+      .header.text-center
+        %h3.d-inline= @user.handle_extra
+      .body
+        %table{class: "table table-bordered mt-3"}
+          %tbody
+            %tr
+              %th= t("user.name.first")
+              %td= @user.first_name
+            %tr
+              %th= t("user.name.last")
+              %td= @user.last_name
+      .footer
+        = link_to t("user.users"), users_path, class: "btn btn-success btn-sm"
+        = link_to t("edit"), edit_user_path(@user), class: "btn btn-info btn-sm"

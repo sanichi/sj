@@ -1,0 +1,11 @@
+en:
+  user:
+    edit: Edit user
+    handle: Username
+    name:
+      first: First name
+      last: Last name
+      name: Name
+    new: New user
+    password: Password
+    users: Users
