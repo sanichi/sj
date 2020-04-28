@@ -3,9 +3,8 @@
 .row
   %div{class: center(xl: 4, lg: 6, md: 8, sm: 10)}
     %section
-      .header
-        %h3.d-inline= t("user.users")
-        .float-right.mt-1= link_to t("user.new"), new_user_path, class: "btn btn-info btn-sm"
+      .header.text-center
+        %h3= t("user.users")
       .body
         %table{class: "table table-bordered table-striped table-sm mt-3"}
           %thead
@@ -15,6 +14,8 @@
           %tbody
             - @users.each do |user|
               %tr
-                -# %td= link_to_if can?(:show, User), user.handle, user
                 %td= link_to user.handle_extra, user
                 %td= user.name
+      .footer
+        = link_to t("user.new"), new_user_path, class: "btn btn-info btn-sm"
+        = link_to t("play.play"), play_path, class: "btn btn-success btn-sm"

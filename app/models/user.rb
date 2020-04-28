@@ -20,6 +20,10 @@ class User < ApplicationRecord
     admin
   end
 
+  def guest?
+    false
+  end
+
   def name
     "#{first_name} #{last_name}"
   end

@@ -1,8 +1,17 @@
 class ApplicationController < ActionController::Base
-  def current_user
-    # @current_user ||= User.find_by(id: session[:user_id]) || Guest.new
-    @current_user = User.find(1)
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.html { redirect_to root_path, alert: exception.message }
+      format.json { head :forbidden, content_type: "text/html" }
+      format.js   { head :forbidden, content_type: "text/html" }
+    end
   end
+
+  def current_user
+    @current_user ||= User.find_by(id: session[:user_id]) || Guest.new
+  end
+
+  helper_method :current_user
 
   def failure(object)
     flash.now[:alert] = object.errors.full_messages.join(", ")
