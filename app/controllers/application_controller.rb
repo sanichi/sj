@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
-      format.html { redirect_to root_path, alert: exception.message }
+      format.html { redirect_to current_user.guest? ? root_path : play_path, alert: exception.message }
       format.json { head :forbidden, content_type: "text/html" }
       format.js   { head :forbidden, content_type: "text/html" }
     end

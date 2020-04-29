@@ -14,7 +14,15 @@ gem 'cancancan', '~> 3.0'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
+  gem 'rspec-rails', '~> 4.0.0'
+  gem 'capybara', '~> 3.28'
+  gem 'factory_bot_rails', '~> 5.2'
+  gem 'faker', '~> 2.10'
   gem 'byebug', platform: :mri
+end
+
+group :test do
+  gem 'database_cleaner-active_record', '~> 1.8'
 end
 
 group :development do
