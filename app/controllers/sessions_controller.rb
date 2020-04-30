@@ -26,7 +26,6 @@ class SessionsController < ApplicationController
   def report(handle)
     handle = 'NONE' if handle.blank?
     ip = request.env['action_dispatch.remote_ip'] || request.env['REMOTE_ADDR']
-    time = Time.now.utc.iso8601
-    logger.error("Failed login attempt for '#{handle}' from #{ip} at #{time}")
+    logger.error("Failed login attempt for '#{handle}' from #{ip}")
   end
 end
