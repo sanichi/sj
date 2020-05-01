@@ -4,3 +4,6 @@
 %p= link_to t("session.sign_out"), session_path, method: "delete", class: "btn btn-danger btn-sm"
 - if can?(:index, User)
   %p= link_to t("user.users"), users_path, class: "btn btn-primary btn-sm"
+
+= content_for :javascript do
+  = render "ping.js"

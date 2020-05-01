@@ -1,0 +1,25 @@
+$(function() {
+
+  // the logged-in user
+  var user_id = <%= current_user.id %>;
+  var data = {
+    user_id: user_id,
+    message: 'initialize'
+  };
+
+  // test message
+  $.ajax('/ping.json', {
+
+    data: data,
+
+    complete: function() {
+      console.log("complete");
+    },
+
+    error: function() {
+      console.log("error");
+    }
+
+  });
+
+});

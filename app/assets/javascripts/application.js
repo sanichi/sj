@@ -14,3 +14,4 @@
 //= require jquery_ujs
 //= require popper
 //= require bootstrap
+//= require my_utils
