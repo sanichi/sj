@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_28_145827) do
+ActiveRecord::Schema.define(version: 2020_05_01_140159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "games", force: :cascade do |t|
+    t.integer "m2", limit: 2, default: 5
+    t.integer "m1", limit: 2, default: 10
+    t.integer "p0", limit: 2, default: 15
+    t.integer "p1", limit: 2, default: 10
+    t.integer "p2", limit: 2, default: 10
+    t.integer "p3", limit: 2, default: 10
+    t.integer "p4", limit: 2, default: 10
+    t.integer "p5", limit: 2, default: 10
+    t.integer "p6", limit: 2, default: 10
+    t.integer "p7", limit: 2, default: 10
+    t.integer "p8", limit: 2, default: 10
+    t.integer "p9", limit: 2, default: 10
+    t.integer "p10", limit: 2, default: 10
+    t.integer "p11", limit: 2, default: 10
+    t.integer "p12", limit: 2, default: 10
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "first_name", limit: 20
