@@ -3,48 +3,31 @@ module Main exposing (main)
 -- local modules
 
 import Browser
-import Config
 import Html exposing (Html)
+import Json.Encode exposing (Value)
+import Model exposing (Model)
 import Platform.Sub
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Util
 
 
 type Msg
     = NoOp
 
 
-type alias Model =
-    Int
-
-
-type alias Flags =
-    { focus : Int
-    }
-
-
-initModel : Flags -> Int
-initModel flags =
-    1
-
-
 
 -- main program
 
 
-main : Program Flags Model Msg
+main : Program Value Model Msg
 main =
     Browser.element
-        { init = \flags -> ( initModel flags, initTasks )
+        { init = \_ -> ( Model.init, Cmd.none )
         , view = view
         , update = update
         , subscriptions = subscriptions
         }
-
-
-initTasks : Cmd Msg
-initTasks =
-    Cmd.none
 
 
 subscriptions : Model -> Sub Msg
@@ -59,13 +42,16 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     let
-        background =
-            rect [ class "background", width (String.fromInt Config.width), height (String.fromInt Config.height) ] []
+        back =
+            rect [ class "background", Util.viewWidth, Util.viewHeight ] []
 
         pack =
-            image [ x "450", y "450", width "100", height "100", xlinkHref "/images/back.png" ] []
+            image [ Util.packX, Util.packY, Util.cardWidth, Util.cardHeight, Util.back ] []
+
+        disc =
+            image [ Util.discX, Util.discY, Util.cardWidth, Util.cardHeight, Util.image model.currentDiscard ] []
     in
-    svg [ id "card-table", version "1.1", viewBox Config.viewBox ] [ background, pack ]
+    svg [ id "card-table", version "1.1", Util.viewBox ] [ back, pack, disc ]
 
 
 
