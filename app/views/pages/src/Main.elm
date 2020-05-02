@@ -4,7 +4,6 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (Html)
-import Json.Encode exposing (Value)
 import Model exposing (Model)
 import Platform.Sub
 import Svg exposing (..)
@@ -20,7 +19,7 @@ type Msg
 -- main program
 
 
-main : Program Value Model Msg
+main : Program () Model Msg
 main =
     Browser.element
         { init = \_ -> ( Model.init, Cmd.none )
