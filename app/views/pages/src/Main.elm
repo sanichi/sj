@@ -63,7 +63,7 @@ view model =
             rect [ class "background", width (String.fromInt Config.width), height (String.fromInt Config.height) ] []
 
         pack =
-            image [ x "450", y "450", width "100", height "100", xlinkHref "/images/back.jpg" ] []
+            image [ x "450", y "450", width "100", height "100", xlinkHref "/images/back.png" ] []
     in
     svg [ id "card-table", version "1.1", viewBox Config.viewBox ] [ background, pack ]
 
