@@ -1,7 +1,9 @@
 
 var skyjo = (function() {
 
-  var user_id = <%= current_user.id %>;
+  const user_id = <%= current_user.id %>;
+  const admin = <%= current_user.admin? ? 'true' : 'false' %>;
+  let polling = true;
   var data = {
     user_id: user_id,
     message: 'initialize'
@@ -15,15 +17,15 @@ var skyjo = (function() {
       dataType: 'json',
 
       success: function(json, status, xhr) {
-        $('#responses').append('<pre>' + xhr.responseText + '</pre>');
+        if (admin) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
       },
 
       error: function(xhr) {
-        $('#responses').append('<pre>' + xhr.status + '</pre>');
+        console.log("ajax error: " + xhr.status);
       },
 
       complete: function(xhr) {
-        setTimeout(poll, 10000);
+        if (polling) setTimeout(poll, 10000);
       }
 
     });
