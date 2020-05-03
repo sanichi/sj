@@ -1,25 +1,40 @@
-$(function() {
 
-  // the logged-in user
+var skyjo = (function() {
+
   var user_id = <%= current_user.id %>;
   var data = {
     user_id: user_id,
     message: 'initialize'
   };
 
-  // test message
-  $.ajax('/ping.json', {
+  function poll() {
+    $.ajax('/ping.json', {
 
-    data: data,
+      data: data,
 
-    complete: function() {
-      console.log("complete");
-    },
+      dataType: 'json',
 
-    error: function() {
-      console.log("error");
-    }
+      success: function(json, status, xhr) {
+        $('#responses').append('<pre>' + xhr.responseText + '</pre>');
+      },
 
-  });
+      error: function(xhr) {
+        $('#responses').append('<pre>' + xhr.status + '</pre>');
+      },
 
+      complete: function(xhr) {
+        setTimeout(poll, 10000);
+      }
+
+    });
+  }
+
+  return {
+    poll: poll
+  };
+
+})();
+
+$(function() {
+  skyjo.poll();
 });
