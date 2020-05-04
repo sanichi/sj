@@ -1,6 +1,10 @@
 class Game < ApplicationRecord
   CARDS = (-2..12).to_a
 
+  def self.current_game
+    last || Game.new.save
+  end
+
   def total_remaining
     CARDS.map { |c| send(card_to_attr(c)) }.sum
   end

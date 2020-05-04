@@ -2,7 +2,9 @@ var skyjo = (function() {
 
   const user_id = <%= current_user.id %>;
   const admin = <%= current_user.admin? ? 'true' : 'false' %>;
-  let polling = true;
+
+  var elm;
+  var polling = true;
   var data = {
     user_id: user_id,
     message: 'initialize'
@@ -17,6 +19,7 @@ var skyjo = (function() {
 
       success: function(json, status, xhr) {
         if (admin) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
+        elm.ports.updates.send(json);
       },
 
       error: function(xhr) {
@@ -30,8 +33,13 @@ var skyjo = (function() {
     });
   }
 
+  function set_elm(app) {
+    elm = app;
+  }
+
   return {
-    poll: poll
+    poll: poll,
+    set_elm: set_elm
   };
 
 })();
@@ -40,5 +48,6 @@ $(function() {
   var app = Elm.Main.init({
     node: $('#elm-main').get(0)
   });
+  skyjo.set_elm(app);
   skyjo.poll();
 });

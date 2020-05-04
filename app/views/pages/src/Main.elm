@@ -4,15 +4,14 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (Html)
+import Messages exposing (Msg(..))
 import Model exposing (Model)
 import Platform.Sub
+import Ports
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Update
 import Util
-
-
-type Msg
-    = NoOp
 
 
 
@@ -31,7 +30,7 @@ main =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Ports.updates (NewUpdate << Update.decode)
 
 
 
@@ -48,7 +47,7 @@ view model =
             image [ Util.packX, Util.packY, Util.cardWidth, Util.cardHeight, Util.back ] []
 
         disc =
-            image [ Util.discX, Util.discY, Util.cardWidth, Util.cardHeight, Util.image model.currentDiscard ] []
+            image [ Util.discX, Util.discY, Util.cardWidth, Util.cardHeight, Util.image model.disc ] []
     in
     svg [ id "card-table", version "1.1", Util.viewBox ] [ back, pack, disc ]
 
@@ -58,7 +57,7 @@ view model =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update msg m =
     case msg of
-        NoOp ->
-            ( model, Cmd.none )
+        NewUpdate u ->
+            ( Model.update m u, Cmd.none )

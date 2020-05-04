@@ -1,5 +1,2 @@
-json.counts do
-  json.count 1
-end
-
-json.greeting @greeting
+json.game @game.id
+json.disc @game.card
