@@ -1,12 +1,11 @@
 namespace :elm do
   def compile_and_minify(args, main="Main")
     out = "elm.js"
-    min = "../../assets/javascripts/elm.min.js"
+    min = "elm.min.js"
     opt = args[:debug].present? ? "" : "--optimize"
     if system("elm make src/#{main}.elm #{opt} --output #{out}")
-      File.open(min, "w") do |file|
-        file.write(Uglifier.compile(File.read(out)))
-      end
+      File.open(min, "w") { |f| f.write(Uglifier.compile(File.read(out))) }
+      system("mv #{min} ../../assets/javascripts/")
       system("rm #{out}")
       puts "uglified ───> #{min}"
     end
