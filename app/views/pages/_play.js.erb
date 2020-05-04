@@ -1,13 +1,12 @@
 var skyjo = (function() {
 
-  const user_id = <%= current_user.id %>;
+  const player = <%= @player.id %>;
   const admin = <%= current_user.admin? ? 'true' : 'false' %>;
 
   var elm;
   var polling = true;
   var data = {
-    user_id: user_id,
-    message: 'initialize'
+    player: player,
   };
 
   function poll() {

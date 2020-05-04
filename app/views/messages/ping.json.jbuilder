@@ -1,2 +1,2 @@
-json.game @game.id
-json.disc @game.card
+json.player @player.id
+json.players @player.game.players.pluck(:id)
