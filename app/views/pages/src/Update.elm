@@ -4,8 +4,7 @@ import Json.Decode as D exposing (Decoder, Value)
 
 
 type alias Update =
-    { disc : Int
-    , game : Int
+    { disc : Maybe Int
     }
 
 
@@ -16,21 +15,23 @@ decode value =
 
 updateDecoder : Decoder Update
 updateDecoder =
-    D.map2 Update
-        (D.field "disc" D.int |> withDefault default.disc)
-        (D.field "game" D.int |> withDefault default.game)
+    D.map Update
+        (D.maybe (D.field "disc" D.int))
 
 
 default : Update
 default =
-    Update 0 0
+    Update Nothing
 
 
 
--- from elm-community/json-extra
-
-
-withDefault : a -> Decoder a -> Decoder a
-withDefault fallback decoder =
-    D.maybe decoder
-        |> D.map (Maybe.withDefault fallback)
+--
+--
+--
+-- -- from elm-community/json-extra
+--
+--
+-- withDefault : a -> Decoder a -> Decoder a
+-- withDefault fallback decoder =
+--     D.maybe decoder
+--         |> D.map (Maybe.withDefault fallback)

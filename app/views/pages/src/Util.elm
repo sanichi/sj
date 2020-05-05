@@ -1,26 +1,16 @@
-module Util exposing (..)
+module Util exposing (bg, box, disc, pack)
 
 import Nums
-import Svg exposing (Attribute)
+import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
 
 
 
--- Table
+-- Visible box
 
 
-viewWidth : Attribute msg
-viewWidth =
-    String.fromInt Nums.viewWidth |> Atr.width
-
-
-viewHeight : Attribute msg
-viewHeight =
-    String.fromInt Nums.viewHeight |> Atr.height
-
-
-viewBox : Attribute msg
-viewBox =
+box : Attribute msg
+box =
     [ 0, 0, Nums.viewWidth, Nums.viewHeight ]
         |> List.map String.fromInt
         |> String.join " "
@@ -28,7 +18,23 @@ viewBox =
 
 
 
--- Playing cards
+-- Background
+
+
+bg : Svg msg
+bg =
+    let
+        w =
+            String.fromInt Nums.viewWidth |> Atr.width
+
+        h =
+            String.fromInt Nums.viewHeight |> Atr.height
+    in
+    Svg.rect [ Atr.class "background", w, h ] []
+
+
+
+-- All playing cards
 
 
 cardWidth : Attribute msg
@@ -45,45 +51,52 @@ cardHeight =
 -- Pack
 
 
-packX : Attribute msg
-packX =
-    String.fromInt Nums.packX |> Atr.x
+pack : Svg msg
+pack =
+    let
+        x =
+            String.fromInt Nums.packX |> Atr.x
 
-
-packY : Attribute msg
-packY =
-    String.fromInt Nums.packY |> Atr.y
+        y =
+            String.fromInt Nums.packY |> Atr.y
+    in
+    Svg.image [ x, y, cardWidth, cardHeight, back ] []
 
 
 
 -- Discard pile
 
 
-discX : Attribute msg
-discX =
-    String.fromInt Nums.discX |> Atr.x
+disc : Int -> Svg msg
+disc card =
+    let
+        x =
+            String.fromInt Nums.discX |> Atr.x
+
+        y =
+            String.fromInt Nums.discY |> Atr.y
+
+        u =
+            url card
+    in
+    Svg.image [ x, y, cardWidth, cardHeight, u ] []
 
 
-discY : Attribute msg
-discY =
-    String.fromInt Nums.discY |> Atr.y
+
+-- Urls
 
 
-
--- Images
-
-
-image : Int -> Attribute msg
-image val =
+url : Int -> Attribute msg
+url card =
     let
         name =
-            if val >= 0 && val <= 12 then
-                "p" ++ String.fromInt val
+            if card >= 0 && card <= 12 then
+                "p" ++ String.fromInt card
 
-            else if val == -1 then
+            else if card == -1 then
                 "m1"
 
-            else if val == -2 then
+            else if card == -2 then
                 "m2"
 
             else

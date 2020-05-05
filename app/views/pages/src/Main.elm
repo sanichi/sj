@@ -39,17 +39,9 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    let
-        back =
-            rect [ class "background", Util.viewWidth, Util.viewHeight ] []
-
-        pack =
-            image [ Util.packX, Util.packY, Util.cardWidth, Util.cardHeight, Util.back ] []
-
-        disc =
-            image [ Util.discX, Util.discY, Util.cardWidth, Util.cardHeight, Util.image model.disc ] []
-    in
-    svg [ id "card-table", version "1.1", Util.viewBox ] [ back, pack, disc ]
+    [ Util.bg, Util.pack, Util.disc model.disc ]
+        ++ []
+        |> svg [ id "card-table", version "1.1", Util.box ]
 
 
 
