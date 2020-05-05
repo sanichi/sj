@@ -46,7 +46,7 @@ cardImageWidth =
 
 cardMargin : Int
 cardMargin =
-    16
+    4
 
 
 

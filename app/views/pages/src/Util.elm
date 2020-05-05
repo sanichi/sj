@@ -1,8 +1,9 @@
-module Util exposing (bg, box, disc, pack)
+module Util exposing (bg, box, disc, hand, pack)
 
 import Nums
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
+import Types exposing (Card)
 
 
 
@@ -34,20 +35,6 @@ bg =
 
 
 
--- All playing cards
-
-
-cardWidth : Attribute msg
-cardWidth =
-    String.fromInt Nums.cardWidth |> Atr.width
-
-
-cardHeight : Attribute msg
-cardHeight =
-    String.fromInt Nums.cardHeight |> Atr.height
-
-
-
 -- Pack
 
 
@@ -60,7 +47,7 @@ pack =
         y =
             String.fromInt Nums.packY |> Atr.y
     in
-    Svg.image [ x, y, cardWidth, cardHeight, back ] []
+    Svg.image [ x, y, cardWidth, cardHeight, cardBack ] []
 
 
 
@@ -77,17 +64,40 @@ disc card =
             String.fromInt Nums.discY |> Atr.y
 
         u =
-            url card
+            cardUrl card
     in
     Svg.image [ x, y, cardWidth, cardHeight, u ] []
 
 
 
--- Urls
+-- Players cards
 
 
-url : Int -> Attribute msg
-url card =
+hand : List Card -> List (Svg msg)
+hand cards =
+    hand_ [] cards
+
+
+hand_ : List (Svg msg) -> List Card -> List (Svg msg)
+hand_ svgs cards =
+    case cards of
+        [] ->
+            List.reverse svgs
+
+        card :: rest ->
+            let
+                svg =
+                    cardSvg card (List.length svgs)
+            in
+            hand_ (svg :: svgs) rest
+
+
+
+-- Private
+
+
+cardUrl : Int -> Attribute msg
+cardUrl card =
     let
         name =
             if card >= 0 && card <= 12 then
@@ -105,6 +115,47 @@ url card =
     "/images/" ++ name ++ ".png" |> Atr.xlinkHref
 
 
-back : Attribute msg
-back =
+cardBack : Attribute msg
+cardBack =
     "/images/back.png" |> Atr.xlinkHref
+
+
+cardWidth : Attribute msg
+cardWidth =
+    String.fromInt Nums.cardWidth |> Atr.width
+
+
+cardHeight : Attribute msg
+cardHeight =
+    String.fromInt Nums.cardHeight |> Atr.height
+
+
+cardSvg : Card -> Int -> Svg msg
+cardSvg card i =
+    let
+        col =
+            remainderBy 4 i
+
+        row =
+            i // 4
+
+        x =
+            col
+                * (Nums.cardWidth + Nums.cardMargin)
+                |> String.fromInt
+                |> Atr.x
+
+        y =
+            row
+                * (Nums.cardHeight + Nums.cardMargin)
+                |> String.fromInt
+                |> Atr.y
+
+        u =
+            if Tuple.second card then
+                Tuple.first card |> cardUrl
+
+            else
+                cardBack
+    in
+    Svg.image [ x, y, cardWidth, cardHeight, u ] []

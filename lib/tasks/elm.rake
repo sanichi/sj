@@ -12,7 +12,7 @@ namespace :elm do
   end
 
   desc "make and minify the Elm JS file for playing SkyJo"
-  task :play, [:debug] do |task, args|
+  task :skyjo, [:debug] do |task, args|
     Dir.chdir("app/views/pages") do
       compile_and_minify args
     end
