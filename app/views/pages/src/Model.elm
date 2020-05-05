@@ -1,16 +1,6 @@
-module Model exposing (Model, init, update)
+module Model exposing (init, update)
 
-import Update exposing (Update)
-
-
-type alias Model =
-    { disc : Int
-    , cards : List Card
-    }
-
-
-type alias Card =
-    ( Int, Bool )
+import Types exposing (Card, Model, Update)
 
 
 init : Model

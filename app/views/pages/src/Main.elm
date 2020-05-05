@@ -4,12 +4,12 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (Html)
-import Messages exposing (Msg(..))
-import Model exposing (Model)
+import Model
 import Platform.Sub
 import Ports
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Types exposing (..)
 import Update
 import Util
 
