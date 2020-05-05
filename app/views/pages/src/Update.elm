@@ -11,13 +11,14 @@ decode value =
 
 updateDecoder : Decoder Update
 updateDecoder =
-    D.map Update
+    D.map2 Update
         (D.maybe (D.field "disc" D.int))
+        (D.maybe (D.field "hand" (D.list D.int)))
 
 
 default : Update
 default =
-    Update Nothing
+    Update Nothing Nothing
 
 
 

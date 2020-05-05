@@ -3,7 +3,7 @@ module Types exposing (..)
 
 type alias Model =
     { disc : Int
-    , cards : List Card
+    , hand : List Card
     }
 
 
@@ -13,6 +13,7 @@ type alias Card =
 
 type alias Update =
     { disc : Maybe Int
+    , hand : Maybe (List Int)
     }
 
 
