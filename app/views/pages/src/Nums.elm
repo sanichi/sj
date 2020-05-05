@@ -75,3 +75,19 @@ discX =
 discY : Int
 discY =
     viewHeight // 2 - (cardHeight // 2)
+
+
+
+-- Handoff sets
+
+
+handOffset : ( Int, Int )
+handOffset =
+    let
+        x =
+            viewWidth // 2 - cardWidth * 2 - 3 * cardMargin // 2
+
+        y =
+            3 * viewHeight // 4 - 3 * cardWidth // 2
+    in
+    ( x, y )

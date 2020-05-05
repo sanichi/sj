@@ -1,4 +1,4 @@
-module Util exposing (bg, box, disc, hand, pack)
+module Util exposing (bg, box, disc, hands, pack)
 
 import Nums
 import Svg exposing (Attribute, Svg)
@@ -73,23 +73,39 @@ disc card =
 -- Players cards
 
 
-hand : List Card -> List (Svg msg)
+hands : List Card -> List (Svg msg)
+hands cards =
+    let
+        own =
+            hand cards
+    in
+    [ own ]
+
+
+hand : List Card -> Svg msg
 hand cards =
-    hand_ [] cards
+    let
+        elements =
+            hand_ [] cards
+
+        translate =
+            handOffset
+    in
+    Svg.g [ translate ] elements
 
 
 hand_ : List (Svg msg) -> List Card -> List (Svg msg)
-hand_ svgs cards =
+hand_ elements cards =
     case cards of
         [] ->
-            List.reverse svgs
+            elements
 
         card :: rest ->
             let
-                svg =
-                    cardSvg card (List.length svgs)
+                element =
+                    cardElement card (List.length elements)
             in
-            hand_ (svg :: svgs) rest
+            hand_ (element :: elements) rest
 
 
 
@@ -130,8 +146,8 @@ cardHeight =
     String.fromInt Nums.cardHeight |> Atr.height
 
 
-cardSvg : Card -> Int -> Svg msg
-cardSvg card i =
+cardElement : Card -> Int -> Svg msg
+cardElement card i =
     let
         col =
             remainderBy 4 i
@@ -159,3 +175,18 @@ cardSvg card i =
                 cardBack
     in
     Svg.image [ x, y, cardWidth, cardHeight, u ] []
+
+
+handOffset : Attribute msg
+handOffset =
+    let
+        ( i, j ) =
+            Nums.handOffset
+
+        x =
+            String.fromInt i
+
+        y =
+            String.fromInt j
+    in
+    Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
