@@ -16,15 +16,7 @@ class ApplicationController < ActionController::Base
   def current_player
     return if current_user.guest?
     game = Game.last || Game.create
-    player = game.players.find_by(user: current_user)
-    new_player = !player
-    if new_player
-      player = Player.create(game: game, user: current_user)
-      msg = Message.new(player: player)
-      msg.disc(game.card)
-      msg.save
-    end
-    player
+    game.players.find_by(user: current_user) || Player.create(game: game, user: current_user)
   end
 
   def failure(object)

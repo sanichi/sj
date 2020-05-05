@@ -7,18 +7,21 @@ var skyjo = (function() {
   var polling = true;
   var data = {
     player: player,
+    number: 0,
   };
 
   function poll() {
-    $.ajax('/ping.json', {
+    $.ajax('/updates.json', {
 
       data: data,
 
       dataType: 'json',
 
       success: function(json, status, xhr) {
+        $.each(json.updates, function(i, update) {
+          elm.ports.updates.send(update);
+        });
         if (admin) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
-        elm.ports.updates.send(json);
       },
 
       error: function(xhr) {
@@ -26,7 +29,8 @@ var skyjo = (function() {
       },
 
       complete: function(xhr) {
-        if (polling) setTimeout(poll, 2000);
+        if (polling) setTimeout(poll, 10000);
+        data.number += 1;
       }
 
     });
