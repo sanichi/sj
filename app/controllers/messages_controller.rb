@@ -13,10 +13,11 @@ class MessagesController < ApplicationController
 
     restart = params[:number].to_i == 0
 
-    old = restart ? player.messages.where(sent: true) : []
-    new = player.messages.where(sent: false)
-    new.each { |m| m.update_column(:sent, true) }
+    old = restart ? player.messages.where(sent: true).to_a : []
+    new = player.messages.where(sent: false).to_a
 
     @messages = old + new
+
+    new.each { |m| m.update_column(:sent, true) }
   end
 end
