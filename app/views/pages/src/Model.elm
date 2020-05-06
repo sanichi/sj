@@ -5,33 +5,37 @@ import Types exposing (Card, Model, Update)
 
 init : Model
 init =
-    { disc = 0
-    , hand = List.repeat 12 (default 0)
+    { pack = ( 0, False )
+    , disc = ( 0, True )
+    , hand = List.repeat 12 ( 0, False )
     }
-
-
-default : Int -> Card
-default card =
-    ( card, False )
 
 
 update : Model -> Update -> Model
 update m u =
     let
+        pack =
+            case u.pack of
+                Just num ->
+                    ( num, False )
+
+                Nothing ->
+                    m.pack
+
         disc =
             case u.disc of
-                Just card ->
-                    card
+                Just num ->
+                    ( num, True )
 
                 Nothing ->
                     m.disc
 
         hand =
             case u.hand of
-                Just cards ->
-                    List.map default cards
+                Just nums ->
+                    List.map (\n -> ( n, False )) nums
 
                 Nothing ->
                     m.hand
     in
-    { m | disc = disc, hand = hand }
+    { m | pack = pack, disc = disc, hand = hand }

@@ -38,23 +38,26 @@ bg =
 -- Pack
 
 
-pack : Svg msg
-pack =
+pack : Card -> Svg msg
+pack card =
     let
         x =
             String.fromInt Nums.packX |> Atr.x
 
         y =
             String.fromInt Nums.packY |> Atr.y
+
+        u =
+            cardUrl card
     in
-    Svg.image [ x, y, cardWidth, cardHeight, cardBack ] []
+    Svg.image [ x, y, cardWidth, cardHeight, u ] []
 
 
 
 -- Discard pile
 
 
-disc : Int -> Svg msg
+disc : Card -> Svg msg
 disc card =
     let
         x =
@@ -80,6 +83,10 @@ hands cards =
             hand cards
     in
     [ own ]
+
+
+
+-- Private
 
 
 hand : List Card -> Svg msg
@@ -108,32 +115,49 @@ hand_ elements cards =
             hand_ (element :: elements) rest
 
 
+handOffset : Attribute msg
+handOffset =
+    let
+        ( i, j ) =
+            Nums.handOffset
 
--- Private
+        x =
+            String.fromInt i
+
+        y =
+            String.fromInt j
+    in
+    Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
 
 
-cardUrl : Int -> Attribute msg
+cardUrl : Card -> Attribute msg
 cardUrl card =
     let
-        name =
-            if card >= 0 && card <= 12 then
-                "p" ++ String.fromInt card
-
-            else if card == -1 then
-                "m1"
-
-            else if card == -2 then
-                "m2"
+        nam =
+            if not (Tuple.second card) then
+                "back"
 
             else
-                "back"
+                let
+                    num =
+                        Tuple.first card
+                in
+                if num >= 0 && num <= 12 then
+                    "p" ++ String.fromInt num
+
+                else if num == -1 then
+                    "m1"
+
+                else if num == -2 then
+                    "m2"
+
+                else
+                    "back"
+
+        url =
+            "/images/" ++ nam ++ ".png"
     in
-    "/images/" ++ name ++ ".png" |> Atr.xlinkHref
-
-
-cardBack : Attribute msg
-cardBack =
-    "/images/back.png" |> Atr.xlinkHref
+    Atr.xlinkHref url
 
 
 cardWidth : Attribute msg
@@ -168,25 +192,6 @@ cardElement card i =
                 |> Atr.y
 
         u =
-            if Tuple.second card then
-                Tuple.first card |> cardUrl
-
-            else
-                cardBack
+            cardUrl card
     in
     Svg.image [ x, y, cardWidth, cardHeight, u ] []
-
-
-handOffset : Attribute msg
-handOffset =
-    let
-        ( i, j ) =
-            Nums.handOffset
-
-        x =
-            String.fromInt i
-
-        y =
-            String.fromInt j
-    in
-    Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"

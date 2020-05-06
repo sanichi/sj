@@ -6,8 +6,8 @@ class MessagesController < ApplicationController
 
     if player.messages.count == 0
       cards = player.game.cards(14)
-      player.messages.create(disc: cards.pop, broadcast: true)
       player.messages.create(pack: cards.pop, broadcast: true)
+      player.messages.create(disc: cards.pop, broadcast: true)
       player.messages.create(hand: cards)
     end
 

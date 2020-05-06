@@ -1,6 +1,7 @@
 class Message < ApplicationRecord
   belongs_to :player
   before_save :generate_json
+
   attribute :disc, :integer
   attribute :pack, :integer
   attribute :hand, :integer, array: true
