@@ -1,5 +1,12 @@
 en:
   game:
+    dealt: Dealt
+    game_id: "Game %{id}"
     games: Games
     join: Join
+    messages: Messages
+    new: New Game
     play: Play
+    players: Players
+    show: Details
+    start: Start

@@ -40,6 +40,10 @@ class User < ApplicationRecord
     game.players.pluck(:user_id).include?(id)
   end
 
+  def can_create_game?
+    true
+  end
+
   private
 
   def normalize_attributes

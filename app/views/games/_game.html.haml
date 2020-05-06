@@ -7,5 +7,7 @@
       = link_to t("game.play"), play_game_path(game), class: "btn btn-success btn-sm"
     - elsif current_user.can_join?(game)
       = link_to t("game.join"), play_game_path(game), class: "btn btn-success btn-sm"
+    - if can?(:show, game)
+      = link_to t("game.show"), game, class: "btn btn-info btn-sm"
     - if can?(:destroy, game)
       = link_to t("delete"), game, class: "btn btn-danger btn-sm", method: :delete, data: { confirm: t("sure") }

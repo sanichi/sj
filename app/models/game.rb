@@ -2,9 +2,16 @@ class Game < ApplicationRecord
   CARDS = (-2..12).to_a
 
   has_many :players, dependent: :destroy
+  has_many :messages, through: :players
+
+  default_scope { order(created_at: :desc) }
 
   def total_remaining
     CARDS.map { |c| send(card_to_attr(c)) }.sum
+  end
+
+  def total_dealt
+    150 - total_remaining
   end
 
   def card

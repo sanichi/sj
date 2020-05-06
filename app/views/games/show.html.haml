@@ -1,0 +1,21 @@
+- set_meta_tags title: t("game.game_id", id: @game.id)
+
+.row
+  %div{class: center(xl: 4, lg: 6, md: 8, sm: 10)}
+    %table{class: "table table-bordered table-striped table-sm mt-3"}
+      %thead
+        %tr
+          %th.text-center{colspan: 2}= t("game.game_id", id: @game.id)
+      %tbody
+        %tr
+          %th= t("game.start")
+          %td= @game.created_at.strftime("%Y-%m-%d %H:%M:%S")
+        %tr
+          %th= t("game.players")
+          %td= @game.players.map { |p| p.user.handle }.join(", ")
+        %tr
+          %th= t("game.dealt")
+          %td= @game.total_dealt
+        %tr
+          %th= t("game.messages")
+          %td= @game.messages.count
