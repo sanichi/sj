@@ -1,4 +1,4 @@
-lock "~> 3.13.0"
+# lock "~> 3.14.0"
 
 set :application, "sni_sj_app"
 set :repo_url, "git@bitbucket.org:sanichi/sni_sj_app.git"
