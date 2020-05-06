@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Game do
   let(:game) { create(:game) }
+  let(:player) { create(:player, game: game) }
 
   it "start pack" do
     expect(game.total_remaining).to eq 150
@@ -28,5 +29,21 @@ describe Game do
     end
     expect(game.total_remaining).to eq 0
     expect(game.card).to eq 0
+  end
+
+  it "destroy" do
+    expect(player.game).to eq game
+    player.messages.create(pack: -2)
+    player.messages.create(disc: -1)
+
+    expect(Game.count).to eq 1
+    expect(Player.count).to eq 1
+    expect(Message.count).to eq 2
+
+    game.destroy
+
+    expect(Game.count).to eq 0
+    expect(Player.count).to eq 0
+    expect(Message.count).to eq 0
   end
 end

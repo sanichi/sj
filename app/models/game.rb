@@ -1,7 +1,7 @@
 class Game < ApplicationRecord
   CARDS = (-2..12).to_a
 
-  has_many :players
+  has_many :players, dependent: :destroy
 
   def total_remaining
     CARDS.map { |c| send(card_to_attr(c)) }.sum

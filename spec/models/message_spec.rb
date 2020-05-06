@@ -33,5 +33,8 @@ describe Message do
     expect(Message.count).to eq 1
     expect(msg).to_not be_sent
     expect(msg.json).to eq "{\"hand\":[-2,-1,0],\"disc\":12,\"pack\":9}"
+
+    player.destroy
+    expect(Message.count).to eq 0
   end
 end
