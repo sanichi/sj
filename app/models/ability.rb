@@ -9,6 +9,7 @@ class Ability
 
     unless user.guest?
       can :play, :page
+      can :index, Game
     end
   end
 end

@@ -16,6 +16,8 @@ class CreateGame < ActiveRecord::Migration[6.0]
       t.integer :p10, limit: 1, default: 10
       t.integer :p11, limit: 1, default: 10
       t.integer :p12, limit: 1, default: 10
+
+      t.timestamps
     end
   end
 end

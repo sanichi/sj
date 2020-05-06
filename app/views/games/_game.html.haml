@@ -1,0 +1,11 @@
+%section
+  .header= game_header(game)
+  .body
+    %p= game.players.map { |p| p.user.handle }.join(", ")
+  .footer
+    - if current_user.can_play?(game)
+      = link_to t("game.play"), play_game_path(game), class: "btn btn-success btn-sm"
+    - elsif current_user.can_join?(game)
+      = link_to t("game.join"), play_game_path(game), class: "btn btn-success btn-sm"
+    - if can?(:destroy, game)
+      = link_to t("delete"), game, class: "btn btn-danger btn-sm", method: :delete, data: { confirm: t("sure") }

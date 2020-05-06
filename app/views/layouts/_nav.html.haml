@@ -1,0 +1,11 @@
+%nav
+  %button{type: "button", "data-toggle" => "collapse", "data-target" => "#navbar"}
+    %span
+  #navbar.collapse.navbar-collapse
+    %ul.left
+      %li= link_to t("game.games"), games_path
+      - if can?(:index, User)
+        %li= link_to t("user.users"), users_path
+    %ul.right
+      - unless controller_name == "sessions"
+        %li= link_to t("session.sign_out"), session_path, method: "delete"

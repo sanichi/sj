@@ -32,6 +32,14 @@ class User < ApplicationRecord
     "#{handle}#{admin ? '†' : ''}"
   end
 
+  def can_join?(game)
+    game.players.count < 4 && !game.players.pluck(:user_id).include?(id)
+  end
+
+  def can_play?(game)
+    game.players.pluck(:user_id).include?(id)
+  end
+
   private
 
   def normalize_attributes

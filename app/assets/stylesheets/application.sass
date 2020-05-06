@@ -1,14 +1,43 @@
-// Bootstrap overides.
-// $link-hover-color: #07f
-// $navbar-dark-color: white
-// $navbar-dark-hover-color: #ddd
-// $navbar-dark-active-color: #ddd
-// $dropdown-bg: #333940
-// $dropdown-link-hover-color: #07f
-// $dropdown-link-hover-bg: #333940
-
 // Bootstrap
 @import "bootstrap"
+
+// Navbar
+nav
+  @extend .navbar, .navbar-expand-md, .navbar-light, .bg-light, .mb-3
+
+  &>a
+    @extend .navbar-brand
+
+    span
+      @extend .d-lg-inline, .d-none
+
+  button
+    @extend .navbar-toggler
+
+    span
+      @extend .navbar-toggler-icon
+
+  #navbar
+    ul
+      @extend .navbar-nav
+
+      &.left
+        @extend .mr-auto
+
+      &.right
+        @extend .ml-auto
+
+      &>li
+        @extend .nav-item
+
+        &>a
+          @extend .nav-link
+
+        .dropdown-menu
+          @extend .p-2, .p-md-0
+
+          &>a
+            @extend .nav-link, .dropdown-item
 
 // Crud forms
 form.crud

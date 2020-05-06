@@ -1,0 +1,9 @@
+- set_meta_tags title: t("game.play")
+
+= content_for :javascript do
+  = render "play.js"
+
+#elm-main
+
+- if current_user.admin?
+  #responses

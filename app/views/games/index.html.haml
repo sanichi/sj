@@ -1,0 +1,6 @@
+- set_meta_tags title: t("game.games")
+
+.row
+  %div{class: center(xl: 8, md: 10)}
+    - @games.each do |game|
+      = render "game", game: game

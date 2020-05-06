@@ -14,8 +14,8 @@ describe User do
       expect(page).to have_title t("session.sign_in")
     end
 
-    it "can't play" do
-      visit play_path
+    it "can't see games" do
+      visit games_path
 
       expect_error(page, KINSHI)
       expect(page).to have_title t("session.sign_in")
@@ -46,7 +46,7 @@ describe User do
     end
 
     it "can play" do
-      expect(page).to have_title t("play.play")
+      expect(page).to have_title t("game.games")
     end
 
     it "can log out" do
@@ -61,7 +61,7 @@ describe User do
       visit users_path
 
       expect_error(page, KINSHI)
-      expect(page).to have_title t("play.play")
+      expect(page).to have_title t("game.games")
     end
 
     it "can't create users" do
@@ -70,7 +70,7 @@ describe User do
       visit new_user_path
 
       expect_error(page, KINSHI)
-      expect(page).to have_title t("play.play")
+      expect(page).to have_title t("game.games")
     end
   end
 
@@ -103,8 +103,6 @@ describe User do
       expect(u.last_name).to eq data.last_name
       expect(u.admin).to eq false
 
-      click_link t("user.users")
-      click_link t("play.play")
       click_link t("session.sign_out")
 
       expect(page).to have_title t("session.sign_in")
@@ -113,7 +111,7 @@ describe User do
       fill_in t("user.password"), with: data.password
       click_button t("session.sign_in")
 
-      expect(page).to have_title t("play.play")
+      expect(page).to have_title t("game.games")
     end
 
     it "edit user" do

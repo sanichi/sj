@@ -5,5 +5,7 @@
   %body
     .container-fluid.mt-3.mb-3
       = render "layouts/flash"
+      - unless current_user.guest?
+        = render "layouts/nav"
       = yield
     = render "layouts/tail"
