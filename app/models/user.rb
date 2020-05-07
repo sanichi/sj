@@ -16,10 +16,6 @@ class User < ApplicationRecord
   validates :first_name, format: { with: /\A[A-Z][a-z]+\z/ }
   validates :last_name, format: { with: /\A(O'|Mac|Mc)?[A-Z][a-z]+\z/ }
 
-  def admin?
-    admin
-  end
-
   def guest?
     false
   end

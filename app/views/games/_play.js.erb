@@ -21,7 +21,8 @@ var skyjo = (function() {
         $.each(json.updates, function(i, update) {
           elm.ports.updates.send(update);
         });
-        if (admin) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
+        // if (admin) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
+        $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
       },
 
       error: function(xhr) {

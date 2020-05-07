@@ -1,7 +1,10 @@
 en:
   cancel: Cancel
+  created: Created
+  data: Data
   delete: Delete
   edit: Edit
+  id: ID
   save: Save
   sure: Are you sure?
   title: SkyJo

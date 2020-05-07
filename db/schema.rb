@@ -39,7 +39,9 @@ ActiveRecord::Schema.define(version: 2020_05_04_131315) do
     t.bigint "player_id"
     t.text "json"
     t.boolean "broadcast", default: false
-    t.boolean "sent", default: false
+    t.integer "sent", limit: 2, default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["player_id"], name: "index_messages_on_player_id"
   end
 

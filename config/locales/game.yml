@@ -7,6 +7,8 @@ en:
     messages: Messages
     new: New Game
     play: Play
+    player: Player
     players: Players
+    sent: Sent
     show: Details
     start: Start

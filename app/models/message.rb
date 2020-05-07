@@ -9,10 +9,12 @@ class Message < ApplicationRecord
   private
 
   def generate_json
-    data = {}
-    data[:hand] = hand if hand
-    data[:disc] = disc if disc
-    data[:pack] = pack if pack
-    self.json = JSON.generate(data)
+    unless json?
+      data = {}
+      data[:hand] = hand if hand
+      data[:disc] = disc if disc
+      data[:pack] = pack if pack
+      self.json = JSON.generate(data)
+    end
   end
 end
