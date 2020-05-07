@@ -16,6 +16,9 @@ ActiveRecord::Schema.define(version: 2020_05_04_131315) do
   enable_extension "plpgsql"
 
   create_table "games", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "participants", limit: 2, default: 2
+    t.string "state", limit: 4, default: "init"
     t.integer "m2", limit: 2, default: 5
     t.integer "m1", limit: 2, default: 10
     t.integer "p0", limit: 2, default: 15
@@ -31,10 +34,9 @@ ActiveRecord::Schema.define(version: 2020_05_04_131315) do
     t.integer "p10", limit: 2, default: 10
     t.integer "p11", limit: 2, default: 10
     t.integer "p12", limit: 2, default: 10
-    t.integer "participants", limit: 2, default: 2
-    t.string "state", limit: 4, default: "init"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_games_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|

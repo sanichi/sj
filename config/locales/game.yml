@@ -12,7 +12,8 @@ en:
     players: Players
     sent: Sent
     show: Details
-    start: Started
+    started_at: Started at
+    started_by: Created by
     state:
       init: Waiting to start
       play: In progress

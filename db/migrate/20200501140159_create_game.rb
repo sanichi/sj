@@ -1,6 +1,11 @@
 class CreateGame < ActiveRecord::Migration[6.0]
   def change
     create_table :games do |t|
+      t.belongs_to :user
+
+      t.integer :participants, limit: 1, default: Game::MIN_PARTICIPANTS
+      t.string  :state, limit: 4, default: Game::INIT
+
       t.integer :m2, limit: 1, default: 5
       t.integer :m1, limit: 1, default: 10
       t.integer :p0, limit: 1, default: 15
@@ -16,9 +21,6 @@ class CreateGame < ActiveRecord::Migration[6.0]
       t.integer :p10, limit: 1, default: 10
       t.integer :p11, limit: 1, default: 10
       t.integer :p12, limit: 1, default: 10
-
-      t.integer :participants, limit: 1, default: Game::MIN_PARTICIPANTS
-      t.string  :state, limit: 4, default: Game::INIT
 
       t.timestamps
     end

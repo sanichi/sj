@@ -9,6 +9,7 @@ class Game < ApplicationRecord
 
   has_many :players, dependent: :destroy
   has_many :messages, through: :players
+  belongs_to :user
 
   default_scope { order(created_at: :desc) }
 

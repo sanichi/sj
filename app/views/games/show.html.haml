@@ -8,8 +8,11 @@
           %th.text-center{colspan: 2}= t("game.game_id", id: @game.id)
       %tbody
         %tr
-          %td= t("game.start")
+          %td= t("game.started_at")
           %td= @game.created_at.strftime("%Y-%m-%d %H:%M:%S")
+        %tr
+          %td= t("game.started_by")
+          %td= @game.user.handle
         %tr
           %td= t("game.state.state")
           %td= t("game.state.#{@game.state}")

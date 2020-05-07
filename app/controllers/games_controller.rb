@@ -7,7 +7,7 @@ class GamesController < ApplicationController
   end
 
   def new
-    Player.create(game: Game.new, user: current_user)
+    Game.create(user: current_user)
     redirect_to games_path
   end
 
