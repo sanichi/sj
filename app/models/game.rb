@@ -8,7 +8,7 @@ class Game < ApplicationRecord
   STOP = "stop"
 
   has_many :players, dependent: :destroy
-  has_many :messages, through: :players
+  has_many :messages, dependent: :destroy
   belongs_to :user
 
   default_scope { order(created_at: :desc) }

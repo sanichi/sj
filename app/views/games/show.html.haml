@@ -38,17 +38,11 @@
           %th.text-center{colspan: 5}= t("game.messages")
         %tr
           %th.text-center= t("id")
-          %th= t("game.player")
-          %th.text-center= t("game.sent")
           %th.text-center= t("created")
           %th= t("data")
       %tbody
         - @game.messages.each do |m|
           %tr
             %td.text-center= m.id
-            %td
-              = m.player.user.handle
-              = "*" if m.broadcast
-            %td.text-center= m.sent
             %td.text-center= m.created_at.strftime("%H:%M:%S")
             %td= m.json

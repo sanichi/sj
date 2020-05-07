@@ -40,13 +40,11 @@ ActiveRecord::Schema.define(version: 2020_05_04_131315) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.bigint "player_id"
+    t.bigint "game_id"
     t.text "json"
-    t.boolean "broadcast", default: false
-    t.integer "sent", limit: 2, default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["player_id"], name: "index_messages_on_player_id"
+    t.index ["game_id"], name: "index_messages_on_game_id"
   end
 
   create_table "players", force: :cascade do |t|

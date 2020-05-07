@@ -1,13 +1,10 @@
 var skyjo = (function() {
 
-  const player = <%= @player.id %>;
-  const admin = <%= current_user.admin? ? 'true' : 'false' %>;
-
   var elm;
   var polling = true;
   var data = {
-    player: player,
-    number: 0,
+    player_id: <%= @player.id %>,
+    last_message_id: 0
   };
 
   function poll() {
@@ -21,7 +18,7 @@ var skyjo = (function() {
         $.each(json.updates, function(i, update) {
           elm.ports.updates.send(update);
         });
-        // if (admin) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
+        data.last_message_id = json.last_message_id;
         $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
       },
 
@@ -31,7 +28,6 @@ var skyjo = (function() {
 
       complete: function(xhr) {
         if (polling) setTimeout(poll, 10000);
-        data.number += 1;
       }
 
     });

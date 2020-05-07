@@ -32,18 +32,15 @@ describe Game do
   end
 
   it "destroy" do
-    expect(player.game).to eq game
-    player.messages.create(pack: -2)
-    player.messages.create(disc: -1)
+    game.messages.create(pack: -2)
+    game.messages.create(disc: -1)
 
     expect(Game.count).to eq 1
-    expect(Player.count).to eq 1
     expect(Message.count).to eq 2
 
     game.destroy
 
     expect(Game.count).to eq 0
-    expect(Player.count).to eq 0
     expect(Message.count).to eq 0
   end
 end

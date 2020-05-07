@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :message do
-    player
+    game
   end
 end

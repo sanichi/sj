@@ -1,5 +1,5 @@
 class Message < ApplicationRecord
-  belongs_to :player
+  belongs_to :game
   before_save :generate_json
 
   attribute :disc, :integer
