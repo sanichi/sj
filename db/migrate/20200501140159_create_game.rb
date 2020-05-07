@@ -17,6 +17,9 @@ class CreateGame < ActiveRecord::Migration[6.0]
       t.integer :p11, limit: 1, default: 10
       t.integer :p12, limit: 1, default: 10
 
+      t.integer :participants, limit: 1, default: Game::MIN_PARTICIPANTS
+      t.string  :state, limit: 4, default: Game::INIT
+
       t.timestamps
     end
   end

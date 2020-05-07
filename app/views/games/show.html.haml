@@ -11,7 +11,14 @@
           %td= t("game.start")
           %td= @game.created_at.strftime("%Y-%m-%d %H:%M:%S")
         %tr
-          %td= t("game.players")
+          %td= t("game.state.state")
+          %td= t("game.state.#{@game.state}")
+        %tr
+          %td
+            = t("game.players")
+            = precede("(") do
+              = succeed(")") do
+                = @game.participants
           %td= @game.players.map { |p| p.user.handle }.join(", ")
         %tr
           %td= t("game.dealt")

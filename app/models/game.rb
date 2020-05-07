@@ -1,5 +1,11 @@
 class Game < ApplicationRecord
   CARDS = (-2..12).to_a
+  MAX_PARTICIPANTS = 2
+  MIN_PARTICIPANTS = 2
+
+  INIT = "init"
+  PLAY = "play"
+  STOP = "stop"
 
   has_many :players, dependent: :destroy
   has_many :messages, through: :players

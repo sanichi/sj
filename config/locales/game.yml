@@ -6,9 +6,15 @@ en:
     join: Join
     messages: Messages
     new: New Game
+    participants: Participants
     play: Play
     player: Player
     players: Players
     sent: Sent
     show: Details
-    start: Start
+    start: Started
+    state:
+      init: Waiting to start
+      play: In progress
+      state: Status
+      stop: Finished
