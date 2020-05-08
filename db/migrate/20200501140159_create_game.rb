@@ -4,7 +4,7 @@ class CreateGame < ActiveRecord::Migration[6.0]
       t.belongs_to :user
 
       t.integer :participants, limit: 1, default: Game::MIN_PARTICIPANTS
-      t.string  :state, limit: 4, default: Game::INIT
+      t.string  :state, limit: 10, default: Game::INIT
 
       t.integer :m2, limit: 1, default: 5
       t.integer :m1, limit: 1, default: 10
