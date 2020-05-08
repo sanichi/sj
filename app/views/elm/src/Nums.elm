@@ -78,7 +78,38 @@ discY =
 
 
 
--- Handoff sets
+-- Name badges
+
+
+badgeWidth : Int
+badgeWidth =
+    4 * cardWidth + 3 * cardMargin
+
+
+badgeHeight : Int
+badgeHeight =
+    50
+
+
+badgeTextSize : Int
+badgeTextSize =
+    40
+
+
+badgeOffset : ( Int, Int )
+badgeOffset =
+    let
+        x =
+            cardWidth * 2 + 3 * cardMargin // 2 - badgeWidth // 2
+
+        y =
+            cardHeight * 3 + 6 * cardMargin
+    in
+    ( x, y )
+
+
+
+-- Relative positions
 
 
 handOffset : ( Int, Int )
@@ -88,6 +119,6 @@ handOffset =
             viewWidth // 2 - cardWidth * 2 - 3 * cardMargin // 2
 
         y =
-            3 * viewHeight // 4 - 3 * cardWidth // 2
+            3 * viewHeight // 4 - 5 * cardWidth // 2
     in
     ( x, y )

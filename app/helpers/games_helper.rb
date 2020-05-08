@@ -29,6 +29,8 @@ module GamesHelper
   end
 
   def game_body(game)
-    "Players: " + game.players.map { |p| p.user.handle }.join(", ")
+    players = game.players.map { |p| p.user.handle }.join(", ")
+    players = "none have joined yet" if players.blank?
+    "Players: " + players
   end
 end

@@ -76,11 +76,11 @@ disc card =
 -- Players cards
 
 
-hands : List Card -> List (Svg msg)
-hands cards =
+hands : List Card -> Int -> List (Svg msg)
+hands cards player =
     let
         own =
-            hand cards
+            hand cards player
     in
     [ own ]
 
@@ -89,16 +89,19 @@ hands cards =
 -- Private
 
 
-hand : List Card -> Svg msg
-hand cards =
+hand : List Card -> Int -> Svg msg
+hand cards player =
     let
         elements =
             hand_ [] cards
 
+        name =
+            badge player
+
         translate =
             handOffset
     in
-    Svg.g [ translate ] elements
+    Svg.g [ translate ] (name :: elements)
 
 
 hand_ : List (Svg msg) -> List Card -> List (Svg msg)
@@ -120,6 +123,68 @@ handOffset =
     let
         ( i, j ) =
             Nums.handOffset
+
+        x =
+            String.fromInt i
+
+        y =
+            String.fromInt j
+    in
+    Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
+
+
+badge : Int -> Svg msg
+badge player =
+    Svg.g [ Atr.class "badge", badgeOffset ]
+        [ badgeRect
+        , badgeText player
+        ]
+
+
+badgeRect : Svg msg
+badgeRect =
+    let
+        x =
+            Atr.x "0"
+
+        y =
+            Atr.y "0"
+
+        w =
+            Atr.width <| String.fromInt Nums.badgeWidth
+
+        h =
+            Atr.height <| String.fromInt Nums.badgeHeight
+
+        rx =
+            Atr.rx "10"
+
+        ry =
+            Atr.ry "10"
+    in
+    Svg.rect [ x, y, w, h, rx, ry ] []
+
+
+badgeText : Int -> Svg msg
+badgeText player =
+    let
+        x =
+            Atr.x <| String.fromInt <| Nums.badgeWidth // 2
+
+        y =
+            Atr.y <| String.fromInt <| Nums.badgeHeight // 2 + Nums.badgeTextSize // 3
+
+        t =
+            Svg.text <| String.fromInt player
+    in
+    Svg.text_ [ x, y ] [ t ]
+
+
+badgeOffset : Attribute msg
+badgeOffset =
+    let
+        ( i, j ) =
+            Nums.badgeOffset
 
         x =
             String.fromInt i

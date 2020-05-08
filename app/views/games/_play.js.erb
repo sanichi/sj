@@ -46,7 +46,10 @@ var skyjo = (function() {
 
 $(function() {
   var app = Elm.Main.init({
-    node: $('#elm-main').get(0)
+    node: $('#elm-main').get(0),
+    flags: {
+      player: <%= @player.id %>
+    }
   });
   skyjo.set_elm(app);
   skyjo.poll();

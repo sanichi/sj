@@ -1,11 +1,26 @@
 module Model exposing (init, update)
 
-import Types exposing (Card, Model, Update)
+import Json.Decode exposing (Value)
+import Setup
+import Types exposing (Card, Model, Setup, Update)
 
 
-init : Model
-init =
-    { pack = ( 0, False )
+init : Value -> Model
+init flags =
+    let
+        setup =
+            Setup.decode flags
+
+        player =
+            case setup.player of
+                Nothing ->
+                    0
+
+                Just id ->
+                    id
+    in
+    { player = player
+    , pack = ( 0, False )
     , disc = ( 0, True )
     , hand = List.repeat 12 ( 0, False )
     }

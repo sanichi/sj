@@ -4,6 +4,7 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (Html)
+import Json.Decode exposing (Value)
 import Model
 import Platform.Sub
 import Ports
@@ -18,10 +19,10 @@ import Util
 -- main program
 
 
-main : Program () Model Msg
+main : Program Value Model Msg
 main =
     Browser.element
-        { init = \_ -> ( Model.init, Cmd.none )
+        { init = \flags -> ( Model.init flags, Cmd.none )
         , view = view
         , update = update
         , subscriptions = subscriptions
@@ -40,7 +41,7 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     [ Util.bg, Util.pack model.pack, Util.disc model.disc ]
-        ++ Util.hands model.hand
+        ++ Util.hands model.hand model.player
         |> svg [ id "card-table", version "1.1", Util.box ]
 
 

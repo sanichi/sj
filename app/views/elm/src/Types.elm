@@ -1,6 +1,11 @@
 module Types exposing (..)
 
 
+type alias Setup =
+    { player : Maybe Int
+    }
+
+
 type alias Update =
     { pack : Maybe Int
     , disc : Maybe Int
@@ -13,7 +18,8 @@ type alias Card =
 
 
 type alias Model =
-    { pack : Card
+    { player : Int
+    , pack : Card
     , disc : Card
     , hand : List Card
     }
