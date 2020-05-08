@@ -1,23 +1,26 @@
 class GamesController < ApplicationController
   authorize_resource
-  before_action :find_game, only: [:destroy, :show, :play]
+  before_action :find_game, only: [:destroy, :show, :join]
 
-  def index
-    @games = Game.all
+  def waiting
+    @games = Game.where(state: Game::INIT)
   end
 
   def new
     Game.create(user: current_user)
-    redirect_to games_path
+    redirect_to waiting_games_path
   end
 
   def destroy
     @game.destroy
-    redirect_to games_path
+    redirect_to waiting_games_path
   end
 
-  def play
-    @player = @game.players.find_by(user: current_user) || Player.create(game: @game, user: current_user)
+  def join
+    if @game.can_be_joined_by?(current_user)
+      @game.players << Player.create(user: current_user)
+    end
+    redirect_to waiting_games_path
   end
 
   private

@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
     user = user&.authenticate(params[:password]) unless current_user.admin?
     if user
       session[:user_id] = user.id
-      redirect_to games_path
+      redirect_to waiting_games_path
     else
       flash.now[:alert] = t("session.invalid")
       report params[:handle]
@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
   end
 
   def new
-    redirect_to games_path unless current_user.guest?
+    redirect_to waiting_games_path unless current_user.guest?
   end
 
   private

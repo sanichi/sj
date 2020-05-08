@@ -15,7 +15,7 @@ describe User do
     end
 
     it "can't see games" do
-      visit games_path
+      visit waiting_games_path
 
       expect_error(page, KINSHI)
       expect(page).to have_title t("session.sign_in")

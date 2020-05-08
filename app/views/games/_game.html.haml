@@ -3,10 +3,8 @@
   .body
     %p= game.players.map { |p| p.user.handle }.join(", ")
   .footer
-    - if current_user.can_play?(game)
-      = link_to t("game.play"), play_game_path(game), class: "btn btn-success btn-sm"
-    - elsif current_user.can_join?(game)
-      = link_to t("game.join"), play_game_path(game), class: "btn btn-success btn-sm"
+    - if game.can_be_joined_by?(current_user)
+      = link_to t("game.join"), join_game_path(game), class: "btn btn-success btn-sm"
     - if can?(:show, game)
       = link_to t("game.show"), game, class: "btn btn-info btn-sm"
     - if can?(:destroy, game)

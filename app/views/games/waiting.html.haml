@@ -1,0 +1,8 @@
+- set_meta_tags title: t("game.games")
+
+= content_for :javascript do
+  = render "refresh.js"
+
+.row
+  %div#results{class: center(xl: 8, md: 10)}
+    = render "waitings", games: @games;

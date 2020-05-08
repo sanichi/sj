@@ -4,8 +4,9 @@ Rails.application.routes.draw do
   get "updates" => "messages#updates"
 
   resources :users
-  resources :games, only: [:index, :new, :destroy, :show] do
-    get :play, on: :member
+  resources :games, only: [:new, :destroy, :show] do
+    get :join, on: :member
+    get :waiting, on: :collection
   end
 
   resource :session, only: [:new, :create, :destroy]

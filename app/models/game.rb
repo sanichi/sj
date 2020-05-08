@@ -13,6 +13,14 @@ class Game < ApplicationRecord
 
   default_scope { order(created_at: :desc) }
 
+  def can_be_joined_by?(user)
+    return false unless state == INIT
+    return false if user.guest?
+    return false if players.count >= participants
+    return false if players.pluck(:user_id).include?(user.id)
+    true
+  end
+
   def total_remaining
     CARDS.map { |c| send(card_to_attr(c)) }.sum
   end
