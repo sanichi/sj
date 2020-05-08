@@ -4,7 +4,7 @@ class MessagesController < ApplicationController
   def updates
     player = Player.find(params[:player_id])
     game = player.game
-    last_message_id = params[:last_message].to_i
+    last_message_id = params[:last_message_id].to_i
 
     @messages = game.messages.where("id > ?", last_message_id)
     @last_message_id = last_message_id

@@ -15,9 +15,15 @@ class Game < ApplicationRecord
 
   def can_be_joined_by?(user)
     return false unless state == INIT
-    return false if user.guest?
     return false if players.count >= participants
     return false if players.pluck(:user_id).include?(user.id)
+    true
+  end
+
+  def can_be_played_by?(user)
+    return false unless state == INIT
+    return false unless players.count == participants
+    return false unless players.pluck(:user_id).include?(user.id)
     true
   end
 

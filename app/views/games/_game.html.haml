@@ -5,6 +5,8 @@
   .footer
     - if game.can_be_joined_by?(current_user)
       = link_to t("game.join"), join_game_path(game), class: "btn btn-success btn-sm"
+    - elsif game.can_be_played_by?(current_user)
+      = link_to t("game.play"), play_game_path(game), class: "btn btn-success btn-sm"
     - if can?(:show, game)
       = link_to t("game.show"), game, class: "btn btn-info btn-sm"
     - if can?(:destroy, game)

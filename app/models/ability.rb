@@ -8,7 +8,7 @@ class Ability
     end
 
     unless user.guest?
-      can [:play, :create, :waiting], Game
+      can [:waiting, :create, :join, :play], Game
       can :updates, :message
     end
   end
