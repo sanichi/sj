@@ -39,8 +39,8 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    [ Util.bg, Util.pack model.pack, Util.disc model.disc ]
-        ++ Util.hands model.hand model.player_id
+    [ Util.bg, Util.pack model, Util.disc model ]
+        ++ Util.hands model
         |> svg [ id "card-table", version "1.1", Util.box ]
 
 

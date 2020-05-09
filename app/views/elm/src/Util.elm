@@ -1,6 +1,8 @@
 module Util exposing (bg, box, disc, hands, pack)
 
 import Card exposing (Card)
+import Hand exposing (Hand)
+import Model exposing (Model)
 import Nums
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
@@ -38,8 +40,8 @@ bg =
 -- Pack
 
 
-pack : Card -> Svg msg
-pack card =
+pack : Model -> Svg msg
+pack model =
     let
         x =
             String.fromInt Nums.packX |> Atr.x
@@ -48,7 +50,7 @@ pack card =
             String.fromInt Nums.packY |> Atr.y
 
         u =
-            cardUrl card
+            cardUrl model.pack
     in
     Svg.image [ x, y, cardWidth, cardHeight, u ] []
 
@@ -57,8 +59,8 @@ pack card =
 -- Discard pile
 
 
-disc : Card -> Svg msg
-disc card =
+disc : Model -> Svg msg
+disc model =
     let
         x =
             String.fromInt Nums.discX |> Atr.x
@@ -67,7 +69,7 @@ disc card =
             String.fromInt Nums.discY |> Atr.y
 
         u =
-            cardUrl card
+            cardUrl model.disc
     in
     Svg.image [ x, y, cardWidth, cardHeight, u ] []
 
@@ -76,11 +78,11 @@ disc card =
 -- Players cards
 
 
-hands : List Card -> Int -> List (Svg msg)
-hands cards player =
+hands : Model -> List (Svg msg)
+hands model =
     let
         own =
-            hand cards player
+            hand model
     in
     [ own ]
 
@@ -89,14 +91,20 @@ hands cards player =
 -- Private
 
 
-hand : List Card -> Int -> Svg msg
-hand cards player =
+hand : Model -> Svg msg
+hand model =
     let
+        player_id =
+            model.player_id
+
+        cards =
+            model.hand
+
         elements =
             hand_ [] cards
 
         name =
-            badge player
+            badge player_id
 
         translate =
             handOffset
@@ -104,7 +112,7 @@ hand cards player =
     Svg.g [ translate ] (name :: elements)
 
 
-hand_ : List (Svg msg) -> List Card -> List (Svg msg)
+hand_ : List (Svg msg) -> Hand -> List (Svg msg)
 hand_ elements cards =
     case cards of
         [] ->
