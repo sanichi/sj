@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
 
-  MAX_NAME = 20
-  MAX_HANDLE = 20
+  MAX_NAME = 15
+  MAX_HANDLE = 10
   MIN_HANDLE = 2
   MIN_PASSWORD = 6
 
@@ -13,8 +13,8 @@ class User < ApplicationRecord
     length: { minimum: MIN_HANDLE, maximum: MAX_HANDLE },
     uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: MIN_PASSWORD }, allow_nil: true
-  validates :first_name, format: { with: /\A[A-Z][a-z]+\z/ }
-  validates :last_name, format: { with: /\A(O'|Mac|Mc)?[A-Z][a-z]+\z/ }
+  validates :first_name, format: { with: /\A[A-Z][a-z]+\z/ }, length: { maximum: MAX_NAME }
+  validates :last_name, format: { with: /\A(O'|Mac|Mc)?[A-Z][a-z]+\z/ }, length: { maximum: MAX_NAME }
 
   def guest?
     false
