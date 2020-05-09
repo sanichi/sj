@@ -1,8 +1,21 @@
-module Model exposing (init, update)
+module Model exposing (Model, init, update)
 
+import Card exposing (Card)
+import Dict
+import Hand
 import Json.Decode exposing (Value)
+import Player exposing (Players)
 import Setup
-import Types exposing (Card, Model, Setup, Update)
+import Update exposing (Update)
+
+
+type alias Model =
+    { player_id : Int
+    , pack : Card
+    , disc : Card
+    , hand : List Card
+    , players : Players
+    }
 
 
 init : Value -> Model
@@ -10,19 +23,12 @@ init flags =
     let
         setup =
             Setup.decode flags
-
-        player =
-            case setup.player of
-                Nothing ->
-                    0
-
-                Just id ->
-                    id
     in
-    { player = player
+    { player_id = setup.player_id
     , pack = ( 0, False )
     , disc = ( 0, True )
-    , hand = List.repeat 12 ( 0, False )
+    , hand = Hand.init
+    , players = Player.init setup.players
     }
 
 

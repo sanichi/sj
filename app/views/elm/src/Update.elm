@@ -1,7 +1,13 @@
-module Update exposing (decode)
+module Update exposing (Update, decode)
 
 import Json.Decode as D exposing (Decoder, Value)
-import Types exposing (Update)
+
+
+type alias Update =
+    { pack : Maybe Int
+    , disc : Maybe Int
+    , hand : Maybe (List Int)
+    }
 
 
 decode : Value -> Update

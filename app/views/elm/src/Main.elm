@@ -5,13 +5,12 @@ module Main exposing (main)
 import Browser
 import Html exposing (Html)
 import Json.Decode exposing (Value)
-import Model
+import Model exposing (Model)
 import Platform.Sub
 import Ports
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
-import Types exposing (..)
-import Update
+import Update exposing (Update)
 import Util
 
 
@@ -41,12 +40,16 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     [ Util.bg, Util.pack model.pack, Util.disc model.disc ]
-        ++ Util.hands model.hand model.player
+        ++ Util.hands model.hand model.player_id
         |> svg [ id "card-table", version "1.1", Util.box ]
 
 
 
 -- update
+
+
+type Msg
+    = NewUpdate Update
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

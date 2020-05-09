@@ -33,4 +33,10 @@ module GamesHelper
     players = "none have joined yet" if players.blank?
     "Players: " + players
   end
+
+  def game_js_player_list(game)
+    game.players.map do |player|
+      "{ id: #{player.id}, handle: '#{player.user.handle}'}"
+    end.join(", ").html_safe
+  end
 end

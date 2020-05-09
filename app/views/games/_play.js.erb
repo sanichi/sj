@@ -48,7 +48,8 @@ $(function() {
   var app = Elm.Main.init({
     node: $('#elm-main').get(0),
     flags: {
-      player: <%= @player.id %>
+      player_id: <%= @player.id %>,
+      players: [ <%= game_js_player_list(@game) %> ]
     }
   });
   skyjo.set_elm(app);

@@ -1,9 +1,9 @@
 module Util exposing (bg, box, disc, hands, pack)
 
+import Card exposing (Card)
 import Nums
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
-import Types exposing (Card)
 
 
 
