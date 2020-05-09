@@ -51,12 +51,28 @@ update m u =
                 Nothing ->
                     m.disc
 
+        player =
+            case u.player of
+                Just id ->
+                    Dict.get id m.players
+
+                Nothing ->
+                    Nothing
+
         hand =
             case u.hand of
                 Just nums ->
-                    List.map Card.hidden nums
+                    Just (List.map Card.hidden nums)
 
                 Nothing ->
-                    m.hand
+                    Nothing
+
+        players =
+            case ( player, hand ) of
+                ( Just p, Just h ) ->
+                    Dict.insert p.id { p | hand = h } m.players
+
+                _ ->
+                    m.players
     in
-    { m | pack = pack, disc = disc, hand = hand }
+    { m | pack = pack, disc = disc, players = players }
