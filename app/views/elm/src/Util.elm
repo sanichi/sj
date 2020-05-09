@@ -4,6 +4,7 @@ import Card exposing (Card)
 import Hand exposing (Hand)
 import Model exposing (Model)
 import Nums
+import Player exposing (Player)
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
 
@@ -81,30 +82,29 @@ disc model =
 hands : Model -> List (Svg msg)
 hands model =
     let
-        own =
-            hand model
+        player =
+            Player.get model.players model.player_id
     in
-    [ own ]
+    case player of
+        Just p ->
+            [ hand p ]
+
+        Nothing ->
+            []
 
 
 
 -- Private
 
 
-hand : Model -> Svg msg
-hand model =
+hand : Player -> Svg msg
+hand player =
     let
-        player_id =
-            model.player_id
-
-        cards =
-            model.hand
-
         elements =
-            hand_ [] cards
+            hand_ [] player.hand
 
         name =
-            badge player_id
+            badge player.handle
 
         translate =
             handOffset
@@ -141,11 +141,11 @@ handOffset =
     Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
 
 
-badge : Int -> Svg msg
-badge player =
+badge : String -> Svg msg
+badge handle =
     Svg.g [ Atr.class "badge", badgeOffset ]
         [ badgeRect
-        , badgeText player
+        , badgeText handle
         ]
 
 
@@ -173,17 +173,17 @@ badgeRect =
     Svg.rect [ x, y, w, h, rx, ry ] []
 
 
-badgeText : Int -> Svg msg
-badgeText player =
+badgeText : String -> Svg msg
+badgeText handle =
     let
         x =
             Atr.x <| String.fromInt <| Nums.badgeWidth // 2
 
         y =
-            Atr.y <| String.fromInt <| Nums.badgeHeight // 2 + Nums.badgeTextSize // 3
+            Atr.y <| String.fromInt <| Nums.badgeHeight // 2 + Nums.badgeTextSize // 4
 
         t =
-            Svg.text <| String.fromInt player
+            Svg.text handle
     in
     Svg.text_ [ x, y ] [ t ]
 

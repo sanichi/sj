@@ -1,7 +1,6 @@
 module Model exposing (Model, init, update)
 
 import Card exposing (Card)
-import Dict
 import Hand exposing (Hand)
 import Json.Decode exposing (Value)
 import Player exposing (Players)
@@ -13,7 +12,6 @@ type alias Model =
     { player_id : Int
     , pack : Card
     , disc : Card
-    , hand : Hand
     , players : Players
     }
 
@@ -27,7 +25,6 @@ init flags =
     { player_id = setup.player_id
     , pack = Card.hidden 0
     , disc = Card.exposed 0
-    , hand = Hand.init
     , players = Player.init setup.players
     }
 
@@ -54,7 +51,7 @@ update m u =
         player =
             case u.player of
                 Just id ->
-                    Dict.get id m.players
+                    Player.get m.players id
 
                 Nothing ->
                     Nothing
@@ -62,7 +59,8 @@ update m u =
         hand =
             case u.hand of
                 Just nums ->
-                    Just (List.map Card.hidden nums)
+                    -- XXX for debugging use exposed istead of hidden
+                    Just (List.map Card.exposed nums)
 
                 Nothing ->
                     Nothing
@@ -70,7 +68,7 @@ update m u =
         players =
             case ( player, hand ) of
                 ( Just p, Just h ) ->
-                    Dict.insert p.id { p | hand = h } m.players
+                    Player.put m.players p.id { p | hand = h }
 
                 _ ->
                     m.players

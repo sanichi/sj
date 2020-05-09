@@ -1,4 +1,4 @@
-module Player exposing (Player, Players, init)
+module Player exposing (Player, Players, get, init, put)
 
 import Dict exposing (Dict)
 import Hand exposing (Hand)
@@ -33,3 +33,13 @@ build list dict =
 start : Int -> String -> Player
 start id handle =
     Player id handle (List.repeat 12 ( 0, False ))
+
+
+get : Players -> Int -> Maybe Player
+get players id =
+    Dict.get id players
+
+
+put : Players -> Int -> Player -> Players
+put players id player =
+    Dict.insert id player players
