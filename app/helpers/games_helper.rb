@@ -34,9 +34,17 @@ module GamesHelper
     "Players: " + players
   end
 
-  def game_js_player_list(game)
-    game.players.map do |player|
-      "{ id: #{player.id}, handle: '#{player.user.handle}'}"
+  def game_js_player_list(game, player_id)
+    players = game.players.sort_by { |p| p.id }
+    south = players.index{ |p| p.id == player_id }.to_i
+    players.rotate!(south)
+    positions = case players.count
+    when 2 then ["S", "N"]
+    when 3 then ["S", "NW", "NE"]
+    else        ["S", "W", "N", "E"]
+    end
+    players.map do |player|
+      "{ id: #{player.id}, handle: '#{player.user.handle}', position: '#{positions.shift}'}"
     end.join(", ").html_safe
   end
 end

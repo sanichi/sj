@@ -49,7 +49,7 @@ $(function() {
     node: $('#elm-main').get(0),
     flags: {
       player_id: <%= @player.id %>,
-      players: [ <%= game_js_player_list(@game) %> ]
+      players: [ <%= game_js_player_list(@game, @player.id) %> ]
     }
   });
   skyjo.set_elm(app);
