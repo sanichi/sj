@@ -1,12 +1,14 @@
-module Player exposing (Player, Players, get, init, put)
+module Player exposing (Player, Players, Position(..), get, init, put)
 
 import Dict exposing (Dict)
 import Hand exposing (Hand)
+import Setup exposing (ProtoPlayer)
 
 
 type alias Player =
     { id : Int
     , handle : String
+    , position : Position
     , hand : Hand
     }
 
@@ -15,24 +17,60 @@ type alias Players =
     Dict Int Player
 
 
-init : List ( Int, String ) -> Players
+type Position
+    = S
+    | N
+    | NW
+    | NE
+    | E
+    | W
+
+
+init : List ProtoPlayer -> Players
 init list =
     build list Dict.empty
 
 
-build : List ( Int, String ) -> Players -> Players
+build : List ProtoPlayer -> Players -> Players
 build list dict =
     case list of
         [] ->
             dict
 
-        ( id, handle ) :: rest ->
-            build rest (Dict.insert id (start id handle) dict)
+        p :: rest ->
+            convert p.id p.handle p.position
+                |> put dict p.id
+                |> build rest
 
 
-start : Int -> String -> Player
-start id handle =
-    Player id handle (List.repeat 12 ( 0, False ))
+convert : Int -> String -> String -> Player
+convert id handle position =
+    Player id handle (decode position) Hand.init
+
+
+decode : String -> Position
+decode position =
+    case position of
+        "S" ->
+            S
+
+        "N" ->
+            N
+
+        "E" ->
+            E
+
+        "W" ->
+            W
+
+        "NE" ->
+            NE
+
+        "NW" ->
+            NW
+
+        _ ->
+            S
 
 
 get : Players -> Int -> Maybe Player

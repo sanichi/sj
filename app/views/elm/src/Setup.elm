@@ -1,11 +1,18 @@
-module Setup exposing (decode)
+module Setup exposing (ProtoPlayer, decode)
 
 import Json.Decode as D exposing (Decoder, Value)
 
 
 type alias Setup =
     { player_id : Int
-    , players : List ( Int, String )
+    , players : List ProtoPlayer
+    }
+
+
+type alias ProtoPlayer =
+    { id : Int
+    , handle : String
+    , position : String
     }
 
 
@@ -21,11 +28,12 @@ flags =
         (D.field "players" (D.list pair) |> withDefault default.players)
 
 
-pair : Decoder ( Int, String )
+pair : Decoder ProtoPlayer
 pair =
-    D.map2 Tuple.pair
+    D.map3 ProtoPlayer
         (D.field "id" D.int |> withDefault 0)
         (D.field "handle" D.string |> withDefault "Nobody")
+        (D.field "position" D.string |> withDefault "S")
 
 
 default : Setup
