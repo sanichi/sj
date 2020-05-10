@@ -30,6 +30,12 @@ class Game < ApplicationRecord
     true
   end
 
+  def can_be_deleted_by?(user)
+    return true if user.admin?
+    return true if user == self.user && state == INIT
+    false
+  end
+
   def total_remaining
     CARDS.map { |c| send(card_to_attr(c)) }.sum
   end
