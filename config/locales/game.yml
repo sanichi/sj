@@ -3,8 +3,9 @@ en:
     dealt: Dealt
     game_id: "Game %{id}"
     games: Games
-    header: '%{participants} players, ends at %{upto}'
+    header: '%{participants} player game, ends at %{upto}'
     join: Join
+    leave: Leave
     messages: Messages
     new: New Game
     participants: Participants

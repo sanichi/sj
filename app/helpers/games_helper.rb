@@ -1,11 +1,14 @@
 module GamesHelper
   def game_started(game)
-    minutes = (Time.now.to_f - game.created_at.to_f).abs / 60.0
+    seconds = Time.now.to_f - game.created_at.to_f
+    minutes = seconds / 60.0
     days = minutes / 1440.0
     years = days / 365.0
 
     case
-    when minutes <= 1 then "just now"
+    when seconds <= 9 then "just now"
+    when minutes <= 1 then "less than a minuute ago"
+    when minutes <= 2 then "less than 2 minutes ago"
     when minutes <= 5 then "less than 5 minutes ago"
     when days    <= 1 then time_ago_in_words(game.created_at) + " ago"
     when days    <= 7 then game.created_at.strftime('last %a at %H:%m')

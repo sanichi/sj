@@ -28,6 +28,12 @@ class Game < ApplicationRecord
     true
   end
 
+  def can_be_left_by?(user)
+    return false unless state == WAITING
+    return false unless players.pluck(:user_id).include?(user.id)
+    true
+  end
+
   def can_be_deleted_by?(user)
     return true if user.admin?
     return true if user == self.user && state == WAITING

@@ -5,8 +5,9 @@ Rails.application.routes.draw do
 
   resources :users
   resources :games, only: [:new, :create, :destroy, :show] do
-    get :play, on: :member
     get :join, on: :member
+    get :leave, on: :member
+    get :play, on: :member
     get :waiting, on: :collection
   end
 
