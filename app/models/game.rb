@@ -1,7 +1,7 @@
 class Game < ApplicationRecord
   CARDS = (-2..12).to_a
-  MAX_PARTICIPANTS = 2
-  MIN_PARTICIPANTS = 2
+  PARTICIPANTS = [2, 3, 4]
+  UPTO = [50, 100, 200, 300, 400, 500]
 
   INIT = "init"
   PLAY = "play"
@@ -10,6 +10,9 @@ class Game < ApplicationRecord
   has_many :players, dependent: :destroy
   has_many :messages, dependent: :destroy
   belongs_to :user
+
+  validates :participants, numericality: { integer_only: true}, inclusion: { in: PARTICIPANTS }
+  validates :upto, numericality: { integer_only: true, greater_than_or_equal_to: UPTO.first, less_than_or_equal_to: UPTO.last }
 
   default_scope { order(created_at: :desc) }
 

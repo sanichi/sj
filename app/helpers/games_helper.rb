@@ -47,4 +47,12 @@ module GamesHelper
       "{ id: #{player.id}, handle: '#{player.user.handle}', position: '#{positions.shift}'}"
     end.join(", ").html_safe
   end
+
+  def game_participants_menu(selected)
+    options_for_select(Game::PARTICIPANTS.map { |n| [n.to_s, n] }, selected)
+  end
+
+  def game_upto_menu(selected)
+    options_for_select(Game::UPTO.map { |n| [n.to_s, n] }, selected)
+  end
 end

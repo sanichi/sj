@@ -1,0 +1,6 @@
+:ruby
+  inputs = [
+    [:participants, t("game.participants"), :select,  menu: game_participants_menu(game.participants)],
+    [:upto,         t("game.upto"),         :select,  menu: game_upto_menu(game.upto)],
+  ]
+= render "utils/crud/form", object: game, index: waiting_games_path, inputs: inputs, title: title, center: center(xl: 4, lg: 6, md: 8, sm: 10)

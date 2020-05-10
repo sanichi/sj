@@ -7,9 +7,17 @@ class GamesController < ApplicationController
   end
 
   def new
-    game = Game.create(user: current_user)
-    game.messages.create(pack: game.card, discard: game.card)
-    redirect_to waiting_games_path
+    @game = Game.new
+  end
+
+  def create
+    @game = Game.new resource_params
+    @game.user = current_user
+    if @game.save
+      redirect_to waiting_games_path
+    else
+      render :new
+    end
   end
 
   def destroy
@@ -37,5 +45,9 @@ class GamesController < ApplicationController
 
   def find_game
     @game = Game.find(params[:id])
+  end
+
+  def resource_params
+    params.require(:game).permit(:participants, :upto)
   end
 end

@@ -13,6 +13,7 @@ en:
     show: Details
     started_at: Started at
     started_by: Created by
+    upto: Upto
     state:
       init: Waiting to start
       play: In progress
