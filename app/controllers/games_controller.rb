@@ -14,6 +14,7 @@ class GamesController < ApplicationController
     @game = Game.new resource_params
     @game.user = current_user
     if @game.save
+      @game.messages.create(pack: @game.card, discard: @game.card)
       redirect_to waiting_games_path
     else
       render :new
@@ -21,12 +22,12 @@ class GamesController < ApplicationController
   end
 
   def destroy
-    @game.destroy
+    @game.destroy if @game
     redirect_to waiting_games_path
   end
 
   def join
-    if @game.can_be_joined_by?(current_user)
+    if @game && @game.can_be_joined_by?(current_user)
       player = @game.players.create(user: current_user)
       @game.messages.create(hand: @game.cards(12), player_id: player.id)
     end
@@ -34,14 +35,14 @@ class GamesController < ApplicationController
   end
 
   def leave
-    if @game.can_be_left_by?(current_user)
+    if @game && @game.can_be_left_by?(current_user)
       @game.players.each { |p| p.destroy if p.user == current_user }
     end
     redirect_to waiting_games_path
   end
 
   def play
-    if @game.can_be_played_by?(current_user)
+    if @game && @game.can_be_played_by?(current_user)
       @player = @game.players.find_by(user: current_user)
     else
       redirect_to waiting_games_path
@@ -51,7 +52,7 @@ class GamesController < ApplicationController
   private
 
   def find_game
-    @game = Game.find(params[:id])
+    @game = Game.find_by(id: params[:id])
   end
 
   def resource_params

@@ -1,4 +1,4 @@
-module Player exposing (Player, Players, Position(..), get, init, put)
+module Player exposing (Player, Players, Position(..), all, get, init, put)
 
 import Dict exposing (Dict)
 import Hand exposing (Hand)
@@ -81,3 +81,8 @@ get players id =
 put : Players -> Int -> Player -> Players
 put players id player =
     Dict.insert id player players
+
+
+all : Players -> List Player
+all players =
+    Dict.values players

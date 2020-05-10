@@ -4,7 +4,7 @@ import Card exposing (Card)
 import Hand exposing (Hand)
 import Model exposing (Model)
 import Nums
-import Player exposing (Player)
+import Player exposing (Player, Position(..))
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
 
@@ -81,39 +81,36 @@ discard model =
 
 hands : Model -> List (Svg msg)
 hands model =
-    let
-        player =
-            Player.get model.players model.player_id
-    in
-    case player of
-        Just p ->
-            [ hand p ]
-
-        Nothing ->
-            []
+    Player.all model.players
+        |> List.map cardsAndName
 
 
 
 -- Private
 
 
-hand : Player -> Svg msg
-hand player =
+cardsAndName : Player -> Svg msg
+cardsAndName player =
     let
-        elements =
-            hand_ [] player.hand
+        cards =
+            groupedCards player
 
         name =
-            badge player.handle
+            badge player
 
         translate =
-            handOffset
+            handOffset player.position
     in
-    Svg.g [ translate ] (name :: elements)
+    Svg.g [ translate ] [ name, cards ]
 
 
-hand_ : List (Svg msg) -> Hand -> List (Svg msg)
-hand_ elements cards =
+groupedCards : Player -> Svg msg
+groupedCards player =
+    Svg.g [ cardsOffset player.position ] (individualCards [] player.hand)
+
+
+individualCards : List (Svg msg) -> Hand -> List (Svg msg)
+individualCards elements cards =
     case cards of
         [] ->
             elements
@@ -123,14 +120,23 @@ hand_ elements cards =
                 element =
                     cardElement card (List.length elements)
             in
-            hand_ (element :: elements) rest
+            individualCards (element :: elements) rest
 
 
-handOffset : Attribute msg
-handOffset =
+cardsOffset : Position -> Attribute msg
+cardsOffset position =
+    let
+        y =
+            Nums.cardsYOffset position |> String.fromInt
+    in
+    Atr.transform <| "translate(0 " ++ y ++ ")"
+
+
+handOffset : Position -> Attribute msg
+handOffset position =
     let
         ( i, j ) =
-            Nums.handOffset
+            Nums.handOffset position
 
         x =
             String.fromInt i
@@ -141,11 +147,11 @@ handOffset =
     Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
 
 
-badge : String -> Svg msg
-badge handle =
-    Svg.g [ Atr.class "badge", badgeOffset ]
+badge : Player -> Svg msg
+badge player =
+    Svg.g [ Atr.class "badge", badgeOffset player.position ]
         [ badgeRect
-        , badgeText handle
+        , badgeText player.handle
         ]
 
 
@@ -188,11 +194,11 @@ badgeText handle =
     Svg.text_ [ x, y ] [ t ]
 
 
-badgeOffset : Attribute msg
-badgeOffset =
+badgeOffset : Position -> Attribute msg
+badgeOffset position =
     let
         ( i, j ) =
-            Nums.badgeOffset
+            Nums.badgeOffset position
 
         x =
             String.fromInt i

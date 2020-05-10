@@ -27,7 +27,7 @@ module GamesHelper
       t("game.status.one", handle: handles.first, number: needed)
     else
       last = handles.pop
-      list = "#{handles.join(',')} and #{last}"
+      list = "#{handles.join(', ')} and #{last}"
       if needed > 0
         t("game.status.some", some: count, handles: list, number: needed)
       else
