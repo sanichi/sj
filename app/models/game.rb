@@ -3,9 +3,7 @@ class Game < ApplicationRecord
   PARTICIPANTS = [2, 3, 4]
   UPTO = [50, 100, 200, 300, 400, 500]
 
-  INIT = "init"
-  PLAY = "play"
-  STOP = "stop"
+  WAITING = "waiting"
 
   has_many :players, dependent: :destroy
   has_many :messages, dependent: :destroy
@@ -17,14 +15,14 @@ class Game < ApplicationRecord
   default_scope { order(created_at: :desc) }
 
   def can_be_joined_by?(user)
-    return false unless state == INIT
+    return false unless state == WAITING
     return false if players.count >= participants
     return false if players.pluck(:user_id).include?(user.id)
     true
   end
 
   def can_be_played_by?(user)
-    return false unless state == INIT
+    return false unless state == WAITING
     return false unless players.count == participants
     return false unless players.pluck(:user_id).include?(user.id)
     true
@@ -32,7 +30,7 @@ class Game < ApplicationRecord
 
   def can_be_deleted_by?(user)
     return true if user.admin?
-    return true if user == self.user && state == INIT
+    return true if user == self.user && state == WAITING
     false
   end
 

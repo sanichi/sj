@@ -14,8 +14,8 @@
           %td= t("game.started_by")
           %td= @game.user.handle
         %tr
-          %td= t("game.state.state")
-          %td= t("game.state.#{@game.state}")
+          %td= t("game.state")
+          %td= @game.state
         %tr
           %td
             = t("game.players")

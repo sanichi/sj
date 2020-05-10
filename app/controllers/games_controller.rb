@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   before_action :find_game, only: [:destroy, :show, :join, :play]
 
   def waiting
-    @games = Game.where(state: Game::INIT)
+    @games = Game.where(state: Game::WAITING)
   end
 
   def new

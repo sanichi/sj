@@ -3,6 +3,7 @@ en:
     dealt: Dealt
     game_id: "Game %{id}"
     games: Games
+    header: '%{participants} players, ends at %{upto}'
     join: Join
     messages: Messages
     new: New Game
@@ -11,11 +12,14 @@ en:
     play: Play
     players: Players
     show: Details
+    started: 'Started by %{handle} %{time}.'
+    started_by: Started by
     started_at: Started at
-    started_by: Created by
+    state: State
     upto: Ends at
-    state:
-      init: Waiting to start
-      play: In progress
-      state: Status
-      stop: Finished
+    status:
+      none: 'no players have joined yet'
+      one: '1 player (%{handle}) has joined, waiting for %{number} more'
+      some: '%{some} players (%{handles}) have joined, waiting for %{number} more'
+      ready: 'ready to play with %{handles}'
+      status: 'Status: %{status}.'
