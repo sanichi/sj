@@ -28,10 +28,10 @@ module GamesHelper
     hdr
   end
 
-  def game_body(game)
+  def game_players(game)
     players = game.players.map { |p| p.user.handle }.join(", ")
     players = "none have joined yet" if players.blank?
-    "Players: " + players
+    players
   end
 
   def game_js_player_list(game, player_id)
