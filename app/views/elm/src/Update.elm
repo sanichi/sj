@@ -4,10 +4,10 @@ import Json.Decode as D exposing (Decoder, Value)
 
 
 type alias Update =
-    { player : Maybe Int
-    , pack : Maybe Int
-    , disc : Maybe Int
+    { pack : Maybe Int
+    , discard : Maybe Int
     , hand : Maybe (List Int)
+    , player_id : Maybe Int
     }
 
 
@@ -19,10 +19,10 @@ decode value =
 updateDecoder : Decoder Update
 updateDecoder =
     D.map4 Update
-        (D.maybe (D.field "player" D.int))
         (D.maybe (D.field "pack" D.int))
-        (D.maybe (D.field "disc" D.int))
+        (D.maybe (D.field "discard" D.int))
         (D.maybe (D.field "hand" (D.list D.int)))
+        (D.maybe (D.field "player_id" D.int))
 
 
 default : Update

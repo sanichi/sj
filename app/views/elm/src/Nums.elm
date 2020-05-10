@@ -67,13 +67,13 @@ packY =
 -- Discard pile
 
 
-discX : Int
-discX =
+discardX : Int
+discardX =
     viewWidth // 2 + (cardMargin // 2)
 
 
-discY : Int
-discY =
+discardY : Int
+discardY =
     viewHeight // 2 - (cardHeight // 2)
 
 

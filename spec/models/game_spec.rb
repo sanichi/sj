@@ -33,7 +33,7 @@ describe Game do
 
   it "destroy" do
     game.messages.create(pack: -2)
-    game.messages.create(disc: -1)
+    game.messages.create(discard: -1)
 
     expect(Game.count).to eq 1
     expect(Message.count).to eq 2

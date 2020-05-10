@@ -1,4 +1,4 @@
-module Util exposing (bg, box, disc, hands, pack)
+module Util exposing (bg, box, discard, hands, pack)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
@@ -60,17 +60,17 @@ pack model =
 -- Discard pile
 
 
-disc : Model -> Svg msg
-disc model =
+discard : Model -> Svg msg
+discard model =
     let
         x =
-            String.fromInt Nums.discX |> Atr.x
+            String.fromInt Nums.discardX |> Atr.x
 
         y =
-            String.fromInt Nums.discY |> Atr.y
+            String.fromInt Nums.discardY |> Atr.y
 
         u =
-            cardUrl model.disc
+            cardUrl model.discard
     in
     Svg.image [ x, y, cardWidth, cardHeight, u ] []
 

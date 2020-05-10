@@ -8,7 +8,7 @@ class GamesController < ApplicationController
 
   def new
     game = Game.create(user: current_user)
-    game.messages.create(pack: game.card, disc: game.card)
+    game.messages.create(pack: game.card, discard: game.card)
     redirect_to waiting_games_path
   end
 
@@ -20,7 +20,7 @@ class GamesController < ApplicationController
   def join
     if @game.can_be_joined_by?(current_user)
       player = @game.players.create(user: current_user)
-      @game.messages.create(hand: @game.cards(12), player: player.id)
+      @game.messages.create(hand: @game.cards(12), player_id: player.id)
     end
     redirect_to waiting_games_path
   end

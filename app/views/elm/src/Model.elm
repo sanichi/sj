@@ -11,7 +11,7 @@ import Update exposing (Update)
 type alias Model =
     { player_id : Int
     , pack : Card
-    , disc : Card
+    , discard : Card
     , players : Players
     }
 
@@ -24,7 +24,7 @@ init flags =
     in
     { player_id = setup.player_id
     , pack = Card.hidden 0
-    , disc = Card.exposed 0
+    , discard = Card.exposed 0
     , players = Player.init setup.players
     }
 
@@ -40,16 +40,16 @@ update m u =
                 Nothing ->
                     m.pack
 
-        disc =
-            case u.disc of
+        discard =
+            case u.discard of
                 Just num ->
                     Card.exposed num
 
                 Nothing ->
-                    m.disc
+                    m.discard
 
         player =
-            case u.player of
+            case u.player_id of
                 Just id ->
                     Player.get m.players id
 
@@ -73,4 +73,4 @@ update m u =
                 _ ->
                     m.players
     in
-    { m | pack = pack, disc = disc, players = players }
+    { m | pack = pack, discard = discard, players = players }
