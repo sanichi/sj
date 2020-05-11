@@ -51,25 +51,32 @@ put id player players =
 
 
 build : List ProtoPlayer -> Players -> Players
-build list dict =
+build list players =
     case list of
         [] ->
-            dict
+            players
 
-        p :: rest ->
-            build rest <| put p.id (convert p.id p.handle p.position) dict
+        proto :: rest ->
+            let
+                nPlayer =
+                    convert proto
+
+                uPlayers =
+                    put proto.id nPlayer players
+            in
+            build rest uPlayers
 
 
-convert : Int -> String -> String -> Player
-convert id handle pos =
+convert : ProtoPlayer -> Player
+convert proto =
     let
         position =
-            decode pos
+            decode proto.position
 
         hand =
             Hand.init <| List.repeat 12 0
     in
-    Player id handle position hand
+    Player proto.id proto.handle position hand
 
 
 decode : String -> Position
