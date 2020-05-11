@@ -19,8 +19,8 @@ map f hand =
 
 
 get : Int -> Hand -> Maybe Card
-get index hand =
-    Array.get index hand
+get cid hand =
+    Array.get cid hand
 
 
 score : Hand -> Int
@@ -29,5 +29,5 @@ score hand =
 
 
 set : Int -> Card -> Hand -> Hand
-set index card hand =
-    Array.set index card hand
+set cid card hand =
+    Array.set cid card hand

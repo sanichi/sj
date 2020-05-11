@@ -30,15 +30,15 @@ init flags =
 
 
 reveal : Model -> Int -> Int -> Model
-reveal m id index =
+reveal m pid cid =
     let
         p =
-            getPlayer m id
+            getPlayer m pid
 
         c =
             case p of
                 Just player ->
-                    Hand.get index player.hand
+                    Hand.get cid player.hand
 
                 Nothing ->
                     Nothing
@@ -50,13 +50,13 @@ reveal m id index =
                     Card.exposed card.num
 
                 uHand =
-                    Hand.set index uCard player.hand
+                    Hand.set cid uCard player.hand
 
                 uPlayer =
                     { player | hand = uHand }
 
                 uPlayers =
-                    Player.put id uPlayer m.players
+                    Player.put pid uPlayer m.players
             in
             { m | players = uPlayers }
 
@@ -85,8 +85,8 @@ update m u =
 
         player =
             case u.player_id of
-                Just id ->
-                    Player.get id m.players
+                Just pid ->
+                    Player.get pid m.players
 
                 Nothing ->
                     Nothing
@@ -102,7 +102,7 @@ update m u =
         players =
             case ( player, hand ) of
                 ( Just p, Just h ) ->
-                    Player.put p.id { p | hand = h } m.players
+                    Player.put p.pid { p | hand = h } m.players
 
                 _ ->
                     m.players
@@ -115,5 +115,5 @@ update m u =
 
 
 getPlayer : Model -> Int -> Maybe Player
-getPlayer model id =
-    Player.get id model.players
+getPlayer model pid =
+    Player.get pid model.players

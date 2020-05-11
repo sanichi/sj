@@ -6,7 +6,7 @@ import Setup exposing (ProtoPlayer)
 
 
 type alias Player =
-    { id : Int
+    { pid : Int
     , handle : String
     , position : Position
     , hand : Hand
@@ -48,8 +48,8 @@ badge player =
 
 
 get : Int -> Players -> Maybe Player
-get id players =
-    Dict.get id players
+get pid players =
+    Dict.get pid players
 
 
 init : List ProtoPlayer -> Players
@@ -58,8 +58,8 @@ init list =
 
 
 put : Int -> Player -> Players -> Players
-put id player players =
-    Dict.insert id player players
+put pid player players =
+    Dict.insert pid player players
 
 
 
@@ -78,7 +78,7 @@ build list players =
                     convert proto
 
                 uPlayers =
-                    put proto.id nPlayer players
+                    put proto.pid nPlayer players
             in
             build rest uPlayers
 
@@ -92,7 +92,7 @@ convert proto =
         hand =
             Hand.init <| List.repeat 12 0
     in
-    Player proto.id proto.handle position hand 0
+    Player proto.pid proto.handle position hand 0
 
 
 decode : String -> Position

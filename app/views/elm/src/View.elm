@@ -177,19 +177,19 @@ cardsOffset position =
 
 
 cardElement : Int -> Int -> Card -> Svg Msg
-cardElement id index card =
+cardElement pid cid card =
     let
         x =
-            Atr.x <| String.fromInt <| Nums.cardX index
+            Atr.x <| String.fromInt <| Nums.cardX cid
 
         y =
-            Atr.y <| String.fromInt <| Nums.cardY index
+            Atr.y <| String.fromInt <| Nums.cardY cid
 
         u =
             cardUrl card
 
         c =
-            onClick (Reveal id index)
+            onClick (Reveal pid cid)
     in
     Svg.image [ x, y, cardWidth, cardHeight, u, c ] []
 
@@ -231,7 +231,7 @@ cardWidth =
 
 groupedCards : Player -> Svg Msg
 groupedCards player =
-    Svg.g [ cardsOffset player.position ] (Hand.map (cardElement player.id) player.hand)
+    Svg.g [ cardsOffset player.position ] (Hand.map (cardElement player.pid) player.hand)
 
 
 handOffset : Position -> Attribute Msg

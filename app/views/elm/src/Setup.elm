@@ -10,7 +10,7 @@ type alias Setup =
 
 
 type alias ProtoPlayer =
-    { id : Int
+    { pid : Int
     , handle : String
     , position : String
     }

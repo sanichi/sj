@@ -9,8 +9,8 @@ import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Platform.Sub
 import Ports
-import Svg exposing (..)
-import Svg.Attributes exposing (..)
+import Svg
+import Svg.Attributes as Atr
 import Update exposing (Update)
 import View
 
@@ -42,7 +42,7 @@ view : Model -> Html Msg
 view model =
     [ View.bg, View.pack model, View.discard model ]
         ++ View.hands model
-        |> svg [ id "card-table", version "1.1", View.box ]
+        |> Svg.svg [ Atr.id "card-table", Atr.version "1.1", View.box ]
 
 
 
@@ -55,5 +55,5 @@ update msg m =
         NewUpdate u ->
             ( Model.update m u, Cmd.none )
 
-        Reveal id index ->
-            ( Model.reveal m id index, Cmd.none )
+        Reveal pid cid ->
+            ( Model.reveal m pid cid, Cmd.none )
