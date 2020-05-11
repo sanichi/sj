@@ -3,6 +3,7 @@ module Util exposing (bg, box, discard, hands, pack)
 import Card exposing (Card)
 import Hand exposing (Hand)
 import Model exposing (Model)
+import Msg exposing (Msg(..))
 import Nums
 import Player exposing (Player, Position(..))
 import Svg exposing (Attribute, Svg)
@@ -245,13 +246,13 @@ cardHeight =
 
 
 cardElement : Card -> Int -> Svg msg
-cardElement card i =
+cardElement card index =
     let
         x =
-            Atr.x <| String.fromInt <| Nums.cardX i
+            Atr.x <| String.fromInt <| Nums.cardX index
 
         y =
-            Atr.y <| String.fromInt <| Nums.cardY i
+            Atr.y <| String.fromInt <| Nums.cardY index
 
         u =
             cardUrl card

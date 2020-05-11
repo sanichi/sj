@@ -6,6 +6,7 @@ import Browser
 import Html exposing (Html)
 import Json.Decode exposing (Value)
 import Model exposing (Model)
+import Msg exposing (Msg(..))
 import Platform.Sub
 import Ports
 import Svg exposing (..)
@@ -46,10 +47,6 @@ view model =
 
 
 -- update
-
-
-type Msg
-    = NewUpdate Update
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

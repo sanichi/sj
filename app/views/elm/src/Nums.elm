@@ -162,13 +162,13 @@ cardsYOffset position =
 
 
 cardX : Int -> Int
-cardX i =
-    remainderBy 4 i * (cardWidth + cardMargin)
+cardX index =
+    remainderBy 4 index * (cardWidth + cardMargin)
 
 
 cardY : Int -> Int
-cardY i =
-    (i // 4) * (cardHeight + cardMargin)
+cardY index =
+    (index // 4) * (cardHeight + cardMargin)
 
 
 badgeOffset : Position -> ( Int, Int )
