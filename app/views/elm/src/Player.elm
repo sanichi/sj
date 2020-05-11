@@ -26,9 +26,28 @@ type Position
     | W
 
 
+all : Players -> List Player
+all players =
+    Dict.values players
+
+
+get : Players -> Int -> Maybe Player
+get players id =
+    Dict.get id players
+
+
 init : List ProtoPlayer -> Players
 init list =
     build list Dict.empty
+
+
+put : Players -> Int -> Player -> Players
+put players id player =
+    Dict.insert id player players
+
+
+
+-- Private
 
 
 build : List ProtoPlayer -> Players -> Players
@@ -44,8 +63,15 @@ build list dict =
 
 
 convert : Int -> String -> String -> Player
-convert id handle position =
-    Player id handle (decode position) Hand.init
+convert id handle pos =
+    let
+        position =
+            decode pos
+
+        hand =
+            Hand.init <| List.repeat 12 0
+    in
+    Player id handle position hand
 
 
 decode : String -> Position
@@ -71,18 +97,3 @@ decode position =
 
         _ ->
             S
-
-
-get : Players -> Int -> Maybe Player
-get players id =
-    Dict.get id players
-
-
-put : Players -> Int -> Player -> Players
-put players id player =
-    Dict.insert id player players
-
-
-all : Players -> List Player
-all players =
-    Dict.values players

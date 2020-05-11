@@ -82,70 +82,11 @@ discard model =
 
 hands : Model -> List (Svg msg)
 hands model =
-    Player.all model.players
-        |> List.map cardsAndName
+    List.map cardsAndName <| Player.all model.players
 
 
 
 -- Private
-
-
-cardsAndName : Player -> Svg msg
-cardsAndName player =
-    let
-        cards =
-            groupedCards player
-
-        name =
-            badge player
-
-        translate =
-            handOffset player.position
-    in
-    Svg.g [ translate ] [ name, cards ]
-
-
-groupedCards : Player -> Svg msg
-groupedCards player =
-    Svg.g [ cardsOffset player.position ] (individualCards [] player.hand)
-
-
-individualCards : List (Svg msg) -> Hand -> List (Svg msg)
-individualCards elements cards =
-    case cards of
-        [] ->
-            elements
-
-        card :: rest ->
-            let
-                element =
-                    cardElement card (List.length elements)
-            in
-            individualCards (element :: elements) rest
-
-
-cardsOffset : Position -> Attribute msg
-cardsOffset position =
-    let
-        y =
-            Nums.cardsYOffset position |> String.fromInt
-    in
-    Atr.transform <| "translate(0 " ++ y ++ ")"
-
-
-handOffset : Position -> Attribute msg
-handOffset position =
-    let
-        ( i, j ) =
-            Nums.handOffset position
-
-        x =
-            String.fromInt i
-
-        y =
-            String.fromInt j
-    in
-    Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
 
 
 badge : Player -> Svg msg
@@ -154,6 +95,21 @@ badge player =
         [ badgeRect
         , badgeText player.handle
         ]
+
+
+badgeOffset : Position -> Attribute msg
+badgeOffset position =
+    let
+        ( i, j ) =
+            Nums.badgeOffset position
+
+        x =
+            String.fromInt i
+
+        y =
+            String.fromInt j
+    in
+    Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
 
 
 badgeRect : Svg msg
@@ -195,19 +151,48 @@ badgeText handle =
     Svg.text_ [ x, y ] [ t ]
 
 
-badgeOffset : Position -> Attribute msg
-badgeOffset position =
+cardsAndName : Player -> Svg msg
+cardsAndName player =
     let
-        ( i, j ) =
-            Nums.badgeOffset position
+        cards =
+            groupedCards player
 
+        name =
+            badge player
+
+        translate =
+            handOffset player.position
+    in
+    Svg.g [ translate ] [ name, cards ]
+
+
+cardsOffset : Position -> Attribute msg
+cardsOffset position =
+    let
+        y =
+            Nums.cardsYOffset position |> String.fromInt
+    in
+    Atr.transform <| "translate(0 " ++ y ++ ")"
+
+
+cardElement : Int -> Card -> Svg msg
+cardElement index card =
+    let
         x =
-            String.fromInt i
+            Atr.x <| String.fromInt <| Nums.cardX index
 
         y =
-            String.fromInt j
+            Atr.y <| String.fromInt <| Nums.cardY index
+
+        u =
+            cardUrl card
     in
-    Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
+    Svg.image [ x, y, cardWidth, cardHeight, u ] []
+
+
+cardHeight : Attribute msg
+cardHeight =
+    String.fromInt Nums.cardHeight |> Atr.height
 
 
 cardUrl : Card -> Attribute msg
@@ -240,21 +225,21 @@ cardWidth =
     String.fromInt Nums.cardWidth |> Atr.width
 
 
-cardHeight : Attribute msg
-cardHeight =
-    String.fromInt Nums.cardHeight |> Atr.height
+groupedCards : Player -> Svg msg
+groupedCards player =
+    Svg.g [ cardsOffset player.position ] (Hand.map cardElement player.hand)
 
 
-cardElement : Card -> Int -> Svg msg
-cardElement card index =
+handOffset : Position -> Attribute msg
+handOffset position =
     let
+        ( i, j ) =
+            Nums.handOffset position
+
         x =
-            Atr.x <| String.fromInt <| Nums.cardX index
+            String.fromInt i
 
         y =
-            Atr.y <| String.fromInt <| Nums.cardY index
-
-        u =
-            cardUrl card
+            String.fromInt j
     in
-    Svg.image [ x, y, cardWidth, cardHeight, u ] []
+    Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"

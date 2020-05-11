@@ -9,9 +9,9 @@ type alias Card =
 
 exposed : Int -> Card
 exposed num =
-    Card num False
+    Card num True
 
 
 hidden : Int -> Card
 hidden num =
-    Card num True
+    Card num False

@@ -59,8 +59,7 @@ update m u =
         hand =
             case u.hand of
                 Just nums ->
-                    -- XXX for debugging use exposed istead of hidden
-                    Just (List.map Card.exposed nums)
+                    Just (Hand.init nums)
 
                 Nothing ->
                     Nothing
