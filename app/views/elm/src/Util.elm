@@ -94,7 +94,7 @@ badge : Player -> Svg Msg
 badge player =
     Svg.g [ Atr.class "badge", badgeOffset player.position ]
         [ badgeRect
-        , badgeText player.handle
+        , badgeText player
         ]
 
 
@@ -137,8 +137,8 @@ badgeRect =
     Svg.rect [ x, y, w, h, rx, ry ] []
 
 
-badgeText : String -> Svg Msg
-badgeText handle =
+badgeText : Player -> Svg Msg
+badgeText player =
     let
         x =
             Atr.x <| String.fromInt <| Nums.badgeWidth // 2
@@ -147,7 +147,7 @@ badgeText handle =
             Atr.y <| String.fromInt <| Nums.badgeHeight // 2 + Nums.badgeTextSize // 4
 
         t =
-            Svg.text handle
+            Svg.text <| Player.badge player
     in
     Svg.text_ [ x, y ] [ t ]
 

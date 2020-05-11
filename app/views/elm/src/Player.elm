@@ -1,4 +1,4 @@
-module Player exposing (Player, Players, Position(..), all, get, init, put)
+module Player exposing (Player, Players, Position(..), all, badge, get, init, put)
 
 import Dict exposing (Dict)
 import Hand exposing (Hand)
@@ -10,6 +10,7 @@ type alias Player =
     , handle : String
     , position : Position
     , hand : Hand
+    , score : Int
     }
 
 
@@ -29,6 +30,21 @@ type Position
 all : Players -> List Player
 all players =
     Dict.values players
+
+
+badge : Player -> String
+badge player =
+    let
+        handle =
+            player.handle
+
+        total =
+            String.fromInt player.score
+
+        current =
+            String.fromInt (Hand.score player.hand)
+    in
+    player.handle ++ " " ++ total ++ "/" ++ current
 
 
 get : Int -> Players -> Maybe Player
@@ -76,7 +92,7 @@ convert proto =
         hand =
             Hand.init <| List.repeat 12 0
     in
-    Player proto.id proto.handle position hand
+    Player proto.id proto.handle position hand 0
 
 
 decode : String -> Position

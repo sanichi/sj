@@ -1,4 +1,4 @@
-module Hand exposing (Hand, get, init, map, set)
+module Hand exposing (Hand, get, init, map, score, set)
 
 import Array exposing (Array)
 import Card exposing (Card)
@@ -21,6 +21,11 @@ map f hand =
 get : Int -> Hand -> Maybe Card
 get index hand =
     Array.get index hand
+
+
+score : Hand -> Int
+score hand =
+    Array.foldr (+) 0 <| Array.map Card.score hand
 
 
 set : Int -> Card -> Hand -> Hand

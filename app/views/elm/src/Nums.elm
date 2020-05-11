@@ -102,7 +102,8 @@ badgeHeight =
 
 badgeTextSize : Int
 badgeTextSize =
-    40
+    -- match this with what's in card_table.sass
+    25
 
 
 badgeMargin : Int
