@@ -1,7 +1,9 @@
-module Player exposing (Player, Players, Position(..), State(..), all, badge, get, init, put, state)
+module Player exposing (Player, Players, Position(..), State(..), all, badge, get, init, msg, put)
 
+import Card exposing (Card)
 import Dict exposing (Dict)
 import Hand exposing (Hand)
+import Msg exposing (Msg(..))
 import Setup exposing (ProtoPlayer)
 
 
@@ -62,22 +64,23 @@ init list =
     build list Dict.empty
 
 
+msg : Player -> Int -> Card -> Msg
+msg player cid card =
+    case state player of
+        Passive ->
+            Noop
+
+        Starting ->
+            if card.vis then
+                Noop
+
+            else
+                Reveal player.pid cid
+
+
 put : Int -> Player -> Players -> Players
 put pid player players =
     Dict.insert pid player players
-
-
-state : Player -> State
-state player =
-    if player.position == S then
-        if Hand.hidden player.hand > 10 then
-            Starting
-
-        else
-            Passive
-
-    else
-        Passive
 
 
 
@@ -136,3 +139,16 @@ decode position =
 
         _ ->
             S
+
+
+state : Player -> State
+state player =
+    if player.position == S then
+        if Hand.hidden player.hand > 10 then
+            Starting
+
+        else
+            Passive
+
+    else
+        Passive

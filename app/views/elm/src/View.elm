@@ -176,28 +176,6 @@ cardsOffset position =
     Atr.transform <| "translate(0 " ++ y ++ ")"
 
 
-cardClick : Player -> Int -> Card -> List (Attribute Msg)
-cardClick player cid card =
-    let
-        msg =
-            case Player.state player of
-                Passive ->
-                    Noop
-
-                Starting ->
-                    if card.vis then
-                        Noop
-
-                    else
-                        Reveal player.pid cid
-    in
-    if msg == Noop then
-        []
-
-    else
-        [ onClick msg ]
-
-
 cardElement : Player -> Int -> Card -> Svg Msg
 cardElement player cid card =
     let
@@ -216,13 +194,20 @@ cardElement player cid card =
         u =
             cardUrl card
 
-        c =
-            cardClick player cid card
-
         a =
-            [ x, y, w, h, u ] ++ c
+            [ x, y, w, h, u ]
+
+        m =
+            Player.msg player cid card
+
+        a_ =
+            if m == Noop then
+                a
+
+            else
+                onClick m :: a
     in
-    Svg.image a []
+    Svg.image a_ []
 
 
 cardHeight : Attribute Msg
