@@ -5,7 +5,7 @@ import Hand exposing (Hand)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Nums
-import Player exposing (Player, Position(..))
+import Player exposing (Player, Position(..), State(..))
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
 import Svg.Events exposing (onClick)
@@ -176,8 +176,30 @@ cardsOffset position =
     Atr.transform <| "translate(0 " ++ y ++ ")"
 
 
-cardElement : Int -> Int -> Card -> Svg Msg
-cardElement pid cid card =
+cardClick : Player -> Int -> Card -> List (Attribute Msg)
+cardClick player cid card =
+    let
+        msg =
+            case Player.state player of
+                Passive ->
+                    Noop
+
+                Starting ->
+                    if card.vis then
+                        Noop
+
+                    else
+                        Reveal player.pid cid
+    in
+    if msg == Noop then
+        []
+
+    else
+        [ onClick msg ]
+
+
+cardElement : Player -> Int -> Card -> Svg Msg
+cardElement player cid card =
     let
         x =
             Atr.x <| String.fromInt <| Nums.cardX cid
@@ -185,13 +207,22 @@ cardElement pid cid card =
         y =
             Atr.y <| String.fromInt <| Nums.cardY cid
 
+        w =
+            cardWidth
+
+        h =
+            cardHeight
+
         u =
             cardUrl card
 
         c =
-            onClick (Reveal pid cid)
+            cardClick player cid card
+
+        a =
+            [ x, y, w, h, u ] ++ c
     in
-    Svg.image [ x, y, cardWidth, cardHeight, u, c ] []
+    Svg.image a []
 
 
 cardHeight : Attribute Msg
@@ -231,7 +262,7 @@ cardWidth =
 
 groupedCards : Player -> Svg Msg
 groupedCards player =
-    Svg.g [ cardsOffset player.position ] (Hand.map (cardElement player.pid) player.hand)
+    Svg.g [ cardsOffset player.position ] (Hand.map (cardElement player) player.hand)
 
 
 handOffset : Position -> Attribute Msg

@@ -1,4 +1,4 @@
-module Player exposing (Player, Players, Position(..), all, badge, get, init, put)
+module Player exposing (Player, Players, Position(..), State(..), all, badge, get, init, put, state)
 
 import Dict exposing (Dict)
 import Hand exposing (Hand)
@@ -25,6 +25,11 @@ type Position
     | NE
     | E
     | W
+
+
+type State
+    = Passive
+    | Starting
 
 
 all : Players -> List Player
@@ -60,6 +65,19 @@ init list =
 put : Int -> Player -> Players -> Players
 put pid player players =
     Dict.insert pid player players
+
+
+state : Player -> State
+state player =
+    if player.position == S then
+        if Hand.hidden player.hand > 10 then
+            Starting
+
+        else
+            Passive
+
+    else
+        Passive
 
 
 

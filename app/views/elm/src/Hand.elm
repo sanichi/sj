@@ -1,4 +1,4 @@
-module Hand exposing (Hand, get, init, map, score, set)
+module Hand exposing (Hand, get, hidden, init, map, score, set)
 
 import Array exposing (Array)
 import Card exposing (Card)
@@ -21,6 +21,11 @@ map f hand =
 get : Int -> Hand -> Maybe Card
 get cid hand =
     Array.get cid hand
+
+
+hidden : Hand -> Int
+hidden hand =
+    Array.length <| Array.filter (not << .vis) hand
 
 
 score : Hand -> Int

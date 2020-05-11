@@ -57,3 +57,6 @@ update msg m =
 
         Reveal pid cid ->
             ( Model.reveal m pid cid, Cmd.none )
+
+        Noop ->
+            ( m, Cmd.none )
