@@ -31,8 +31,8 @@ all players =
     Dict.values players
 
 
-get : Players -> Int -> Maybe Player
-get players id =
+get : Int -> Players -> Maybe Player
+get id players =
     Dict.get id players
 
 
@@ -41,8 +41,8 @@ init list =
     build list Dict.empty
 
 
-put : Players -> Int -> Player -> Players
-put players id player =
+put : Int -> Player -> Players -> Players
+put id player players =
     Dict.insert id player players
 
 
@@ -57,9 +57,7 @@ build list dict =
             dict
 
         p :: rest ->
-            convert p.id p.handle p.position
-                |> put dict p.id
-                |> build rest
+            build rest <| put p.id (convert p.id p.handle p.position) dict
 
 
 convert : Int -> String -> String -> Player

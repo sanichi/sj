@@ -54,3 +54,6 @@ update msg m =
     case msg of
         NewUpdate u ->
             ( Model.update m u, Cmd.none )
+
+        Reveal id index ->
+            ( Model.reveal m id index, Cmd.none )

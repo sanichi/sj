@@ -8,13 +8,14 @@ import Nums
 import Player exposing (Player, Position(..))
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
+import Svg.Events exposing (onClick)
 
 
 
 -- Visible box
 
 
-box : Attribute msg
+box : Attribute Msg
 box =
     [ 0, 0, Nums.viewWidth, Nums.viewHeight ]
         |> List.map String.fromInt
@@ -26,7 +27,7 @@ box =
 -- Background
 
 
-bg : Svg msg
+bg : Svg Msg
 bg =
     let
         w =
@@ -42,7 +43,7 @@ bg =
 -- Pack
 
 
-pack : Model -> Svg msg
+pack : Model -> Svg Msg
 pack model =
     let
         x =
@@ -61,7 +62,7 @@ pack model =
 -- Discard pile
 
 
-discard : Model -> Svg msg
+discard : Model -> Svg Msg
 discard model =
     let
         x =
@@ -80,7 +81,7 @@ discard model =
 -- Players cards
 
 
-hands : Model -> List (Svg msg)
+hands : Model -> List (Svg Msg)
 hands model =
     List.map cardsAndName <| Player.all model.players
 
@@ -89,7 +90,7 @@ hands model =
 -- Private
 
 
-badge : Player -> Svg msg
+badge : Player -> Svg Msg
 badge player =
     Svg.g [ Atr.class "badge", badgeOffset player.position ]
         [ badgeRect
@@ -97,7 +98,7 @@ badge player =
         ]
 
 
-badgeOffset : Position -> Attribute msg
+badgeOffset : Position -> Attribute Msg
 badgeOffset position =
     let
         ( i, j ) =
@@ -112,7 +113,7 @@ badgeOffset position =
     Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
 
 
-badgeRect : Svg msg
+badgeRect : Svg Msg
 badgeRect =
     let
         x =
@@ -136,7 +137,7 @@ badgeRect =
     Svg.rect [ x, y, w, h, rx, ry ] []
 
 
-badgeText : String -> Svg msg
+badgeText : String -> Svg Msg
 badgeText handle =
     let
         x =
@@ -151,7 +152,7 @@ badgeText handle =
     Svg.text_ [ x, y ] [ t ]
 
 
-cardsAndName : Player -> Svg msg
+cardsAndName : Player -> Svg Msg
 cardsAndName player =
     let
         cards =
@@ -166,7 +167,7 @@ cardsAndName player =
     Svg.g [ translate ] [ name, cards ]
 
 
-cardsOffset : Position -> Attribute msg
+cardsOffset : Position -> Attribute Msg
 cardsOffset position =
     let
         y =
@@ -175,8 +176,8 @@ cardsOffset position =
     Atr.transform <| "translate(0 " ++ y ++ ")"
 
 
-cardElement : Int -> Card -> Svg msg
-cardElement index card =
+cardElement : Int -> Int -> Card -> Svg Msg
+cardElement id index card =
     let
         x =
             Atr.x <| String.fromInt <| Nums.cardX index
@@ -186,16 +187,19 @@ cardElement index card =
 
         u =
             cardUrl card
+
+        c =
+            onClick (Reveal id index)
     in
-    Svg.image [ x, y, cardWidth, cardHeight, u ] []
+    Svg.image [ x, y, cardWidth, cardHeight, u, c ] []
 
 
-cardHeight : Attribute msg
+cardHeight : Attribute Msg
 cardHeight =
     String.fromInt Nums.cardHeight |> Atr.height
 
 
-cardUrl : Card -> Attribute msg
+cardUrl : Card -> Attribute Msg
 cardUrl card =
     let
         nam =
@@ -220,17 +224,17 @@ cardUrl card =
     Atr.xlinkHref url
 
 
-cardWidth : Attribute msg
+cardWidth : Attribute Msg
 cardWidth =
     String.fromInt Nums.cardWidth |> Atr.width
 
 
-groupedCards : Player -> Svg msg
+groupedCards : Player -> Svg Msg
 groupedCards player =
-    Svg.g [ cardsOffset player.position ] (Hand.map cardElement player.hand)
+    Svg.g [ cardsOffset player.position ] (Hand.map (cardElement player.id) player.hand)
 
 
-handOffset : Position -> Attribute msg
+handOffset : Position -> Attribute Msg
 handOffset position =
     let
         ( i, j ) =
