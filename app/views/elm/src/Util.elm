@@ -213,25 +213,20 @@ cardUrl : Card -> Attribute msg
 cardUrl card =
     let
         nam =
-            if not (Tuple.second card) then
+            if not card.vis then
                 "back"
 
+            else if card.num >= 0 && card.num <= 12 then
+                "p" ++ String.fromInt card.num
+
+            else if card.num == -1 then
+                "m1"
+
+            else if card.num == -2 then
+                "m2"
+
             else
-                let
-                    num =
-                        Tuple.first card
-                in
-                if num >= 0 && num <= 12 then
-                    "p" ++ String.fromInt num
-
-                else if num == -1 then
-                    "m1"
-
-                else if num == -2 then
-                    "m2"
-
-                else
-                    "back"
+                "back"
 
         url =
             "/images/" ++ nam ++ ".png"

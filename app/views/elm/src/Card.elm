@@ -2,14 +2,16 @@ module Card exposing (Card, exposed, hidden)
 
 
 type alias Card =
-    ( Int, Bool )
+    { num : Int
+    , vis : Bool
+    }
 
 
 exposed : Int -> Card
-exposed val =
-    ( val, True )
+exposed num =
+    Card num False
 
 
 hidden : Int -> Card
-hidden val =
-    ( val, False )
+hidden num =
+    Card num True
