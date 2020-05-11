@@ -247,23 +247,11 @@ cardHeight =
 cardElement : Card -> Int -> Svg msg
 cardElement card i =
     let
-        col =
-            remainderBy 4 i
-
-        row =
-            i // 4
-
         x =
-            col
-                * (Nums.cardWidth + Nums.cardMargin)
-                |> String.fromInt
-                |> Atr.x
+            Atr.x <| String.fromInt <| Nums.cardX i
 
         y =
-            row
-                * (Nums.cardHeight + Nums.cardMargin)
-                |> String.fromInt
-                |> Atr.y
+            Atr.y <| String.fromInt <| Nums.cardY i
 
         u =
             cardUrl card

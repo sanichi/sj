@@ -161,6 +161,16 @@ cardsYOffset position =
             badgeHeight + badgeMargin
 
 
+cardX : Int -> Int
+cardX i =
+    remainderBy 4 i * (cardWidth + cardMargin)
+
+
+cardY : Int -> Int
+cardY i =
+    (i // 4) * (cardHeight + cardMargin)
+
+
 badgeOffset : Position -> ( Int, Int )
 badgeOffset position =
     let
