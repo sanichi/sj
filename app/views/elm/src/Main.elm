@@ -12,7 +12,7 @@ import Ports
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Update exposing (Update)
-import Util
+import View
 
 
 
@@ -40,9 +40,9 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    [ Util.bg, Util.pack model, Util.discard model ]
-        ++ Util.hands model
-        |> svg [ id "card-table", version "1.1", Util.box ]
+    [ View.bg, View.pack model, View.discard model ]
+        ++ View.hands model
+        |> svg [ id "card-table", version "1.1", View.box ]
 
 
 
