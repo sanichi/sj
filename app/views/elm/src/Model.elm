@@ -1,4 +1,4 @@
-module Model exposing (Model, init, reveal, revealed, update)
+module Model exposing (Model, init, reveal, update)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
@@ -63,28 +63,6 @@ reveal m pid cid =
 
         _ ->
             m
-
-
-revealed : Model -> Int -> Int -> Bool
-revealed m pid cid =
-    let
-        p =
-            getPlayer m pid
-
-        c =
-            case p of
-                Just player ->
-                    Hand.get cid player.hand
-
-                Nothing ->
-                    Nothing
-    in
-    case c of
-        Just card ->
-            card.vis
-
-        _ ->
-            True
 
 
 update : Model -> Update -> Model

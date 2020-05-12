@@ -56,11 +56,7 @@ update msg m =
             ( Model.update m u, Cmd.none )
 
         Reveal pid cid ->
-            if Model.revealed m pid cid then
-                ( m, Cmd.none )
-
-            else
-                ( Model.reveal m pid cid, push msg )
+            ( Model.reveal m pid cid, push msg )
 
         Noop ->
             ( m, Cmd.none )
