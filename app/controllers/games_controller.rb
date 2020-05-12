@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   before_action :find_game, only: [:destroy, :show, :join, :leave, :play]
 
   def waiting
-    @games = Game.where(state: Game::WAITING)
+    @games = Game.where.not(state: Game::FINISHED)
   end
 
   def new
@@ -43,6 +43,7 @@ class GamesController < ApplicationController
 
   def play
     if @game && @game.can_be_played_by?(current_user)
+      @game.update_column(:state, Game::STARTED) if @game.state == Game::WAITING
       @player = @game.players.find_by(user: current_user)
     else
       redirect_to waiting_games_path

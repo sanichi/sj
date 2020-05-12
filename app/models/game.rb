@@ -4,6 +4,8 @@ class Game < ApplicationRecord
   UPTO = [50, 100, 200, 300, 400, 500]
 
   WAITING = "waiting"
+  STARTED = "started"
+  FINISHED = "finished"
 
   has_many :players, dependent: :destroy
   has_many :messages, dependent: :destroy
@@ -22,7 +24,7 @@ class Game < ApplicationRecord
   end
 
   def can_be_played_by?(user)
-    return false unless state == WAITING
+    return false unless state != FINISHED
     return false unless players.count == participants
     return false unless players.pluck(:user_id).include?(user.id)
     true
