@@ -46,16 +46,13 @@ bg =
 pack : Model -> Svg Msg
 pack model =
     let
-        x =
-            String.fromInt Nums.packX |> Atr.x
+        frame =
+            [ packX, packY, cardWidth, cardHeight ]
 
-        y =
-            String.fromInt Nums.packY |> Atr.y
-
-        u =
+        url =
             cardUrl model.pack
     in
-    Svg.image [ x, y, cardWidth, cardHeight, u ] []
+    cardGroup (url :: frame) frame
 
 
 
@@ -65,16 +62,13 @@ pack model =
 discard : Model -> Svg Msg
 discard model =
     let
-        x =
-            String.fromInt Nums.discardX |> Atr.x
+        frame =
+            [ discardX, discardY, cardWidth, cardHeight ]
 
-        y =
-            String.fromInt Nums.discardY |> Atr.y
-
-        u =
+        url =
             cardUrl model.discard
     in
-    Svg.image [ x, y, cardWidth, cardHeight, u ] []
+    cardGroup (url :: frame) frame
 
 
 
@@ -202,6 +196,11 @@ cardElement player cid card =
             else
                 Atr.class "clickable" :: frame
     in
+    cardGroup picture border
+
+
+cardGroup : List (Attribute Msg) -> List (Attribute Msg) -> Svg Msg
+cardGroup picture border =
     Svg.g [ Atr.class "card" ]
         [ Svg.image picture []
         , Svg.rect border []
@@ -253,6 +252,16 @@ cardY cid =
     Atr.y <| String.fromInt <| Nums.cardY cid
 
 
+discardX : Attribute Msg
+discardX =
+    Atr.x <| String.fromInt Nums.discardX
+
+
+discardY : Attribute Msg
+discardY =
+    Atr.y <| String.fromInt Nums.discardY
+
+
 groupedCards : Player -> Svg Msg
 groupedCards player =
     Svg.g [ cardsOffset player.position ] (Hand.map (cardElement player) player.hand)
@@ -271,3 +280,13 @@ handOffset position =
             String.fromInt j
     in
     Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
+
+
+packX : Attribute Msg
+packX =
+    Atr.x <| String.fromInt Nums.packX
+
+
+packY : Attribute Msg
+packY =
+    Atr.y <| String.fromInt Nums.packY
