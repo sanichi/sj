@@ -15,6 +15,7 @@ var skyjo = (function() {
       dataType: 'json',
 
       success: function(json, status, xhr) {
+        if (json.abort) abort();
         $.each(json.updates, function(i, update) {
           elm.ports.pullUpdate.send(update);
         });
@@ -40,11 +41,19 @@ var skyjo = (function() {
 
       dataType: 'json',
 
+      success: function(json, status, xhr) {
+        if (json.abort) abort();
+      },
+
       error: function(xhr) {
         console.log("ajax push error: " + xhr.status);
       },
 
     });
+  }
+
+  function abort() {
+    window.location.href = '<%= waiting_games_path %>';
   }
 
   function set_elm(app) {
