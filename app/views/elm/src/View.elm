@@ -5,7 +5,7 @@ import Hand exposing (Hand)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Nums
-import Player exposing (Player, Position(..), State(..))
+import Player exposing (Player, Position(..))
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
 import Svg.Events exposing (onClick)
@@ -87,7 +87,7 @@ hands model =
 badge : Player -> Svg Msg
 badge player =
     Svg.g [ Atr.class "badge", badgeOffset player.position ]
-        [ badgeRect
+        [ badgeRect player
         , badgeText player
         ]
 
@@ -107,8 +107,8 @@ badgeOffset position =
     Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
 
 
-badgeRect : Svg Msg
-badgeRect =
+badgeRect : Player -> Svg Msg
+badgeRect player =
     let
         x =
             Atr.x "0"
@@ -122,13 +122,21 @@ badgeRect =
         h =
             Atr.height <| String.fromInt Nums.badgeHeight
 
+        c =
+            Atr.class <|
+                if player.turn then
+                    "turn"
+
+                else
+                    "wait"
+
         rx =
             Atr.rx "10"
 
         ry =
             Atr.ry "10"
     in
-    Svg.rect [ x, y, w, h, rx, ry ] []
+    Svg.rect [ x, y, w, h, c, rx, ry ] []
 
 
 badgeText : Player -> Svg Msg

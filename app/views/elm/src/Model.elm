@@ -58,8 +58,11 @@ reveal m pid cid =
 
                 uPlayers =
                     Player.put pid uPlayer m.players
+
+                uTurns =
+                    Player.updateReveal uPlayers
             in
-            { m | players = uPlayers }
+            { m | players = uTurns }
 
         _ ->
             m

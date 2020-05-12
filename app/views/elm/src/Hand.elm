@@ -8,6 +8,11 @@ type alias Hand =
     Array Card
 
 
+exposed : Hand -> Int
+exposed hand =
+    Array.length <| Array.filter .vis hand
+
+
 init : List Int -> Hand
 init nums =
     Array.fromList <| List.map Card.hidden nums

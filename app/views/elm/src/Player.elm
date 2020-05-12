@@ -1,4 +1,16 @@
-module Player exposing (Player, Players, Position(..), State(..), all, badge, get, init, msg, put)
+module Player exposing
+    ( Player
+    , Players
+    , Position(..)
+    , State(..)
+    , all
+    , badge
+    , get
+    , init
+    , msg
+    , put
+    , updateReveal
+    )
 
 import Card exposing (Card)
 import Dict exposing (Dict)
@@ -12,6 +24,7 @@ type alias Player =
     , handle : String
     , position : Position
     , hand : Hand
+    , turn : Bool
     , score : Int
     }
 
@@ -51,7 +64,7 @@ badge player =
         current =
             String.fromInt (Hand.score player.hand)
     in
-    player.handle ++ " " ++ total ++ "/" ++ current
+    player.handle ++ " " ++ total ++ "|" ++ current
 
 
 get : Int -> Players -> Maybe Player
@@ -81,6 +94,11 @@ msg player cid card =
 put : Int -> Player -> Players -> Players
 put pid player players =
     Dict.insert pid player players
+
+
+updateReveal : Players -> Players
+updateReveal players =
+    players
 
 
 
@@ -113,7 +131,7 @@ convert proto =
         hand =
             Hand.init <| List.repeat 12 0
     in
-    Player proto.pid proto.handle position hand 0
+    Player proto.pid proto.handle position hand True 0
 
 
 decode : String -> Position
