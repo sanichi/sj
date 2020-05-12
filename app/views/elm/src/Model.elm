@@ -4,7 +4,8 @@ import Card exposing (Card)
 import Hand exposing (Hand)
 import Json.Decode exposing (Value)
 import Msg
-import Player exposing (Player, Players)
+import Player exposing (Player)
+import Players exposing (Players)
 import Setup
 import Update exposing (Update)
 
@@ -26,7 +27,7 @@ init flags =
     { player_id = setup.player_id
     , pack = Card.hidden 0
     , discard = Card.exposed 0
-    , players = Player.init setup.players
+    , players = Players.init setup.players
     }
 
 
@@ -57,10 +58,10 @@ reveal m pid cid =
                     { player | hand = uHand }
 
                 uPlayers =
-                    Player.put pid uPlayer m.players
+                    Players.put pid uPlayer m.players
 
                 uTurns =
-                    Player.updateReveal uPlayers
+                    Players.updateReveal uPlayers
             in
             { m | players = uTurns }
 
@@ -90,7 +91,7 @@ update m u =
         p =
             case u.player_id of
                 Just pid ->
-                    Player.get pid m.players
+                    Players.get pid m.players
 
                 Nothing ->
                     Nothing
@@ -106,7 +107,7 @@ update m u =
         m3 =
             case ( p, h ) of
                 ( Just player, Just hand ) ->
-                    { m2 | players = Player.put player.pid { player | hand = hand } m.players }
+                    { m2 | players = Players.put player.pid { player | hand = hand } m.players }
 
                 _ ->
                     m2
@@ -128,4 +129,4 @@ update m u =
 
 getPlayer : Model -> Int -> Maybe Player
 getPlayer model pid =
-    Player.get pid model.players
+    Players.get pid model.players

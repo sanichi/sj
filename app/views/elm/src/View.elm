@@ -6,6 +6,7 @@ import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Nums
 import Player exposing (Player, Position(..))
+import Players exposing (Players)
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
 import Svg.Events exposing (onClick)
@@ -77,7 +78,7 @@ discard model =
 
 hands : Model -> List (Svg Msg)
 hands model =
-    List.map cardsAndName <| Player.all model.players
+    List.map cardsAndName <| Players.all model.players
 
 
 
