@@ -1,13 +1,13 @@
 var skyjo = (function() {
 
   var elm;
-  var polling = true;
+  var pulling = true;
   var data = {
     player_id: <%= @player.id %>,
     last_message_id: 0
   };
 
-  function poll() {
+  function pull() {
     $.ajax('/updates.json', {
 
       data: data,
@@ -16,7 +16,7 @@ var skyjo = (function() {
 
       success: function(json, status, xhr) {
         $.each(json.updates, function(i, update) {
-          elm.ports.updates.send(update);
+          elm.ports.pullUpdate.send(update);
         });
         data.last_message_id = json.last_message_id;
         $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
@@ -27,7 +27,7 @@ var skyjo = (function() {
       },
 
       complete: function(xhr) {
-        if (polling) setTimeout(poll, 10000);
+        if (pulling) setTimeout(pull, 10000);
       }
 
     });
@@ -38,7 +38,7 @@ var skyjo = (function() {
   }
 
   return {
-    poll: poll,
+    pull: pull,
     set_elm: set_elm
   };
 
@@ -52,6 +52,9 @@ $(function() {
       players: [ <%= game_js_player_list(@game, @player.id) %> ]
     }
   });
+  app.ports.pushUpdates.subscribe(function(updates) {
+    console.log(updates);
+  });
   skyjo.set_elm(app);
-  skyjo.poll();
+  skyjo.pull();
 });

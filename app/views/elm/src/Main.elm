@@ -31,7 +31,7 @@ main =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Ports.updates (NewUpdate << Update.decode)
+    Ports.pullUpdate (NewUpdate << Update.decode)
 
 
 
@@ -56,7 +56,16 @@ update msg m =
             ( Model.update m u, Cmd.none )
 
         Reveal pid cid ->
-            ( Model.reveal m pid cid, Cmd.none )
+            ( Model.reveal m pid cid, push msg )
 
         Noop ->
             ( m, Cmd.none )
+
+
+
+-- private
+
+
+push : Msg -> Cmd Msg
+push msg =
+    Msg.value msg |> Ports.pushUpdates
