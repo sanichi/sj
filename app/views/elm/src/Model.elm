@@ -47,23 +47,7 @@ reveal m pid cid =
     in
     case ( p, c ) of
         ( Just player, Just card ) ->
-            let
-                uCard =
-                    Card.exposed card.num
-
-                uHand =
-                    Hand.set cid uCard player.hand
-
-                uPlayer =
-                    { player | hand = uHand }
-
-                uPlayers =
-                    Players.put pid uPlayer m.players
-
-                uTurns =
-                    Players.updateReveal uPlayers
-            in
-            { m | players = uTurns }
+            { m | players = Players.updateReveal cid card player m.players }
 
         _ ->
             m

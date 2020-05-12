@@ -7,6 +7,7 @@ module Players exposing
     , updateReveal
     )
 
+import Card exposing (Card)
 import Dict exposing (Dict)
 import Hand exposing (Hand)
 import Player exposing (Player, Position(..))
@@ -37,9 +38,22 @@ put pid player players =
     Dict.insert pid player players
 
 
-updateReveal : Players -> Players
-updateReveal players =
-    players
+updateReveal : Int -> Card -> Player -> Players -> Players
+updateReveal cid card player players =
+    let
+        uCard =
+            Card.exposed card.num
+
+        uHand =
+            Hand.set cid uCard player.hand
+
+        uPlayer =
+            { player | hand = uHand }
+
+        uPlayers =
+            put player.pid uPlayer players
+    in
+    updateRevealTurns uPlayers
 
 
 
@@ -98,3 +112,56 @@ decode position =
 
         _ ->
             S
+
+
+updateRevealTurns : Players -> Players
+updateRevealTurns players =
+    let
+        uPlayers =
+            Dict.map updateRevealTurn players
+
+        stillOn =
+            List.filter .turn <| Dict.values uPlayers
+    in
+    if List.isEmpty stillOn then
+        updateRevealWho uPlayers
+
+    else
+        uPlayers
+
+
+updateRevealTurn : Int -> Player -> Player
+updateRevealTurn pid player =
+    if Hand.exposed player.hand >= 2 then
+        { player | turn = False }
+
+    else
+        player
+
+
+updateRevealWho : Players -> Players
+updateRevealWho players =
+    let
+        mapper =
+            \p -> ( Hand.score p.hand, Hand.highest p.hand, p.pid )
+
+        sorted =
+            Dict.values players
+                |> List.map mapper
+                |> List.sort
+                |> List.reverse
+
+        playerToMove =
+            case List.head sorted of
+                Just ( score, highest, pid ) ->
+                    get pid players
+
+                Nothing ->
+                    Nothing
+    in
+    case playerToMove of
+        Just player ->
+            put player.pid { player | turn = True } players
+
+        Nothing ->
+            players

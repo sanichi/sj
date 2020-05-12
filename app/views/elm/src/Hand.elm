@@ -1,4 +1,14 @@
-module Hand exposing (Hand, get, hidden, init, map, score, set)
+module Hand exposing
+    ( Hand
+    , exposed
+    , get
+    , hidden
+    , highest
+    , init
+    , map
+    , score
+    , set
+    )
 
 import Array exposing (Array)
 import Card exposing (Card)
@@ -31,6 +41,16 @@ get cid hand =
 hidden : Hand -> Int
 hidden hand =
     Array.length <| Array.filter (not << .vis) hand
+
+
+highest : Hand -> Int
+highest hand =
+    case List.maximum <| Array.toList <| Array.map Card.score hand of
+        Just max ->
+            max
+
+        Nothing ->
+            0
 
 
 score : Hand -> Int
