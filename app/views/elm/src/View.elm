@@ -179,35 +179,33 @@ cardsOffset position =
 cardElement : Player -> Int -> Card -> Svg Msg
 cardElement player cid card =
     let
-        x =
-            Atr.x <| String.fromInt <| Nums.cardX cid
+        frame =
+            [ cardX cid, cardY cid, cardWidth, cardHeight ]
 
-        y =
-            Atr.y <| String.fromInt <| Nums.cardY cid
-
-        w =
-            cardWidth
-
-        h =
-            cardHeight
-
-        u =
+        url =
             cardUrl card
 
-        a =
-            [ x, y, w, h, u ]
-
-        m =
+        msg =
             Player.msg player cid card
 
-        a_ =
-            if m == Noop then
-                a
+        picture =
+            if msg == Noop then
+                url :: frame
 
             else
-                onClick m :: a
+                onClick msg :: url :: frame
+
+        border =
+            if msg == Noop then
+                frame
+
+            else
+                Atr.class "clickable" :: frame
     in
-    Svg.image a_ []
+    Svg.g [ Atr.class "card" ]
+        [ Svg.image picture []
+        , Svg.rect border []
+        ]
 
 
 cardHeight : Attribute Msg
@@ -243,6 +241,16 @@ cardUrl card =
 cardWidth : Attribute Msg
 cardWidth =
     String.fromInt Nums.cardWidth |> Atr.width
+
+
+cardX : Int -> Attribute Msg
+cardX cid =
+    Atr.x <| String.fromInt <| Nums.cardX cid
+
+
+cardY : Int -> Attribute Msg
+cardY cid =
+    Atr.y <| String.fromInt <| Nums.cardY cid
 
 
 groupedCards : Player -> Svg Msg
