@@ -4,17 +4,17 @@ class Message < ApplicationRecord
 
   attribute :pack, :integer
   attribute :discard, :integer
-  attribute :hand, :integer, array: true
   attribute :player_id, :integer
+  attribute :hand, :integer, array: true
+  attribute :reveal, :integer
 
   private
 
   def generate_json
     data = {}
-    data[:pack] = pack if pack
-    data[:discard] = discard if discard
-    data[:hand] = hand if hand
-    data[:player_id] = player_id if player_id
+    [:pack, :discard, :player_id, :hand, :reveal].each do |atr|
+      data[atr] = send(atr) if send(atr)
+    end
     self.json = JSON.generate(data)
   end
 end

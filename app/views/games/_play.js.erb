@@ -8,7 +8,7 @@ var skyjo = (function() {
   };
 
   function pull() {
-    $.ajax('/updates.json', {
+    $.ajax('/pull.json', {
 
       data: data,
 
@@ -23,12 +23,26 @@ var skyjo = (function() {
       },
 
       error: function(xhr) {
-        console.log("ajax error: " + xhr.status);
+        console.log("ajax pull error: " + xhr.status);
       },
 
       complete: function(xhr) {
         if (pulling) setTimeout(pull, 10000);
       }
+
+    });
+  }
+
+  function push(updates) {
+    $.ajax('/push.json', {
+
+      data: updates,
+
+      dataType: 'json',
+
+      error: function(xhr) {
+        console.log("ajax push error: " + xhr.status);
+      },
 
     });
   }
@@ -39,6 +53,7 @@ var skyjo = (function() {
 
   return {
     pull: pull,
+    push: push,
     set_elm: set_elm
   };
 
@@ -54,6 +69,7 @@ $(function() {
   });
   app.ports.pushUpdates.subscribe(function(updates) {
     console.log(updates);
+    skyjo.push(updates);
   });
   skyjo.set_elm(app);
   skyjo.pull();

@@ -1,8 +1,9 @@
-module Model exposing (Model, init, reveal, update)
+module Model exposing (Model, init, reveal, revealed, update)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
 import Json.Decode exposing (Value)
+import Msg
 import Player exposing (Player, Players)
 import Setup
 import Update exposing (Update)
@@ -64,26 +65,48 @@ reveal m pid cid =
             m
 
 
+revealed : Model -> Int -> Int -> Bool
+revealed m pid cid =
+    let
+        p =
+            getPlayer m pid
+
+        c =
+            case p of
+                Just player ->
+                    Hand.get cid player.hand
+
+                Nothing ->
+                    Nothing
+    in
+    case c of
+        Just card ->
+            card.vis
+
+        _ ->
+            True
+
+
 update : Model -> Update -> Model
 update m u =
     let
-        pack =
+        m1 =
             case u.pack of
                 Just num ->
-                    Card.hidden num
+                    { m | pack = Card.hidden num }
 
                 Nothing ->
-                    m.pack
+                    m
 
-        discard =
+        m2 =
             case u.discard of
                 Just num ->
-                    Card.exposed num
+                    { m1 | discard = Card.exposed num }
 
                 Nothing ->
-                    m.discard
+                    m1
 
-        player =
+        p =
             case u.player_id of
                 Just pid ->
                     Player.get pid m.players
@@ -91,7 +114,7 @@ update m u =
                 Nothing ->
                     Nothing
 
-        hand =
+        h =
             case u.hand of
                 Just nums ->
                     Just (Hand.init nums)
@@ -99,15 +122,23 @@ update m u =
                 Nothing ->
                     Nothing
 
-        players =
-            case ( player, hand ) of
-                ( Just p, Just h ) ->
-                    Player.put p.pid { p | hand = h } m.players
+        m3 =
+            case ( p, h ) of
+                ( Just player, Just hand ) ->
+                    { m2 | players = Player.put player.pid { player | hand = hand } m.players }
 
                 _ ->
-                    m.players
+                    m2
+
+        m4 =
+            case ( p, u.reveal ) of
+                ( Just player, Just cid ) ->
+                    reveal m3 player.pid cid
+
+                _ ->
+                    m3
     in
-    { m | pack = pack, discard = discard, players = players }
+    m4
 
 
 

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root to: "sessions#new"
 
-  get "updates" => "messages#updates"
+  %w/push pull/.each { |a| get a => "messages##{a}" }
 
   resources :users
   resources :games, only: [:new, :create, :destroy, :show] do

@@ -24,6 +24,13 @@ describe Message do
     expect(msg.json).to eq "{\"hand\":[1,2,3]}"
   end
 
+  it "reveal" do
+    msg = game.messages.create(reveal: 4)
+
+    expect(Message.count).to eq 1
+    expect(msg.json).to eq "{\"reveal\":4}"
+  end
+
   it "player_id" do
     msg = game.messages.create(player_id: 371)
 
@@ -31,11 +38,11 @@ describe Message do
     expect(msg.json).to eq "{\"player_id\":371}"
   end
 
-  it "all" do
+  it "multiple" do
     msg = game.messages.create(pack: 9, discard: 12, hand: [-2, -1, 0], player_id: 99481)
 
     expect(Message.count).to eq 1
-    expect(msg.json).to eq "{\"pack\":9,\"discard\":12,\"hand\":[-2,-1,0],\"player_id\":99481}"
+    expect(msg.json).to eq "{\"pack\":9,\"discard\":12,\"player_id\":99481,\"hand\":[-2,-1,0]}"
 
     game.destroy
     expect(Message.count).to eq 0

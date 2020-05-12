@@ -15,8 +15,8 @@ value msg =
     case msg of
         Reveal pid cid ->
             E.object
-                [ ( "pid", E.int pid )
-                , ( "cid", E.int cid )
+                [ ( "player_id", E.int pid )
+                , ( "card_index", E.int cid )
                 ]
 
         _ ->
