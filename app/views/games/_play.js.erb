@@ -20,7 +20,7 @@ var skyjo = (function() {
           elm.ports.pullUpdate.send(update);
         });
         data.last_message_id = json.last_message_id;
-        $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
+        if (!empty(json)) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
       },
 
       error: function(xhr) {
@@ -54,6 +54,10 @@ var skyjo = (function() {
 
   function abort() {
     window.location.href = '<%= waiting_games_path %>';
+  }
+
+  function empty(obj) {
+    return $.type(obj.updates) == 'array' && obj.updates.length == 0
   }
 
   function set_elm(app) {
