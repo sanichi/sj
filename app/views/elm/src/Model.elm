@@ -59,9 +59,6 @@ packVis m vis =
     let
         pack =
             Card m.pack.num vis
-
-        x =
-            Debug.log "dealing with pack vis: " pack
     in
     { m | pack = pack }
 
@@ -102,10 +99,6 @@ update m u =
         m2 =
             case u.pack_vis of
                 Just vis ->
-                    let
-                        x =
-                            Debug.log "got pack vis: " vis
-                    in
                     packVis m1 vis
 
                 Nothing ->
