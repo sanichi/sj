@@ -1,10 +1,10 @@
-module Model exposing (Model, init, reveal, update)
+module Model exposing (Model, init, packMsg, packVis, reveal, update)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
 import Json.Decode exposing (Value)
-import Msg
-import Player exposing (Player)
+import Msg exposing (Msg(..))
+import Player exposing (Player, State(..))
 import Players exposing (Players)
 import Setup
 import Update exposing (Update)
@@ -29,6 +29,41 @@ init flags =
     , discard = Card.exposed 0
     , players = Players.init setup.player_id setup.players
     }
+
+
+packMsg : Model -> Msg
+packMsg model =
+    case getActivePlayer model of
+        Just player ->
+            if player.turn then
+                case player.state of
+                    ReadyForTurn ->
+                        if model.pack.vis then
+                            Noop
+
+                        else
+                            PackVis True
+
+                    _ ->
+                        Noop
+
+            else
+                Noop
+
+        Nothing ->
+            Noop
+
+
+packVis : Model -> Bool -> Model
+packVis m vis =
+    let
+        pack =
+            Card m.pack.num vis
+
+        x =
+            Debug.log "dealing with pack vis: " pack
+    in
+    { m | pack = pack }
 
 
 reveal : Model -> Int -> Int -> Model
@@ -65,12 +100,24 @@ update m u =
                     m
 
         m2 =
-            case u.discard of
-                Just num ->
-                    { m1 | discard = Card.exposed num }
+            case u.pack_vis of
+                Just vis ->
+                    let
+                        x =
+                            Debug.log "got pack vis: " vis
+                    in
+                    packVis m1 vis
 
                 Nothing ->
                     m1
+
+        m3 =
+            case u.discard of
+                Just num ->
+                    { m2 | discard = Card.exposed num }
+
+                Nothing ->
+                    m2
 
         p =
             case u.player_id of
@@ -88,23 +135,23 @@ update m u =
                 Nothing ->
                     Nothing
 
-        m3 =
+        m4 =
             case ( p, h ) of
                 ( Just player, Just hand ) ->
-                    { m2 | players = Players.put player.pid { player | hand = hand } m.players }
-
-                _ ->
-                    m2
-
-        m4 =
-            case ( p, u.reveal ) of
-                ( Just player, Just cid ) ->
-                    reveal m3 player.pid cid
+                    { m3 | players = Players.put player.pid { player | hand = hand } m.players }
 
                 _ ->
                     m3
+
+        m5 =
+            case ( p, u.reveal ) of
+                ( Just player, Just cid ) ->
+                    reveal m4 player.pid cid
+
+                _ ->
+                    m4
     in
-    m4
+    m5
 
 
 
@@ -114,3 +161,8 @@ update m u =
 getPlayer : Model -> Int -> Maybe Player
 getPlayer model pid =
     Players.get pid model.players
+
+
+getActivePlayer : Model -> Maybe Player
+getActivePlayer model =
+    Players.get model.player_id model.players

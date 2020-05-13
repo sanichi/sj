@@ -10,6 +10,13 @@ describe Message do
     expect(msg.json).to eq "{\"pack\":5}"
   end
 
+  it "pack_vis" do
+    msg = game.messages.create(pack_vis: true)
+
+    expect(Message.count).to eq 1
+    expect(msg.json).to eq "{\"pack_vis\":true}"
+  end
+
   it "discard" do
     msg = game.messages.create(discard: -2)
 
@@ -39,10 +46,10 @@ describe Message do
   end
 
   it "multiple" do
-    msg = game.messages.create(pack: 9, discard: 12, hand: [-2, -1, 0], player_id: 99481)
+    msg = game.messages.create(pack: 9, pack_vis: false, discard: 12, hand: [-2, -1, 0], player_id: 99481)
 
     expect(Message.count).to eq 1
-    expect(msg.json).to eq "{\"pack\":9,\"discard\":12,\"player_id\":99481,\"hand\":[-2,-1,0]}"
+    expect(msg.json).to eq "{\"pack\":9,\"pack_vis\":false,\"discard\":12,\"player_id\":99481,\"hand\":[-2,-1,0]}"
 
     game.destroy
     expect(Message.count).to eq 0

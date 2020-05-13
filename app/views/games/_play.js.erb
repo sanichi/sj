@@ -9,11 +9,8 @@ var skyjo = (function() {
 
   function pull() {
     $.ajax('/pull.json', {
-
       data: data,
-
       dataType: 'json',
-
       success: function(json, status, xhr) {
         if (json.abort) abort();
         $.each(json.updates, function(i, update) {
@@ -22,33 +19,23 @@ var skyjo = (function() {
         data.last_message_id = json.last_message_id;
         if (!empty(json)) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
       },
-
       error: function(xhr) {
         console.log("ajax pull error: " + xhr.status);
       },
-
       complete: function(xhr) {
         if (pulling) setTimeout(pull, 2500);
       }
-
     });
   }
 
   function push(updates) {
+    updates.game_id = <%= @game.id %>;
     $.ajax('/push.json', {
-
       data: updates,
-
       dataType: 'json',
-
-      success: function(json, status, xhr) {
-        if (json.abort) abort();
-      },
-
       error: function(xhr) {
         console.log("ajax push error: " + xhr.status);
-      },
-
+      }
     });
   }
 

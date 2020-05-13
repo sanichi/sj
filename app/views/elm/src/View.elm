@@ -52,8 +52,11 @@ pack model =
 
         url =
             cardUrl model.pack
+
+        msg =
+            Model.packMsg model
     in
-    cardGroup (url :: frame) frame
+    cardGroup frame url msg
 
 
 
@@ -68,8 +71,11 @@ discard model =
 
         url =
             cardUrl model.discard
+
+        msg =
+            Noop
     in
-    cardGroup (url :: frame) frame
+    cardGroup frame url msg
 
 
 
@@ -190,7 +196,13 @@ cardElement player cid card =
 
         msg =
             Player.cardMsg player cid card
+    in
+    cardGroup frame url msg
 
+
+cardGroup : List (Attribute Msg) -> Attribute Msg -> Msg -> Svg Msg
+cardGroup frame url msg =
+    let
         picture =
             if msg == Noop then
                 url :: frame
@@ -205,11 +217,6 @@ cardElement player cid card =
             else
                 Atr.class "clickable" :: frame
     in
-    cardGroup picture border
-
-
-cardGroup : List (Attribute Msg) -> List (Attribute Msg) -> Svg Msg
-cardGroup picture border =
     Svg.g [ Atr.class "card" ]
         [ Svg.image picture []
         , Svg.rect border []

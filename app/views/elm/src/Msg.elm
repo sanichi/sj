@@ -7,6 +7,7 @@ import Update exposing (Update)
 type Msg
     = NewUpdate Update
     | Reveal Int Int
+    | PackVis Bool
     | Noop
 
 
@@ -17,6 +18,11 @@ value msg =
             E.object
                 [ ( "player_id", E.int pid )
                 , ( "card_index", E.int cid )
+                ]
+
+        PackVis vis ->
+            E.object
+                [ ( "pack_vis", E.bool vis )
                 ]
 
         _ ->

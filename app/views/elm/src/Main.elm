@@ -58,6 +58,9 @@ update msg m =
         Reveal pid cid ->
             ( Model.reveal m pid cid, push msg )
 
+        PackVis vis ->
+            ( Model.packVis m vis, push msg )
+
         Noop ->
             ( m, Cmd.none )
 

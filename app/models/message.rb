@@ -3,6 +3,7 @@ class Message < ApplicationRecord
   before_save :generate_json
 
   attribute :pack, :integer
+  attribute :pack_vis, :boolean
   attribute :discard, :integer
   attribute :player_id, :integer
   attribute :hand, :integer, array: true
@@ -14,8 +15,8 @@ class Message < ApplicationRecord
 
   def generate_json
     data = {}
-    [:pack, :discard, :player_id, :hand, :reveal].each do |atr|
-      data[atr] = send(atr) if send(atr)
+    [:pack, :pack_vis, :discard, :player_id, :hand, :reveal].each do |atr|
+      data[atr] = send(atr) unless send(atr).nil?
     end
     self.json = JSON.generate(data)
   end
