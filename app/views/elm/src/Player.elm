@@ -36,7 +36,7 @@ type Position
 type State
     = Passive
     | Revealing
-    | Picking
+    | ReadyForTurn
 
 
 badge : Player -> String

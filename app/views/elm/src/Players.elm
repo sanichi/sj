@@ -140,7 +140,7 @@ updateRevealTurns players =
 updateRevealTurn : Int -> Player -> Player
 updateRevealTurn pid player =
     if Hand.exposed player.hand >= 2 then
-        Player.update Picking { player | turn = False }
+        Player.update ReadyForTurn { player | turn = False }
 
     else
         player
