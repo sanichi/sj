@@ -81,7 +81,6 @@ $(function() {
     }
   });
   app.ports.pushUpdates.subscribe(function(updates) {
-    console.log(updates);
     skyjo.push(updates);
   });
   skyjo.set_elm(app);

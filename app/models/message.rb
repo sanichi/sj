@@ -8,6 +8,8 @@ class Message < ApplicationRecord
   attribute :hand, :integer, array: true
   attribute :reveal, :integer
 
+  default_scope { order(:id) }
+
   private
 
   def generate_json
