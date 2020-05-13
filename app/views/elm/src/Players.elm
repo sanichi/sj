@@ -10,7 +10,7 @@ module Players exposing
 import Card exposing (Card)
 import Dict exposing (Dict)
 import Hand exposing (Hand)
-import Player exposing (Player, Position(..))
+import Player exposing (Player, Position(..), State(..))
 import Setup exposing (ProtoPlayer)
 
 
@@ -86,10 +86,14 @@ convert pid proto =
         hand =
             Hand.init <| List.repeat 12 0
 
-        active =
-            proto.pid == pid
+        state =
+            if proto.pid == pid then
+                Revealing
+
+            else
+                Passive
     in
-    Player proto.pid proto.handle position hand True active 0
+    Player proto.pid proto.handle position hand True state 0
 
 
 decode : String -> Position
@@ -136,7 +140,7 @@ updateRevealTurns players =
 updateRevealTurn : Int -> Player -> Player
 updateRevealTurn pid player =
     if Hand.exposed player.hand >= 2 then
-        { player | turn = False }
+        Player.update Picking { player | turn = False }
 
     else
         player

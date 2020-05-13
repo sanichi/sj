@@ -189,7 +189,7 @@ cardElement player cid card =
             cardUrl card
 
         msg =
-            Player.msg player cid card
+            Player.cardMsg player cid card
 
         picture =
             if msg == Noop then
