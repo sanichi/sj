@@ -28,9 +28,9 @@ get pid players =
     Dict.get pid players
 
 
-init : List ProtoPlayer -> Players
-init list =
-    build list Dict.empty
+init : Int -> List ProtoPlayer -> Players
+init pid list =
+    build pid list Dict.empty
 
 
 put : Int -> Player -> Players -> Players
@@ -60,8 +60,8 @@ updateReveal cid card player players =
 -- Private
 
 
-build : List ProtoPlayer -> Players -> Players
-build list players =
+build : Int -> List ProtoPlayer -> Players -> Players
+build pid list players =
     case list of
         [] ->
             players
@@ -69,24 +69,27 @@ build list players =
         proto :: rest ->
             let
                 nPlayer =
-                    convert proto
+                    convert pid proto
 
                 uPlayers =
                     put proto.pid nPlayer players
             in
-            build rest uPlayers
+            build pid rest uPlayers
 
 
-convert : ProtoPlayer -> Player
-convert proto =
+convert : Int -> ProtoPlayer -> Player
+convert pid proto =
     let
         position =
             decode proto.position
 
         hand =
             Hand.init <| List.repeat 12 0
+
+        active =
+            proto.pid == pid
     in
-    Player proto.pid proto.handle position hand True 0
+    Player proto.pid proto.handle position hand True active 0
 
 
 decode : String -> Position

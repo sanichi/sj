@@ -27,7 +27,7 @@ init flags =
     { player_id = setup.player_id
     , pack = Card.hidden 0
     , discard = Card.exposed 0
-    , players = Players.init setup.players
+    , players = Players.init setup.player_id setup.players
     }
 
 

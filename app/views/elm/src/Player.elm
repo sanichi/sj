@@ -1,7 +1,6 @@
 module Player exposing
     ( Player
     , Position(..)
-    , State(..)
     , badge
     , msg
     )
@@ -18,6 +17,7 @@ type alias Player =
     , position : Position
     , hand : Hand
     , turn : Bool
+    , active : Bool
     , score : Int
     }
 
@@ -29,11 +29,6 @@ type Position
     | NE
     | E
     | W
-
-
-type State
-    = Passive
-    | Starting
 
 
 badge : Player -> String
@@ -48,35 +43,17 @@ badge player =
         current =
             String.fromInt (Hand.score player.hand)
     in
-    player.handle ++ " " ++ total ++ "|" ++ current
+    player.handle ++ " " ++ total ++ "•" ++ current
 
 
 msg : Player -> Int -> Card -> Msg
 msg player cid card =
-    case state player of
-        Passive ->
-            Noop
-
-        Starting ->
-            if card.vis then
-                Noop
-
-            else
-                Reveal player.pid cid
-
-
-
--- Private
-
-
-state : Player -> State
-state player =
-    if player.position == S then
-        if Hand.hidden player.hand > 10 then
-            Starting
+    if player.active then
+        if not card.vis && (Hand.hidden player.hand > 10) then
+            Reveal player.pid cid
 
         else
-            Passive
+            Noop
 
     else
-        Passive
+        Noop
