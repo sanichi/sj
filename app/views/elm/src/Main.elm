@@ -59,7 +59,7 @@ update msg m =
             ( Model.revealCard m pid cid, push msg )
 
         PackVis vis ->
-            ( Model.packVis m vis, push msg )
+            ( Model.updatePackVis m vis, push msg )
 
         Noop ->
             ( m, Cmd.none )

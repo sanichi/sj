@@ -5,8 +5,11 @@ class MessagesController < ApplicationController
     @player = Player.find_by(id: params[:player_id])
 
     if @player
-      @game = @player.game
-      @messages = @game.messages.where("id > ?", params[:last_message_id].to_i)
+      @updates = @player.game.messages.where("id > ?", params[:last_message_id].to_i).map do |m|
+        update = JSON.parse(m.json)
+        update[:mid] = m.id
+        update
+      end
     else
       render "abort"
     end
@@ -18,7 +21,7 @@ class MessagesController < ApplicationController
     if game
       if params[:player_id] && params[:card_index]
         game.reveal(params[:player_id].to_i, params[:card_index].to_i)
-      elsif params[:game_id] && params[:pack_vis]
+      elsif params[:pack_vis]
         game.pack_vis(params[:pack_vis] == "true")
       end
     end
