@@ -1,10 +1,10 @@
-module Model exposing (Model, init, newUpdate, packMsg, revealCard, updatePackVis)
+module Model exposing (Model, State(..), init, mainPlayer, newUpdate, revealCard, updatePackVis)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
 import Json.Decode exposing (Value)
 import Msg exposing (Msg(..))
-import Player exposing (Player, State(..))
+import Player exposing (Player)
 import Players exposing (Players)
 import Setup
 import Update exposing (Update)
@@ -15,7 +15,13 @@ type alias Model =
     , pack : Card
     , discard : Card
     , players : Players
+    , state : State
     }
+
+
+type State
+    = Revealing
+    | Ready
 
 
 init : Value -> Model
@@ -28,7 +34,13 @@ init flags =
     , pack = Card.hidden 0
     , discard = Card.exposed 0
     , players = Players.init setup.player_id setup.players
+    , state = Revealing
     }
+
+
+mainPlayer : Model -> Maybe Player
+mainPlayer model =
+    Players.get model.player_id model.players
 
 
 newUpdate : Model -> Update -> Model
@@ -82,29 +94,6 @@ newUpdate model update =
             model
 
 
-packMsg : Model -> Msg
-packMsg model =
-    case getActivePlayer model of
-        Just player ->
-            if player.turn then
-                case player.state of
-                    ReadyForTurn ->
-                        if model.pack.vis then
-                            Noop
-
-                        else
-                            PackVis True
-
-                    _ ->
-                        Noop
-
-            else
-                Noop
-
-        Nothing ->
-            Noop
-
-
 updatePackVis : Model -> Bool -> Model
 updatePackVis m vis =
     let
@@ -130,7 +119,25 @@ revealCard m pid cid =
     in
     case ( p, c ) of
         ( Just player, Just card ) ->
-            { m | players = Players.updateReveal cid card player m.players }
+            let
+                players =
+                    Players.updateReveal cid card player m.players
+
+                allDone =
+                    Players.toList players
+                        |> List.map .hand
+                        |> List.map Hand.exposed
+                        |> List.map (\n -> n == 2)
+                        |> List.foldl (&&) True
+
+                state =
+                    if allDone then
+                        Ready
+
+                    else
+                        m.state
+            in
+            { m | players = players, state = state }
 
         _ ->
             m
@@ -143,11 +150,6 @@ revealCard m pid cid =
 getPlayer : Model -> Int -> Maybe Player
 getPlayer model pid =
     Players.get pid model.players
-
-
-getActivePlayer : Model -> Maybe Player
-getActivePlayer model =
-    Players.get model.player_id model.players
 
 
 playerHand : Model -> Int -> List Int -> Model

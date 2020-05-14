@@ -1,10 +1,7 @@
 module Player exposing
     ( Player
     , Position(..)
-    , State(..)
     , badge
-    , cardMsg
-    , update
     )
 
 import Card exposing (Card)
@@ -19,7 +16,7 @@ type alias Player =
     , position : Position
     , hand : Hand
     , turn : Bool
-    , state : State
+    , active : Bool
     , score : Int
     }
 
@@ -31,12 +28,6 @@ type Position
     | NE
     | E
     | W
-
-
-type State
-    = Passive
-    | Revealing
-    | ReadyForTurn
 
 
 badge : Player -> String
@@ -52,27 +43,3 @@ badge player =
             String.fromInt (Hand.score player.hand)
     in
     player.handle ++ " " ++ total ++ "•" ++ current
-
-
-cardMsg : Player -> Int -> Card -> Msg
-cardMsg player cid card =
-    case player.state of
-        Revealing ->
-            if card.vis then
-                Noop
-
-            else
-                RevealCard player.pid cid
-
-        _ ->
-            Noop
-
-
-update : State -> Player -> Player
-update state player =
-    case player.state of
-        Passive ->
-            player
-
-        _ ->
-            { player | state = state }

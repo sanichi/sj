@@ -2,7 +2,7 @@ module View exposing (bg, box, discard, hands, pack)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
-import Model exposing (Model)
+import Model exposing (Model, State(..))
 import Msg exposing (Msg(..))
 import Nums
 import Player exposing (Player, Position(..))
@@ -54,7 +54,7 @@ pack model =
             cardUrl model.pack
 
         msg =
-            Model.packMsg model
+            packMsg model
     in
     cardGroup frame url msg
 
@@ -84,7 +84,7 @@ discard model =
 
 hands : Model -> List (Svg Msg)
 hands model =
-    List.map cardsAndName <| Players.all model.players
+    List.map (cardsAndName model.state) <| Players.all model.players
 
 
 
@@ -161,11 +161,11 @@ badgeText player =
     Svg.text_ [ x, y ] [ t ]
 
 
-cardsAndName : Player -> Svg Msg
-cardsAndName player =
+cardsAndName : State -> Player -> Svg Msg
+cardsAndName state player =
     let
         cards =
-            groupedCards player
+            groupedCards state player
 
         name =
             badge player
@@ -185,8 +185,8 @@ cardsOffset position =
     Atr.transform <| "translate(0 " ++ y ++ ")"
 
 
-cardElement : Player -> Int -> Card -> Svg Msg
-cardElement player cid card =
+cardElement : State -> Player -> Int -> Card -> Svg Msg
+cardElement state player cid card =
     let
         frame =
             [ cardX cid, cardY cid, cardWidth, cardHeight ]
@@ -195,7 +195,7 @@ cardElement player cid card =
             cardUrl card
 
         msg =
-            Player.cardMsg player cid card
+            cardMsg state player cid card
     in
     cardGroup frame url msg
 
@@ -226,6 +226,24 @@ cardGroup frame url msg =
 cardHeight : Attribute Msg
 cardHeight =
     String.fromInt Nums.cardHeight |> Atr.height
+
+
+cardMsg : State -> Player -> Int -> Card -> Msg
+cardMsg state player cid card =
+    if player.active then
+        case state of
+            Revealing ->
+                if card.vis || not player.turn then
+                    Noop
+
+                else
+                    RevealCard player.pid cid
+
+            _ ->
+                Noop
+
+    else
+        Noop
 
 
 cardUrl : Card -> Attribute Msg
@@ -278,9 +296,9 @@ discardY =
     Atr.y <| String.fromInt Nums.discardY
 
 
-groupedCards : Player -> Svg Msg
-groupedCards player =
-    Svg.g [ cardsOffset player.position ] (Hand.map (cardElement player) player.hand)
+groupedCards : State -> Player -> Svg Msg
+groupedCards state player =
+    Svg.g [ cardsOffset player.position ] (Hand.map (cardElement state player) player.hand)
 
 
 handOffset : Position -> Attribute Msg
@@ -296,6 +314,29 @@ handOffset position =
             String.fromInt j
     in
     Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
+
+
+packMsg : Model -> Msg
+packMsg model =
+    case Model.mainPlayer model of
+        Just player ->
+            if player.turn then
+                case model.state of
+                    Ready ->
+                        if model.pack.vis then
+                            Noop
+
+                        else
+                            PackVis True
+
+                    _ ->
+                        Noop
+
+            else
+                Noop
+
+        Nothing ->
+            Noop
 
 
 packX : Attribute Msg
