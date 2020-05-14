@@ -23,12 +23,12 @@ class MessagesController < ApplicationController
     if params[:player_id] && params[:card_index]
       # reveal a card belonging to a player in a game
       player = Player.find_by(id: params[:player_id])
-      player.game.messages.create(player_id: @player.id, reveal: params[:card_index].to_i) if player
+      player.game.messages.create(key: "reveal", val: [player.id, params[:card_index].to_i]) if player
     elsif params[:game_id] && params[:pack_vis]
       # make the card on top of the pack visisble/invisible
       bool = params[:pack_vis] == "true"
       game = Game.find_by(id: params[:game_id])
-      game.messages.create(pack_vis: bool) if game
+      game.messages.create(key: "pack_vis", val: [1]) if game
     end
   end
 end

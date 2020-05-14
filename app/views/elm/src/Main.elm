@@ -53,7 +53,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg m =
     case msg of
         NewUpdate u ->
-            ( Model.update m u, Cmd.none )
+            ( Model.doUpdate m u, Cmd.none )
 
         Reveal pid cid ->
             ( Model.reveal m pid cid, push msg )

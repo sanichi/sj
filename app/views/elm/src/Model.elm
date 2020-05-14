@@ -1,4 +1,4 @@
-module Model exposing (Model, init, packMsg, packVis, reveal, update)
+module Model exposing (Model, doUpdate, init, packMsg, packVis, reveal)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
@@ -85,66 +85,67 @@ reveal m pid cid =
             m
 
 
-update : Model -> Update -> Model
-update m u =
+doUpdate : Model -> Update -> Model
+doUpdate model update =
     let
-        m1 =
-            case u.pack of
-                Just num ->
-                    { m | pack = Card.hidden num }
-
-                Nothing ->
-                    m
-
-        m2 =
-            case u.pack_vis of
-                Just vis ->
-                    packVis m1 vis
-
-                Nothing ->
-                    m1
-
-        m3 =
-            case u.discard of
-                Just num ->
-                    { m2 | discard = Card.exposed num }
-
-                Nothing ->
-                    m2
-
-        p =
-            case u.player_id of
-                Just pid ->
-                    Players.get pid m.players
-
-                Nothing ->
-                    Nothing
-
-        h =
-            case u.hand of
-                Just nums ->
-                    Just (Hand.init nums)
-
-                Nothing ->
-                    Nothing
-
-        m4 =
-            case ( p, h ) of
-                ( Just player, Just hand ) ->
-                    { m3 | players = Players.put player.pid { player | hand = hand } m.players }
-
-                _ ->
-                    m3
-
-        m5 =
-            case ( p, u.reveal ) of
-                ( Just player, Just cid ) ->
-                    reveal m4 player.pid cid
-
-                _ ->
-                    m4
+        ( key, val ) =
+            update
     in
-    m5
+    case key of
+        "pack" ->
+            case val of
+                [ num ] ->
+                    { model | pack = Card.hidden num }
+
+                _ ->
+                    model
+
+        "pack_vis" ->
+            case val of
+                [ num ] ->
+                    packVis model (num /= 0)
+
+                _ ->
+                    model
+
+        "discard" ->
+            case val of
+                [ num ] ->
+                    { model | discard = Card.exposed num }
+
+                _ ->
+                    model
+
+        "hand" ->
+            case val of
+                pid :: nums ->
+                    let
+                        player_ =
+                            Players.get pid model.players
+
+                        hand =
+                            Hand.init nums
+                    in
+                    case player_ of
+                        Just player ->
+                            { model | players = Players.put pid { player | hand = hand } model.players }
+
+                        Nothing ->
+                            model
+
+                _ ->
+                    model
+
+        "reveal" ->
+            case val of
+                [ pid, cid ] ->
+                    reveal model pid cid
+
+                _ ->
+                    model
+
+        _ ->
+            model
 
 
 

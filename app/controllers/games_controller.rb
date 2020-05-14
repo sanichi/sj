@@ -14,7 +14,8 @@ class GamesController < ApplicationController
     @game = Game.new resource_params
     @game.user = current_user
     if @game.save
-      @game.messages.create(pack: @game.card, discard: @game.card)
+      @game.messages.create(key: "pack", val: [@game.card])
+      @game.messages.create(key: "discard", val: [@game.card])
       redirect_to waiting_games_path
     else
       render :new
@@ -29,7 +30,7 @@ class GamesController < ApplicationController
   def join
     if @game && @game.can_be_joined_by?(current_user)
       player = @game.players.create(user: current_user)
-      @game.messages.create(hand: @game.cards(12), player_id: player.id)
+      @game.messages.create(key: "hand", val: @game.cards(12).unshift(player.id))
     end
     redirect_to waiting_games_path
   end
