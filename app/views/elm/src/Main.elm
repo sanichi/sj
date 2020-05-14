@@ -40,7 +40,7 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    [ View.bg, View.pack model, View.discard model ]
+    [ View.bg, View.pack model, View.discard model, View.debug model ]
         ++ View.hands model
         |> Svg.svg [ Atr.id "card-table", Atr.version "1.1", View.box ]
 

@@ -1,4 +1,4 @@
-module View exposing (bg, box, discard, hands, pack)
+module View exposing (bg, box, debug, discard, hands, pack)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
@@ -347,3 +347,25 @@ packX =
 packY : Attribute Msg
 packY =
     Atr.y <| String.fromInt Nums.packY
+
+
+
+-- Debug
+
+
+debug : Model -> Svg Msg
+debug model =
+    let
+        x =
+            Atr.x "10"
+
+        y =
+            Atr.y "20"
+
+        c =
+            Atr.class "debug"
+
+        t =
+            Svg.text <| Model.debug model
+    in
+    Svg.text_ [ x, y, c ] [ t ]

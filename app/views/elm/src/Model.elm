@@ -1,4 +1,4 @@
-module Model exposing (Model, State(..), init, mainPlayer, newUpdate, revealCard, updatePackVis)
+module Model exposing (Model, State(..), debug, init, mainPlayer, newUpdate, revealCard, updatePackVis)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
@@ -141,6 +141,29 @@ revealCard m pid cid =
 
         _ ->
             m
+
+
+debug : Model -> String
+debug model =
+    let
+        pid =
+            String.fromInt model.player_id
+
+        state =
+            case model.state of
+                Revealing ->
+                    "Revealing"
+
+                Ready ->
+                    "Ready"
+
+        plrs =
+            List.map Player.debug <| Players.toList model.players
+
+        mdl =
+            String.join " " [ pid, state ]
+    in
+    String.join " | " (mdl :: plrs)
 
 
 
