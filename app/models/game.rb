@@ -16,6 +16,24 @@ class Game < ApplicationRecord
 
   default_scope { order(created_at: :desc) }
 
+  def start
+    add_msg("pack", card)
+    add_msg("discard", card)
+  end
+
+  def deal(pid)
+    add_msg("hand", cards(12).unshift(pid))
+  end
+
+  def reveal(pid, cid)
+    player = players.find_by(id: pid)
+    add_msg("reveal", [player.id, cid]) if player
+  end
+
+  def pack_vis(bool)
+    add_msg("pack_vis", bool)
+  end
+
   def can_be_joined_by?(user)
     return false unless state == WAITING
     return false if players.count >= participants
@@ -73,6 +91,13 @@ class Game < ApplicationRecord
   end
 
   private
+
+  def add_msg(k, v)
+    v = [ 1 ] if v.class == TrueClass
+    v = [ 0 ] if v.class == FalseClass
+    v = [ v ] if v.class == Integer
+    messages.create(json: JSON.generate({ key: k, val: v }))
+  end
 
   def card_to_attr(c)
     "#{c < 0 ? 'm' : 'p'}#{c.abs}"

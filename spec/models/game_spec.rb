@@ -32,8 +32,8 @@ describe Game do
   end
 
   it "destroy" do
-    game.messages.create(key: "pack", int: -2)
-    game.messages.create(key: "discard", int: -1)
+    game.send(:add_msg, "pack", -2)
+    game.send(:add_msg, "discard", -1)
 
     expect(Game.count).to eq 1
     expect(Message.count).to eq 2
