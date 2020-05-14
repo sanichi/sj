@@ -1,4 +1,4 @@
-module Model exposing (Model, doUpdate, init, packMsg, packVis, reveal)
+module Model exposing (Model, init, newUpdate, packMsg, packVis, revealCard)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
@@ -63,30 +63,8 @@ packVis m vis =
     { m | pack = pack }
 
 
-reveal : Model -> Int -> Int -> Model
-reveal m pid cid =
-    let
-        p =
-            getPlayer m pid
-
-        c =
-            case p of
-                Just player ->
-                    Hand.get cid player.hand
-
-                Nothing ->
-                    Nothing
-    in
-    case ( p, c ) of
-        ( Just player, Just card ) ->
-            { m | players = Players.updateReveal cid card player m.players }
-
-        _ ->
-            m
-
-
-doUpdate : Model -> Update -> Model
-doUpdate model update =
+newUpdate : Model -> Update -> Model
+newUpdate model update =
     let
         ( key, val ) =
             update
@@ -139,13 +117,35 @@ doUpdate model update =
         "reveal" ->
             case val of
                 [ pid, cid ] ->
-                    reveal model pid cid
+                    revealCard model pid cid
 
                 _ ->
                     model
 
         _ ->
             model
+
+
+revealCard : Model -> Int -> Int -> Model
+revealCard m pid cid =
+    let
+        p =
+            getPlayer m pid
+
+        c =
+            case p of
+                Just player ->
+                    Hand.get cid player.hand
+
+                Nothing ->
+                    Nothing
+    in
+    case ( p, c ) of
+        ( Just player, Just card ) ->
+            { m | players = Players.updateReveal cid card player m.players }
+
+        _ ->
+            m
 
 
 

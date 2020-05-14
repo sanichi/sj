@@ -6,7 +6,7 @@ import Update exposing (Update)
 
 type Msg
     = NewUpdate Update
-    | Reveal Int Int
+    | RevealCard Int Int
     | PackVis Bool
     | Noop
 
@@ -14,7 +14,7 @@ type Msg
 value : Msg -> Value
 value msg =
     case msg of
-        Reveal pid cid ->
+        RevealCard pid cid ->
             E.object
                 [ ( "player_id", E.int pid )
                 , ( "card_index", E.int cid )

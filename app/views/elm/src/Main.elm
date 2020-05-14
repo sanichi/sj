@@ -53,10 +53,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg m =
     case msg of
         NewUpdate u ->
-            ( Model.doUpdate m u, Cmd.none )
+            ( Model.newUpdate m u, Cmd.none )
 
-        Reveal pid cid ->
-            ( Model.reveal m pid cid, push msg )
+        RevealCard pid cid ->
+            ( Model.revealCard m pid cid, push msg )
 
         PackVis vis ->
             ( Model.packVis m vis, push msg )

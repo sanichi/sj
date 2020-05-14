@@ -62,7 +62,7 @@ cardMsg player cid card =
                 Noop
 
             else
-                Reveal player.pid cid
+                RevealCard player.pid cid
 
         _ ->
             Noop
