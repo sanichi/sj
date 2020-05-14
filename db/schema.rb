@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2020_05_04_131315) do
 
   create_table "messages", force: :cascade do |t|
     t.bigint "game_id"
-    t.text "json"
+    t.string "json"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["game_id"], name: "index_messages_on_game_id"
