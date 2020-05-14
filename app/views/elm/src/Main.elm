@@ -62,7 +62,7 @@ update msg m =
             ( Model.updateChoosePack m, push msg )
 
         ChooseDiscard ->
-            ( Model.updateChooseDiscard m, Cmd.none )
+            ( Model.updateChooseDiscard m, push msg )
 
         Noop ->
             ( m, Cmd.none )

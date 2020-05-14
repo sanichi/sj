@@ -30,8 +30,8 @@ class Game < ApplicationRecord
     add_msg("reveal", [player.id, cid]) if player
   end
 
-  def pack_vis(bool)
-    add_msg("pack_vis", bool)
+  def elm_state(state)
+    add_msg("elm_state", state)
   end
 
   def can_be_joined_by?(user)

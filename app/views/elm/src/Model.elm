@@ -70,14 +70,6 @@ newUpdate model update =
                 _ ->
                     model
 
-        "pack_vis" ->
-            case val of
-                [ num ] ->
-                    updateChoosePack model
-
-                _ ->
-                    model
-
         "discard" ->
             case val of
                 [ num ] ->
@@ -98,6 +90,22 @@ newUpdate model update =
             case val of
                 [ pid, cid ] ->
                     revealCard model pid cid
+
+                _ ->
+                    model
+
+        "elm_state" ->
+            case val of
+                [ code ] ->
+                    case code of
+                        1 ->
+                            updateChoosePack model
+
+                        2 ->
+                            updateChooseDiscard model
+
+                        _ ->
+                            model
 
                 _ ->
                     model

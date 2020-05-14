@@ -10,18 +10,11 @@ describe Message do
     expect(msg.json).to eq "{\"key\":\"pack\",\"val\":[5]}"
   end
 
-  it "pack_vis (on)" do
-    msg = game.send(:add_msg, "pack_vis", true)
+  it "state" do
+    msg = game.send(:add_msg, "state", 1)
 
     expect(Message.count).to eq 1
-    expect(msg.json).to eq "{\"key\":\"pack_vis\",\"val\":[1]}"
-  end
-
-  it "pack_vis (off)" do
-    msg = game.send(:add_msg, "pack_vis", false)
-
-    expect(Message.count).to eq 1
-    expect(msg.json).to eq "{\"key\":\"pack_vis\",\"val\":[0]}"
+    expect(msg.json).to eq "{\"key\":\"state\",\"val\":[1]}"
   end
 
   it "discard" do

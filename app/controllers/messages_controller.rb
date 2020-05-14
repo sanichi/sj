@@ -21,8 +21,8 @@ class MessagesController < ApplicationController
     if game
       if params[:player_id] && params[:card_index]
         game.reveal(params[:player_id].to_i, params[:card_index].to_i)
-      elsif params[:pack_vis]
-        game.pack_vis(params[:pack_vis] == "true")
+      elsif params[:elm_state]
+        game.elm_state(params[:elm_state].to_i)
       end
     end
   end

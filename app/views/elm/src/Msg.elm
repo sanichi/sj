@@ -23,7 +23,12 @@ value msg =
 
         ChoosePack ->
             E.object
-                [ ( "pack_vis", E.bool True )
+                [ ( "elm_state", E.int 1 )
+                ]
+
+        ChooseDiscard ->
+            E.object
+                [ ( "elm_state", E.int 2 )
                 ]
 
         _ ->
