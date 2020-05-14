@@ -14,9 +14,9 @@ var skyjo = (function() {
       success: function(json, status, xhr) {
         if (json.abort) abort();
         $.each(json.updates, function(i, update) {
+          if (update.mid > data.last_message_id) data.last_message_id = update.mid;
           elm.ports.pullUpdate.send(update);
         });
-        data.last_message_id = json.last_message_id;
         if (!empty(json)) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
       },
       error: function(xhr) {

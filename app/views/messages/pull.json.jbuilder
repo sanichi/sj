@@ -1,2 +1,1 @@
-json.last_message_id @last_message_id
-json.updates(@messages.map { |m| JSON.parse(m.json) })
+json.updates(@messages.map { |m| h = JSON.parse(m.json); h[:mid] = m.id; h })
