@@ -6,14 +6,7 @@ class MessagesController < ApplicationController
 
     if @player
       @game = @player.game
-
-      last_message_id = params[:last_message_id].to_i
-
-      @messages = @game.messages.where("id > ?", last_message_id)
-      @last_message_id = last_message_id
-      @messages.each do |m|
-        @last_message_id = m.id if m.id > @last_message_id
-      end
+      @messages = @game.messages.where("id > ?", params[:last_message_id].to_i)
     else
       render "abort"
     end
@@ -21,6 +14,7 @@ class MessagesController < ApplicationController
 
   def push
     game = Game.find_by(id: params[:game_id])
+
     if game
       if params[:player_id] && params[:card_index]
         game.reveal(params[:player_id].to_i, params[:card_index].to_i)
