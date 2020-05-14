@@ -1,4 +1,14 @@
-module Model exposing (Model, State(..), debug, init, mainPlayer, newUpdate, revealCard, updatePackVis)
+module Model exposing
+    ( Model
+    , State(..)
+    , debug
+    , init
+    , mainPlayer
+    , newUpdate
+    , revealCard
+    , updateChooseDiscard
+    , updateChoosePack
+    )
 
 import Card exposing (Card)
 import Hand exposing (Hand)
@@ -22,6 +32,8 @@ type alias Model =
 type State
     = Revealing
     | Ready
+    | ChosenPack
+    | ChosenDiscard
 
 
 init : Value -> Model
@@ -61,7 +73,7 @@ newUpdate model update =
         "pack_vis" ->
             case val of
                 [ num ] ->
-                    updatePackVis model (num /= 0)
+                    updateChoosePack model
 
                 _ ->
                     model
@@ -94,13 +106,18 @@ newUpdate model update =
             model
 
 
-updatePackVis : Model -> Bool -> Model
-updatePackVis m vis =
+updateChooseDiscard : Model -> Model
+updateChooseDiscard m =
+    { m | state = ChosenDiscard }
+
+
+updateChoosePack : Model -> Model
+updateChoosePack m =
     let
         pack =
-            Card m.pack.num vis
+            Card.exposed m.pack.num
     in
-    { m | pack = pack }
+    { m | pack = pack, state = ChosenPack }
 
 
 revealCard : Model -> Int -> Int -> Model
@@ -157,11 +174,20 @@ debug model =
                 Ready ->
                     "Ready"
 
+                ChosenPack ->
+                    "ChosenPack"
+
+                ChosenDiscard ->
+                    "ChosenDiscard"
+
         plrs =
             List.map Player.debug <| Players.toList model.players
 
+        pck =
+            String.fromInt model.pack.num
+
         mdl =
-            String.join " " [ pid, state ]
+            String.join " " [ pid, pck, state ]
     in
     String.join " | " (mdl :: plrs)
 

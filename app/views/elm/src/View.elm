@@ -73,7 +73,7 @@ discard model =
             cardUrl model.discard
 
         msg =
-            Noop
+            discardMsg model
     in
     cardGroup frame url msg
 
@@ -286,6 +286,25 @@ cardY cid =
     Atr.y <| String.fromInt <| Nums.cardY cid
 
 
+discardMsg : Model -> Msg
+discardMsg model =
+    case Model.mainPlayer model of
+        Just player ->
+            if player.turn then
+                case model.state of
+                    Ready ->
+                        ChooseDiscard
+
+                    _ ->
+                        Noop
+
+            else
+                Noop
+
+        Nothing ->
+            Noop
+
+
 discardX : Attribute Msg
 discardX =
     Atr.x <| String.fromInt Nums.discardX
@@ -323,11 +342,7 @@ packMsg model =
             if player.turn then
                 case model.state of
                     Ready ->
-                        if model.pack.vis then
-                            Noop
-
-                        else
-                            PackVis True
+                        ChoosePack
 
                     _ ->
                         Noop

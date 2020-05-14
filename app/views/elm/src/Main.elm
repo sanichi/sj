@@ -58,8 +58,11 @@ update msg m =
         RevealCard pid cid ->
             ( Model.revealCard m pid cid, push msg )
 
-        PackVis vis ->
-            ( Model.updatePackVis m vis, push msg )
+        ChoosePack ->
+            ( Model.updateChoosePack m, push msg )
+
+        ChooseDiscard ->
+            ( Model.updateChooseDiscard m, Cmd.none )
 
         Noop ->
             ( m, Cmd.none )

@@ -7,7 +7,8 @@ import Update exposing (Update)
 type Msg
     = NewUpdate Update
     | RevealCard Int Int
-    | PackVis Bool
+    | ChoosePack
+    | ChooseDiscard
     | Noop
 
 
@@ -20,9 +21,9 @@ value msg =
                 , ( "card_index", E.int cid )
                 ]
 
-        PackVis vis ->
+        ChoosePack ->
             E.object
-                [ ( "pack_vis", E.bool vis )
+                [ ( "pack_vis", E.bool True )
                 ]
 
         _ ->
