@@ -22,6 +22,8 @@ class MessagesController < ApplicationController
       if player_id
         if card_index
           game.reveal(player_id, card_index)
+        elsif discard_card_index
+          game.discard_card(player_id, discard_card_index)
         elsif pack_card_index
           game.pack_card(player_id, pack_card_index)
         elsif pack_discard_card_index
@@ -35,7 +37,7 @@ class MessagesController < ApplicationController
 
   private
 
-  [:card_index, :elm_state, :pack_card_index, :pack_discard_card_index, :player_id].each do |key|
+  [:card_index, :elm_state, :discard_card_index, :pack_card_index, :pack_discard_card_index, :player_id].each do |key|
     define_method(key) { params[key] && params[key].to_i }
   end
 end

@@ -5,6 +5,7 @@ module Players exposing
     , init
     , put
     , toList
+    , updateDiscardCard
     , updatePackCard
     , updatePackDiscardCard
     , updateReveal
@@ -46,64 +47,45 @@ put pid player players =
     Dict.insert pid player players
 
 
+updateDiscardCard : Int -> Card -> Player -> Players -> Players
+updateDiscardCard cid card player players =
+    let
+        players_ =
+            replace cid card player players
+
+        next =
+            updateNextTurn player.position (size players_)
+    in
+    Dict.map next players_
+
+
 updatePackCard : Int -> Card -> Player -> Players -> Players
 updatePackCard cid pack player players =
     let
-        uCard =
-            Card.exposed pack.num
-
-        uHand =
-            Hand.set cid uCard player.hand
-
-        uPlayer =
-            { player | hand = uHand }
-
-        uPlayers =
-            put player.pid uPlayer players
+        players_ =
+            replace cid pack player players
 
         next =
-            updateNextTurn player.position (size players)
+            updateNextTurn player.position (size players_)
     in
-    Dict.map next uPlayers
+    Dict.map next players_
 
 
 updatePackDiscardCard : Int -> Card -> Player -> Players -> Players
 updatePackDiscardCard cid card player players =
     let
-        uCard =
-            Card.exposed card.num
-
-        uHand =
-            Hand.set cid uCard player.hand
-
-        uPlayer =
-            { player | hand = uHand }
-
-        uPlayers =
-            put player.pid uPlayer players
+        players_ =
+            replace cid card player players
 
         next =
-            updateNextTurn player.position (size players)
+            updateNextTurn player.position (size players_)
     in
-    Dict.map next uPlayers
+    Dict.map next players_
 
 
 updateReveal : Int -> Card -> Player -> Players -> Players
 updateReveal cid card player players =
-    let
-        uCard =
-            Card.exposed card.num
-
-        uHand =
-            Hand.set cid uCard player.hand
-
-        uPlayer =
-            { player | hand = uHand }
-
-        uPlayers =
-            put player.pid uPlayer players
-    in
-    updateRevealTurns uPlayers
+    updateRevealTurns <| replace cid card player players
 
 
 
@@ -174,6 +156,21 @@ decode position =
 size : Players -> Int
 size players =
     Dict.size players
+
+
+replace : Int -> Card -> Player -> Players -> Players
+replace cid card player players =
+    let
+        uCard =
+            Card.exposed card.num
+
+        uHand =
+            Hand.set cid uCard player.hand
+
+        uPlayer =
+            { player | hand = uHand }
+    in
+    put player.pid uPlayer players
 
 
 updateNextTurn : Position -> Int -> Int -> Player -> Player

@@ -7,6 +7,7 @@ module Model exposing
     , newUpdate
     , revealCard
     , updateChooseDiscard
+    , updateChooseDiscardCard
     , updateChoosePack
     , updateChoosePackCard
     , updateChoosePackDiscard
@@ -98,6 +99,15 @@ newUpdate update model =
                 _ ->
                     model
 
+        "discard_card" ->
+            case val of
+                [ pid, cid ] ->
+                    model
+                        |> updateChooseDiscardCard pid cid
+
+                _ ->
+                    model
+
         "pack_card" ->
             case val of
                 [ pid, cid, num ] ->
@@ -145,6 +155,32 @@ updateChooseDiscard : Model -> Model
 updateChooseDiscard model =
     model
         |> updateState ChosenDiscard
+
+
+updateChooseDiscardCard : Int -> Int -> Model -> Model
+updateChooseDiscardCard pid cid model =
+    case model.state of
+        ChosenDiscard ->
+            let
+                playerCard =
+                    getPlayerCard pid cid model
+            in
+            case playerCard of
+                ( Just player, Just card ) ->
+                    let
+                        players =
+                            Players.updateDiscardCard cid model.discard player model.players
+                    in
+                    model
+                        |> updatePlayers players
+                        |> updateDiscard card.num
+                        |> updateState Choose
+
+                _ ->
+                    model
+
+        _ ->
+            model
 
 
 updateChoosePack : Model -> Model

@@ -34,6 +34,11 @@ class Game < ApplicationRecord
     add_msg("elm_state", state)
   end
 
+  def discard_card(pid, cid)
+    add_msg("discard_card", [pid, cid])
+  end
+
+
   def pack_card(pid, cid)
     add_msg("pack_card", [pid, cid, card])
   end

@@ -239,6 +239,9 @@ cardMsg state player cid card =
                 else
                     Noop
 
+            ChosenDiscard ->
+                ChooseDiscardCard player.pid cid
+
             ChosenPack ->
                 ChoosePackCard player.pid cid
 

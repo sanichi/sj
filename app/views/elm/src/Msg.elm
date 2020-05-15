@@ -8,10 +8,11 @@ type Msg
     = NewUpdate Update
     | RevealCard Int Int
     | ChoosePack
-    | ChooseDiscard
     | ChoosePackCard Int Int
     | ChoosePackDiscard
     | ChoosePackDiscardCard Int Int
+    | ChooseDiscard
+    | ChooseDiscardCard Int Int
     | Noop
 
 
@@ -22,6 +23,17 @@ value msg =
             E.object
                 [ ( "player_id", E.int pid )
                 , ( "card_index", E.int cid )
+                ]
+
+        ChooseDiscard ->
+            E.object
+                [ ( "elm_state", E.int 2 )
+                ]
+
+        ChooseDiscardCard pid cid ->
+            E.object
+                [ ( "player_id", E.int pid )
+                , ( "discard_card_index", E.int cid )
                 ]
 
         ChoosePack ->
@@ -44,11 +56,6 @@ value msg =
             E.object
                 [ ( "player_id", E.int pid )
                 , ( "pack_discard_card_index", E.int cid )
-                ]
-
-        ChooseDiscard ->
-            E.object
-                [ ( "elm_state", E.int 2 )
                 ]
 
         _ ->
