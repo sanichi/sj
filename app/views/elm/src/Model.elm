@@ -9,6 +9,8 @@ module Model exposing
     , updateChooseDiscard
     , updateChoosePack
     , updateChoosePackCard
+    , updateChoosePackDiscard
+    , updateChoosePackDiscardCard
     )
 
 import Card exposing (Card)
@@ -34,6 +36,7 @@ type State
     = Revealing
     | Choose
     | ChosenPack
+    | ChosenPackDiscard
     | ChosenDiscard
 
 
@@ -105,6 +108,16 @@ newUpdate update model =
                 _ ->
                     model
 
+        "pack_discard_card" ->
+            case val of
+                [ pid, cid, num ] ->
+                    model
+                        |> updateChoosePackDiscardCard pid cid
+                        |> updatePack num
+
+                _ ->
+                    model
+
         "elm_state" ->
             case val of
                 [ code ] ->
@@ -114,6 +127,9 @@ newUpdate update model =
 
                         2 ->
                             updateChooseDiscard model
+
+                        3 ->
+                            updateChoosePackDiscard model
 
                         _ ->
                             model
@@ -155,6 +171,44 @@ updateChoosePackCard pid cid model =
                     model
                         |> updatePlayers players
                         |> updateDiscard card.num
+                        |> updateState Choose
+
+                _ ->
+                    model
+
+        _ ->
+            model
+
+
+updateChoosePackDiscard : Model -> Model
+updateChoosePackDiscard model =
+    case model.state of
+        ChosenPack ->
+            model
+                |> updatePack model.pack.num
+                |> updateDiscard model.pack.num
+                |> updateState ChosenPackDiscard
+
+        _ ->
+            model
+
+
+updateChoosePackDiscardCard : Int -> Int -> Model -> Model
+updateChoosePackDiscardCard pid cid model =
+    case model.state of
+        ChosenPackDiscard ->
+            let
+                playerCard =
+                    getPlayerCard pid cid model
+            in
+            case playerCard of
+                ( Just player, Just card ) ->
+                    let
+                        players =
+                            Players.updatePackDiscardCard cid card player model.players
+                    in
+                    model
+                        |> updatePlayers players
                         |> updateState Choose
 
                 _ ->
@@ -217,6 +271,9 @@ debug model =
 
                 ChosenDiscard ->
                     "ChosenDiscard"
+
+                ChosenPackDiscard ->
+                    "ChosenPackDiscard"
 
         plrs =
             List.map Player.debug <| Players.toList model.players

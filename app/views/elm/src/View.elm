@@ -230,18 +230,21 @@ cardHeight =
 
 cardMsg : State -> Player -> Int -> Card -> Msg
 cardMsg state player cid card =
-    if player.active then
+    if player.active && player.turn then
         case state of
             Revealing ->
-                if player.turn && not card.vis then
+                if not card.vis then
                     RevealCard player.pid cid
 
                 else
                     Noop
 
             ChosenPack ->
-                if player.turn then
-                    ChoosePackCard player.pid cid
+                ChoosePackCard player.pid cid
+
+            ChosenPackDiscard ->
+                if not card.vis then
+                    ChoosePackDiscardCard player.pid cid
 
                 else
                     Noop
@@ -301,6 +304,9 @@ discardMsg model =
                 case model.state of
                     Choose ->
                         ChooseDiscard
+
+                    ChosenPack ->
+                        ChoosePackDiscard
 
                     _ ->
                         Noop

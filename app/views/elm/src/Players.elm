@@ -6,6 +6,7 @@ module Players exposing
     , put
     , toList
     , updatePackCard
+    , updatePackDiscardCard
     , updateReveal
     )
 
@@ -50,6 +51,27 @@ updatePackCard cid pack player players =
     let
         uCard =
             Card.exposed pack.num
+
+        uHand =
+            Hand.set cid uCard player.hand
+
+        uPlayer =
+            { player | hand = uHand }
+
+        uPlayers =
+            put player.pid uPlayer players
+
+        next =
+            updateNextTurn player.position (size players)
+    in
+    Dict.map next uPlayers
+
+
+updatePackDiscardCard : Int -> Card -> Player -> Players -> Players
+updatePackDiscardCard cid card player players =
+    let
+        uCard =
+            Card.exposed card.num
 
         uHand =
             Hand.set cid uCard player.hand

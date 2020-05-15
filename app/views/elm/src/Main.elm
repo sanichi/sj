@@ -64,6 +64,12 @@ update msg model =
         ChoosePackCard pid cid ->
             ( Model.updateChoosePackCard pid cid model, push msg )
 
+        ChoosePackDiscard ->
+            ( Model.updateChoosePackDiscard model, push msg )
+
+        ChoosePackDiscardCard pid cid ->
+            ( Model.updateChoosePackDiscardCard pid cid model, push msg )
+
         ChooseDiscard ->
             ( Model.updateChooseDiscard model, push msg )
 
