@@ -233,11 +233,18 @@ cardMsg state player cid card =
     if player.active then
         case state of
             Revealing ->
-                if card.vis || not player.turn then
-                    Noop
+                if player.turn && not card.vis then
+                    RevealCard player.pid cid
 
                 else
-                    RevealCard player.pid cid
+                    Noop
+
+            ChosenPack ->
+                if player.turn then
+                    ChoosePackCard player.pid cid
+
+                else
+                    Noop
 
             _ ->
                 Noop
@@ -292,7 +299,7 @@ discardMsg model =
         Just player ->
             if player.turn then
                 case model.state of
-                    Ready ->
+                    Choose ->
                         ChooseDiscard
 
                     _ ->
@@ -341,7 +348,7 @@ packMsg model =
         Just player ->
             if player.turn then
                 case model.state of
-                    Ready ->
+                    Choose ->
                         ChoosePack
 
                     _ ->

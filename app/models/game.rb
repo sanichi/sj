@@ -34,6 +34,10 @@ class Game < ApplicationRecord
     add_msg("elm_state", state)
   end
 
+  def pack_card(pid, cid)
+    add_msg("pack_card", [pid, cid, card])
+  end
+
   def can_be_joined_by?(user)
     return false unless state == WAITING
     return false if players.count >= participants

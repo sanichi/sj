@@ -8,6 +8,7 @@ module Model exposing
     , revealCard
     , updateChooseDiscard
     , updateChoosePack
+    , updateChoosePackCard
     )
 
 import Card exposing (Card)
@@ -31,7 +32,7 @@ type alias Model =
 
 type State
     = Revealing
-    | Ready
+    | Choose
     | ChosenPack
     | ChosenDiscard
 
@@ -94,6 +95,18 @@ newUpdate model update =
                 _ ->
                     model
 
+        "pack_card" ->
+            case val of
+                [ pid, cid, num ] ->
+                    let
+                        uModel =
+                            updateChoosePackCard model pid cid
+                    in
+                    updatePack uModel num
+
+                _ ->
+                    model
+
         "elm_state" ->
             case val of
                 [ code ] ->
@@ -128,6 +141,20 @@ updateChoosePack m =
     { m | pack = pack, state = ChosenPack }
 
 
+updateChoosePackCard : Model -> Int -> Int -> Model
+updateChoosePackCard m pid cid =
+    case m.state of
+        ChosenPack ->
+            let
+                state =
+                    Choose
+            in
+            { m | state = state }
+
+        _ ->
+            m
+
+
 revealCard : Model -> Int -> Int -> Model
 revealCard m pid cid =
     let
@@ -157,7 +184,7 @@ revealCard m pid cid =
 
                 state =
                     if allDone then
-                        Ready
+                        Choose
 
                     else
                         m.state
@@ -179,8 +206,8 @@ debug model =
                 Revealing ->
                     "Revealing"
 
-                Ready ->
-                    "Ready"
+                Choose ->
+                    "Choose"
 
                 ChosenPack ->
                     "ChosenPack"

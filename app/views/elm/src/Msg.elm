@@ -9,6 +9,7 @@ type Msg
     | RevealCard Int Int
     | ChoosePack
     | ChooseDiscard
+    | ChoosePackCard Int Int
     | Noop
 
 
@@ -24,6 +25,12 @@ value msg =
         ChoosePack ->
             E.object
                 [ ( "elm_state", E.int 1 )
+                ]
+
+        ChoosePackCard pid cid ->
+            E.object
+                [ ( "player_id", E.int pid )
+                , ( "pack_card_index", E.int cid )
                 ]
 
         ChooseDiscard ->

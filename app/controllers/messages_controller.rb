@@ -19,11 +19,21 @@ class MessagesController < ApplicationController
     game = Game.find_by(id: params[:game_id])
 
     if game
-      if params[:player_id] && params[:card_index]
-        game.reveal(params[:player_id].to_i, params[:card_index].to_i)
-      elsif params[:elm_state]
-        game.elm_state(params[:elm_state].to_i)
+      if player_id
+        if card_index
+          game.reveal(player_id, card_index)
+        elsif pack_card_index
+          game.pack_card(player_id, pack_card_index)
+        end
+      elsif elm_state
+        game.elm_state(elm_state)
       end
     end
+  end
+
+  private
+
+  [:card_index, :elm_state, :pack_card_index, :player_id].each do |key|
+    define_method(key) { params[key] && params[key].to_i }
   end
 end
