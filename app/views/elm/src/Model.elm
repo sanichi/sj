@@ -56,8 +56,8 @@ mainPlayer model =
     Players.get model.player_id model.players
 
 
-newUpdate : Model -> Update -> Model
-newUpdate model update =
+newUpdate : Update -> Model -> Model
+newUpdate update model =
     let
         ( key, val ) =
             update
@@ -66,7 +66,7 @@ newUpdate model update =
         "pack" ->
             case val of
                 [ num ] ->
-                    updatePack model num
+                    updatePack num model
 
                 _ ->
                     model
@@ -74,7 +74,7 @@ newUpdate model update =
         "discard" ->
             case val of
                 [ num ] ->
-                    updateDiscard model num
+                    updateDiscard num model
 
                 _ ->
                     model
@@ -82,7 +82,7 @@ newUpdate model update =
         "hand" ->
             case val of
                 pid :: nums ->
-                    playerHand model pid nums
+                    playerHand pid nums model
 
                 _ ->
                     model
@@ -90,7 +90,7 @@ newUpdate model update =
         "reveal" ->
             case val of
                 [ pid, cid ] ->
-                    revealCard model pid cid
+                    revealCard pid cid model
 
                 _ ->
                     model
@@ -98,11 +98,9 @@ newUpdate model update =
         "pack_card" ->
             case val of
                 [ pid, cid, num ] ->
-                    let
-                        uModel =
-                            updateChoosePackCard model pid cid
-                    in
-                    updatePack uModel num
+                    model
+                        |> updateChoosePackCard pid cid
+                        |> updatePack num
 
                 _ ->
                     model
@@ -128,52 +126,55 @@ newUpdate model update =
 
 
 updateChooseDiscard : Model -> Model
-updateChooseDiscard m =
-    { m | state = ChosenDiscard }
+updateChooseDiscard model =
+    model
+        |> updateState ChosenDiscard
 
 
 updateChoosePack : Model -> Model
-updateChoosePack m =
-    let
-        pack =
-            Card.exposed m.pack.num
-    in
-    { m | pack = pack, state = ChosenPack }
+updateChoosePack model =
+    model
+        |> updatePackExposed model.pack.num
+        |> updateState ChosenPack
 
 
-updateChoosePackCard : Model -> Int -> Int -> Model
-updateChoosePackCard m pid cid =
-    case m.state of
+updateChoosePackCard : Int -> Int -> Model -> Model
+updateChoosePackCard pid cid model =
+    case model.state of
         ChosenPack ->
             let
-                state =
-                    Choose
+                playerCard =
+                    getPlayerCard pid cid model
             in
-            { m | state = state }
+            case playerCard of
+                ( Just player, Just card ) ->
+                    let
+                        players =
+                            Players.updatePackCard cid model.pack player model.players
+                    in
+                    model
+                        |> updatePlayers players
+                        |> updateDiscard card.num
+                        |> updateState Choose
+
+                _ ->
+                    model
 
         _ ->
-            m
+            model
 
 
-revealCard : Model -> Int -> Int -> Model
-revealCard m pid cid =
+revealCard : Int -> Int -> Model -> Model
+revealCard pid cid model =
     let
-        p =
-            getPlayer m pid
-
-        c =
-            case p of
-                Just player ->
-                    Hand.get cid player.hand
-
-                Nothing ->
-                    Nothing
+        playerCard =
+            getPlayerCard pid cid model
     in
-    case ( p, c ) of
+    case playerCard of
         ( Just player, Just card ) ->
             let
                 players =
-                    Players.updateReveal cid card player m.players
+                    Players.updateReveal cid card player model.players
 
                 allDone =
                     Players.toList players
@@ -187,12 +188,14 @@ revealCard m pid cid =
                         Choose
 
                     else
-                        m.state
+                        model.state
             in
-            { m | players = players, state = state }
+            model
+                |> updatePlayers players
+                |> updateState state
 
         _ ->
-            m
+            model
 
 
 debug : Model -> String
@@ -231,33 +234,65 @@ debug model =
 -- Private
 
 
-getPlayer : Model -> Int -> Maybe Player
-getPlayer model pid =
+getPlayer : Int -> Model -> Maybe Player
+getPlayer pid model =
     Players.get pid model.players
 
 
-playerHand : Model -> Int -> List Int -> Model
-playerHand model pid nums =
+getPlayerCard : Int -> Int -> Model -> ( Maybe Player, Maybe Card )
+getPlayerCard pid cid model =
     let
-        player_ =
+        player =
+            getPlayer pid model
+
+        card =
+            case player of
+                Just p ->
+                    Hand.get cid p.hand
+
+                Nothing ->
+                    Nothing
+    in
+    ( player, card )
+
+
+playerHand : Int -> List Int -> Model -> Model
+playerHand pid nums model =
+    let
+        player =
             Players.get pid model.players
 
         hand =
             Hand.init nums
     in
-    case player_ of
-        Just player ->
-            { model | players = Players.put pid { player | hand = hand } model.players }
+    case player of
+        Just p ->
+            { model | players = Players.put pid { p | hand = hand } model.players }
 
         Nothing ->
             model
 
 
-updatePack : Model -> Int -> Model
-updatePack model num =
+updateDiscard : Int -> Model -> Model
+updateDiscard num model =
+    { model | discard = Card.exposed num }
+
+
+updatePack : Int -> Model -> Model
+updatePack num model =
     { model | pack = Card.hidden num }
 
 
-updateDiscard : Model -> Int -> Model
-updateDiscard model num =
-    { model | discard = Card.exposed num }
+updatePackExposed : Int -> Model -> Model
+updatePackExposed num model =
+    { model | pack = Card.exposed num }
+
+
+updatePlayers : Players -> Model -> Model
+updatePlayers players model =
+    { model | players = players }
+
+
+updateState : State -> Model -> Model
+updateState state model =
+    { model | state = state }

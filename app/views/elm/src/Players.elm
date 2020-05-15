@@ -5,6 +5,7 @@ module Players exposing
     , init
     , put
     , toList
+    , updatePackCard
     , updateReveal
     )
 
@@ -42,6 +43,27 @@ toList players =
 put : Int -> Player -> Players -> Players
 put pid player players =
     Dict.insert pid player players
+
+
+updatePackCard : Int -> Card -> Player -> Players -> Players
+updatePackCard cid pack player players =
+    let
+        uCard =
+            Card.exposed pack.num
+
+        uHand =
+            Hand.set cid uCard player.hand
+
+        uPlayer =
+            { player | hand = uHand }
+
+        uPlayers =
+            put player.pid uPlayer players
+
+        next =
+            updateNextTurn player.position (size players)
+    in
+    Dict.map next uPlayers
 
 
 updateReveal : Int -> Card -> Player -> Players -> Players
@@ -125,6 +147,57 @@ decode position =
 
         _ ->
             S
+
+
+size : Players -> Int
+size players =
+    Dict.size players
+
+
+updateNextTurn : Position -> Int -> Int -> Player -> Player
+updateNextTurn position number pid player =
+    if player.position == position then
+        { player | turn = False }
+
+    else
+        let
+            turn =
+                case number of
+                    4 ->
+                        case ( position, player.position ) of
+                            ( S, W ) ->
+                                True
+
+                            ( W, N ) ->
+                                True
+
+                            ( N, E ) ->
+                                True
+
+                            ( E, S ) ->
+                                True
+
+                            _ ->
+                                False
+
+                    3 ->
+                        case ( position, player.position ) of
+                            ( S, NW ) ->
+                                True
+
+                            ( NW, NE ) ->
+                                True
+
+                            ( NE, S ) ->
+                                True
+
+                            _ ->
+                                False
+
+                    _ ->
+                        True
+        in
+        { player | turn = turn }
 
 
 updateRevealTurns : Players -> Players

@@ -50,25 +50,25 @@ view model =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg m =
+update msg model =
     case msg of
         NewUpdate u ->
-            ( Model.newUpdate m u, Cmd.none )
+            ( Model.newUpdate u model, Cmd.none )
 
         RevealCard pid cid ->
-            ( Model.revealCard m pid cid, push msg )
+            ( Model.revealCard pid cid model, push msg )
 
         ChoosePack ->
-            ( Model.updateChoosePack m, push msg )
+            ( Model.updateChoosePack model, push msg )
 
         ChoosePackCard pid cid ->
-            ( Model.updateChoosePackCard m pid cid, push msg )
+            ( Model.updateChoosePackCard pid cid model, push msg )
 
         ChooseDiscard ->
-            ( Model.updateChooseDiscard m, push msg )
+            ( Model.updateChooseDiscard model, push msg )
 
         Noop ->
-            ( m, Cmd.none )
+            ( model, Cmd.none )
 
 
 
