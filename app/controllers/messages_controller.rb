@@ -22,6 +22,8 @@ class MessagesController < ApplicationController
         game.reveal(pid, card_index)
       elsif discard_card_index
         game.discard_card(pid, discard_card_index)
+      elsif discard_chosen
+        game.discard_chosen(pid)
       elsif pack_chosen
         game.pack_chosen(pid)
       elsif pack_discard_chosen
@@ -30,8 +32,6 @@ class MessagesController < ApplicationController
         game.pack_card(pid, pack_card_index)
       elsif pack_discard_card_index
         game.pack_discard_card(pid, pack_discard_card_index)
-      elsif elm_state
-        game.elm_state(pid, elm_state)
       end
     end
   end
@@ -42,7 +42,7 @@ class MessagesController < ApplicationController
     @player = Player.find_by(id: params[:player_id])
   end
 
-  [:card_index, :elm_state, :pack, :discard_card_index, :last_message_id, :pack_card_index, :pack_chosen, :pack_discard_card_index, :pack_discard_chosen].each do |key|
+  [:card_index, :elm_state, :pack, :discard_card_index, :discard_chosen, :last_message_id, :pack_card_index, :pack_chosen, :pack_discard_card_index, :pack_discard_chosen].each do |key|
     define_method(key) { params[key] && params[key].to_i }
   end
 end

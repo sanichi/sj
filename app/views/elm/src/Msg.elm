@@ -28,7 +28,7 @@ value msg =
         ChooseDiscard pid ->
             E.object
                 [ ( "player_id", E.int pid )
-                , ( "elm_state", E.int 2 )
+                , ( "discard_chosen", E.int 1 )
                 ]
 
         ChooseDiscardCard pid cid ->

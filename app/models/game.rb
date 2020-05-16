@@ -38,12 +38,12 @@ class Game < ApplicationRecord
     add_msg("reveal", [pid, cid], not: pid)
   end
 
-  def elm_state(pid, code)
-    add_msg("elm_state", [pid, code], for: pid, only_start: true)
-  end
-
   def discard_card(pid, cid)
     add_msg("discard_card", [pid, cid], not: pid)
+  end
+
+  def discard_chosen(pid)
+    add_msg("discard_chosen", pid, only_start: true)
   end
 
   def pack_chosen(pid)
