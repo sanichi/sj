@@ -99,6 +99,14 @@ newUpdate update model =
                 _ ->
                     model
 
+        "new_pack_card" ->
+            case val of
+                [ num ] ->
+                    updatePack num model
+
+                _ ->
+                    model
+
         "discard_card" ->
             case val of
                 [ pid, cid ] ->
@@ -117,10 +125,8 @@ newUpdate update model =
 
         "pack_card" ->
             case val of
-                [ pid, cid, num ] ->
-                    model
-                        |> updateChoosePackCard pid cid
-                        |> updatePack num
+                [ pid, cid ] ->
+                    updateChoosePackCard pid cid model
 
                 _ ->
                     model
@@ -202,6 +208,13 @@ updateChoosePackCard pid cid model =
     let
         playerCard =
             getPlayerCard pid cid model
+
+        state =
+            if pid == model.player_id then
+                Choose
+
+            else
+                model.state
     in
     case playerCard of
         ( Just player, Just card ) ->
@@ -211,8 +224,9 @@ updateChoosePackCard pid cid model =
             in
             model
                 |> updatePlayers players
+                |> updatePack model.pack.num
                 |> updateDiscard card.num
-                |> updateState Choose
+                |> updateState state
 
         _ ->
             model

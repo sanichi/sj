@@ -48,11 +48,11 @@ class Game < ApplicationRecord
 
   def pack_chosen(pid)
     add_msg("pack_chosen", pid, not: pid)
-    add_msg("pack_chosen", pid, for: pid, only_start: true)
   end
 
   def pack_card(pid, cid)
-    add_msg("pack_card", [pid, cid, card], not: pid)
+    add_msg("pack_card", [pid, cid], not: pid)
+    add_msg("new_pack_card", card)
   end
 
   def pack_discard_card(pid, cid)
