@@ -56,7 +56,8 @@ class Game < ApplicationRecord
   end
 
   def pack_discard_card(pid, cid)
-    add_msg("pack_discard_card", [pid, cid, card], not: pid)
+    add_msg("pack_discard_card", [pid, cid], not: pid)
+    add_msg("new_pack_card", card)
   end
 
   def pack_discard_chosen(pid)
