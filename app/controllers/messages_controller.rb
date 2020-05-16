@@ -1,11 +1,10 @@
 class MessagesController < ApplicationController
   authorize_resource class: false
+  before_action :find_player
 
   def pull
-    @player = Player.find_by(id: params[:player_id])
-
-    if @player
-      @updates = @player.game.messages.where("id > ?", params[:last_message_id].to_i).map do |m|
+    if @player && last_message_id
+      @updates = @player.game.get_messages(@player.id, last_message_id).map do |m|
         update = JSON.parse(m.json)
         update[:mid] = m.id
         update
@@ -16,28 +15,32 @@ class MessagesController < ApplicationController
   end
 
   def push
-    game = Game.find_by(id: params[:game_id])
-
-    if game
-      if player_id
-        if card_index
-          game.reveal(player_id, card_index)
-        elsif discard_card_index
-          game.discard_card(player_id, discard_card_index)
-        elsif pack_card_index
-          game.pack_card(player_id, pack_card_index)
-        elsif pack_discard_card_index
-          game.pack_discard_card(player_id, pack_discard_card_index)
-        end
+    if @player
+      pid = @player.id
+      game = @player.game
+      if card_index
+        game.reveal(pid, card_index)
+      elsif discard_card_index
+        game.discard_card(pid, discard_card_index)
+      elsif pack_chosen
+        game.pack_chosen(pid)
+      elsif pack_card_index
+        game.pack_card(pid, pack_card_index)
+      elsif pack_discard_card_index
+        game.pack_discard_card(pid, pack_discard_card_index)
       elsif elm_state
-        game.elm_state(elm_state)
+        game.elm_state(pid, elm_state)
       end
     end
   end
 
   private
 
-  [:card_index, :elm_state, :discard_card_index, :pack_card_index, :pack_discard_card_index, :player_id].each do |key|
+  def find_player
+    @player = Player.find_by(id: params[:player_id])
+  end
+
+  [:card_index, :elm_state, :pack, :discard_card_index, :last_message_id, :pack_card_index, :pack_chosen, :pack_discard_card_index].each do |key|
     define_method(key) { params[key] && params[key].to_i }
   end
 end

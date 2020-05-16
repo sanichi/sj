@@ -29,7 +29,7 @@ var skyjo = (function() {
   }
 
   function push(updates) {
-    updates.game_id = <%= @game.id %>;
+    // updates.game_id = <%= @game.id %>; - XXX idea for refactor
     $.ajax('/push.json', {
       data: updates,
       dataType: 'json',

@@ -7,11 +7,11 @@ import Update exposing (Update)
 type Msg
     = NewUpdate Update
     | RevealCard Int Int
-    | ChoosePack
+    | ChoosePack Int
     | ChoosePackCard Int Int
-    | ChoosePackDiscard
+    | ChoosePackDiscard Int
     | ChoosePackDiscardCard Int Int
-    | ChooseDiscard
+    | ChooseDiscard Int
     | ChooseDiscardCard Int Int
     | Noop
 
@@ -25,9 +25,10 @@ value msg =
                 , ( "card_index", E.int cid )
                 ]
 
-        ChooseDiscard ->
+        ChooseDiscard pid ->
             E.object
-                [ ( "elm_state", E.int 2 )
+                [ ( "player_id", E.int pid )
+                , ( "elm_state", E.int 2 )
                 ]
 
         ChooseDiscardCard pid cid ->
@@ -36,9 +37,10 @@ value msg =
                 , ( "discard_card_index", E.int cid )
                 ]
 
-        ChoosePack ->
+        ChoosePack pid ->
             E.object
-                [ ( "elm_state", E.int 1 )
+                [ ( "player_id", E.int pid )
+                , ( "pack_chosen", E.int 1 )
                 ]
 
         ChoosePackCard pid cid ->
@@ -47,9 +49,10 @@ value msg =
                 , ( "pack_card_index", E.int cid )
                 ]
 
-        ChoosePackDiscard ->
+        ChoosePackDiscard pid ->
             E.object
-                [ ( "elm_state", E.int 3 )
+                [ ( "player_id", E.int pid )
+                , ( "elm_state", E.int 3 )
                 ]
 
         ChoosePackDiscardCard pid cid ->

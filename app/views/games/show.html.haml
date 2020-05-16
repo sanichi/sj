@@ -19,9 +19,7 @@
         %tr
           %td
             = t("game.players")
-            = precede("(") do
-              = succeed(")") do
-                = @game.participants
+            = "(%d/%d)" % [@game.players.count, @game.participants]
           %td= @game.players.map { |p| p.user.handle }.join(", ")
         %tr
           %td= t("game.dealt")
@@ -37,12 +35,16 @@
         %tr
           %th.text-center{colspan: 5}= t("game.messages")
         %tr
-          %th.text-center= t("id")
+          %th= t("id")
           %th.text-center= t("created")
+          %th= t("message.target")
+          %th.text-center= t("message.only_start")
           %th= t("data")
       %tbody
         - @game.messages.each do |m|
           %tr
-            %td.text-center= m.id
+            %td= m.id
             %td.text-center= m.created_at.strftime("%H:%M:%S")
+            %td= m.target
+            %td.text-center= m.only_start ? "T" : "F"
             %td= m.json

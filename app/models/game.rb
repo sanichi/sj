@@ -16,6 +16,15 @@ class Game < ApplicationRecord
 
   default_scope { order(created_at: :desc) }
 
+  def get_messages(target, last_message_id)
+    return messages if last_message_id == 0
+
+    messages
+      .where(only_start: false)
+      .where("id > ?", last_message_id)
+      .where("target = ? OR target = ? OR (target < 0 AND target != ?)", Message::ALL, target, -target)
+  end
+
   def start
     add_msg("pack", card)
     add_msg("discard", card)
@@ -26,25 +35,28 @@ class Game < ApplicationRecord
   end
 
   def reveal(pid, cid)
-    player = players.find_by(id: pid)
-    add_msg("reveal", [player.id, cid]) if player
+    add_msg("reveal", [pid, cid], not: pid)
   end
 
-  def elm_state(state)
-    add_msg("elm_state", state)
+  def elm_state(pid, code)
+    add_msg("elm_state", [pid, code], for: pid, only_start: true)
   end
 
   def discard_card(pid, cid)
-    add_msg("discard_card", [pid, cid])
+    add_msg("discard_card", [pid, cid], not: pid)
   end
 
+  def pack_chosen(pid)
+    add_msg("pack_chosen", pid, not: pid)
+    add_msg("pack_chosen", pid, for: pid, only_start: true)
+  end
 
   def pack_card(pid, cid)
-    add_msg("pack_card", [pid, cid, card])
+    add_msg("pack_card", [pid, cid, card], not: pid)
   end
 
   def pack_discard_card(pid, cid)
-    add_msg("pack_discard_card", [pid, cid, card])
+    add_msg("pack_discard_card", [pid, cid, card], not: pid)
   end
 
   def can_be_joined_by?(user)
@@ -103,14 +115,25 @@ class Game < ApplicationRecord
     num.times.map { card }
   end
 
-  private
+  def add_msg(k, v, **opts)
+    if k == "test"
+      json = v.to_s
+    else
+      v = [ 1 ] if v.class == TrueClass
+      v = [ 0 ] if v.class == FalseClass
+      v = [ v ] if v.class == Integer
+      json = JSON.generate({ key: k, val: v })
+    end
 
-  def add_msg(k, v)
-    v = [ 1 ] if v.class == TrueClass
-    v = [ 0 ] if v.class == FalseClass
-    v = [ v ] if v.class == Integer
-    messages.create(json: JSON.generate({ key: k, val: v }))
+    msg = {json: json}
+    msg[:target] = 0 + opts[:for] if opts[:for]
+    msg[:target] = 0 - opts[:not] if opts[:not]
+    msg[:only_start] = true if opts[:only_start]
+
+    messages.create(msg)
   end
+
+  private
 
   def card_to_attr(c)
     "#{c < 0 ? 'm' : 'p'}#{c.abs}"

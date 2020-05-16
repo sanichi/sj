@@ -58,20 +58,20 @@ update msg model =
         RevealCard pid cid ->
             ( Model.revealCard pid cid model, push msg )
 
-        ChooseDiscard ->
-            ( Model.updateChooseDiscard model, push msg )
+        ChooseDiscard pid ->
+            ( Model.updateChooseDiscard pid model, push msg )
 
         ChooseDiscardCard pid cid ->
             ( Model.updateChooseDiscardCard pid cid model, push msg )
 
-        ChoosePack ->
-            ( Model.updateChoosePack model, push msg )
+        ChoosePack pid ->
+            ( Model.updateChoosePack pid model, push msg )
 
         ChoosePackCard pid cid ->
             ( Model.updateChoosePackCard pid cid model, push msg )
 
-        ChoosePackDiscard ->
-            ( Model.updateChoosePackDiscard model, push msg )
+        ChoosePackDiscard pid ->
+            ( Model.updateChoosePackDiscard pid model, push msg )
 
         ChoosePackDiscardCard pid cid ->
             ( Model.updateChoosePackDiscardCard pid cid model, push msg )

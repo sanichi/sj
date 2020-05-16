@@ -306,10 +306,10 @@ discardMsg model =
             if player.turn then
                 case model.state of
                     Choose ->
-                        ChooseDiscard
+                        ChooseDiscard player.pid
 
                     ChosenPack ->
-                        ChoosePackDiscard
+                        ChoosePackDiscard player.pid
 
                     _ ->
                         Noop
@@ -358,7 +358,7 @@ packMsg model =
             if player.turn then
                 case model.state of
                     Choose ->
-                        ChoosePack
+                        ChoosePack player.pid
 
                     _ ->
                         Noop

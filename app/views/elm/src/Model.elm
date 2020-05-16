@@ -102,8 +102,15 @@ newUpdate update model =
         "discard_card" ->
             case val of
                 [ pid, cid ] ->
+                    updateChooseDiscardCard pid cid model
+
+                _ ->
                     model
-                        |> updateChooseDiscardCard pid cid
+
+        "pack_chosen" ->
+            case val of
+                [ pid ] ->
+                    updateChoosePack pid model
 
                 _ ->
                     model
@@ -130,16 +137,13 @@ newUpdate update model =
 
         "elm_state" ->
             case val of
-                [ code ] ->
+                [ pid, code ] ->
                     case code of
-                        1 ->
-                            updateChoosePack model
-
                         2 ->
-                            updateChooseDiscard model
+                            updateChooseDiscard pid model
 
                         3 ->
-                            updateChoosePackDiscard model
+                            updateChoosePackDiscard pid model
 
                         _ ->
                             model
@@ -151,104 +155,92 @@ newUpdate update model =
             model
 
 
-updateChooseDiscard : Model -> Model
-updateChooseDiscard model =
+updateChooseDiscard : Int -> Model -> Model
+updateChooseDiscard pid model =
     model
         |> updateState ChosenDiscard
 
 
 updateChooseDiscardCard : Int -> Int -> Model -> Model
 updateChooseDiscardCard pid cid model =
-    case model.state of
-        ChosenDiscard ->
+    let
+        playerCard =
+            getPlayerCard pid cid model
+    in
+    case playerCard of
+        ( Just player, Just card ) ->
             let
-                playerCard =
-                    getPlayerCard pid cid model
+                players =
+                    Players.updateDiscardCard cid model.discard player model.players
             in
-            case playerCard of
-                ( Just player, Just card ) ->
-                    let
-                        players =
-                            Players.updateDiscardCard cid model.discard player model.players
-                    in
-                    model
-                        |> updatePlayers players
-                        |> updateDiscard card.num
-                        |> updateState Choose
-
-                _ ->
-                    model
+            model
+                |> updatePlayers players
+                |> updateDiscard card.num
+                |> updateState Choose
 
         _ ->
             model
 
 
-updateChoosePack : Model -> Model
-updateChoosePack model =
+updateChoosePack : Int -> Model -> Model
+updateChoosePack pid model =
+    let
+        state =
+            if pid == model.player_id then
+                ChosenPack
+
+            else
+                model.state
+    in
     model
         |> updatePackExposed model.pack.num
-        |> updateState ChosenPack
+        |> updateState state
 
 
 updateChoosePackCard : Int -> Int -> Model -> Model
 updateChoosePackCard pid cid model =
-    case model.state of
-        ChosenPack ->
+    let
+        playerCard =
+            getPlayerCard pid cid model
+    in
+    case playerCard of
+        ( Just player, Just card ) ->
             let
-                playerCard =
-                    getPlayerCard pid cid model
+                players =
+                    Players.updatePackCard cid model.pack player model.players
             in
-            case playerCard of
-                ( Just player, Just card ) ->
-                    let
-                        players =
-                            Players.updatePackCard cid model.pack player model.players
-                    in
-                    model
-                        |> updatePlayers players
-                        |> updateDiscard card.num
-                        |> updateState Choose
-
-                _ ->
-                    model
+            model
+                |> updatePlayers players
+                |> updateDiscard card.num
+                |> updateState Choose
 
         _ ->
             model
 
 
-updateChoosePackDiscard : Model -> Model
-updateChoosePackDiscard model =
-    case model.state of
-        ChosenPack ->
-            model
-                |> updatePack model.pack.num
-                |> updateDiscard model.pack.num
-                |> updateState ChosenPackDiscard
-
-        _ ->
-            model
+updateChoosePackDiscard : Int -> Model -> Model
+updateChoosePackDiscard pid model =
+    model
+        |> updatePack model.pack.num
+        |> updateDiscard model.pack.num
+        |> updateState ChosenPackDiscard
 
 
 updateChoosePackDiscardCard : Int -> Int -> Model -> Model
 updateChoosePackDiscardCard pid cid model =
-    case model.state of
-        ChosenPackDiscard ->
+    let
+        playerCard =
+            getPlayerCard pid cid model
+    in
+    case playerCard of
+        ( Just player, Just card ) ->
             let
-                playerCard =
-                    getPlayerCard pid cid model
+                players =
+                    Players.updatePackDiscardCard cid card player model.players
             in
-            case playerCard of
-                ( Just player, Just card ) ->
-                    let
-                        players =
-                            Players.updatePackDiscardCard cid card player model.players
-                    in
-                    model
-                        |> updatePlayers players
-                        |> updateState Choose
-
-                _ ->
-                    model
+            model
+                |> updatePlayers players
+                |> updateState Choose
 
         _ ->
             model
