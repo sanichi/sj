@@ -1,17 +1,17 @@
 module Model exposing
     ( Model
     , State(..)
+    , chooseDiscard
+    , chooseDiscardCard
+    , choosePack
+    , choosePackCard
+    , choosePackDiscard
+    , choosePackDiscardCard
     , debug
     , init
     , mainPlayer
     , newUpdate
     , revealCard
-    , updateChooseDiscard
-    , updateChooseDiscardCard
-    , updateChoosePack
-    , updateChoosePackCard
-    , updateChoosePackDiscard
-    , updateChoosePackDiscardCard
     )
 
 import Card exposing (Card)
@@ -102,7 +102,7 @@ newUpdate update model =
         "discard_card" ->
             case val of
                 [ pid, cid ] ->
-                    updateChooseDiscardCard pid cid model
+                    chooseDiscardCard pid cid model
 
                 _ ->
                     model
@@ -110,7 +110,7 @@ newUpdate update model =
         "discard_chosen" ->
             case val of
                 [ pid ] ->
-                    updateChooseDiscard pid model
+                    chooseDiscard pid model
 
                 _ ->
                     model
@@ -118,7 +118,7 @@ newUpdate update model =
         "pack_chosen" ->
             case val of
                 [ pid ] ->
-                    updateChoosePack pid model
+                    choosePack pid model
 
                 _ ->
                     model
@@ -126,7 +126,7 @@ newUpdate update model =
         "pack_card" ->
             case val of
                 [ pid, cid ] ->
-                    updateChoosePackCard pid cid model
+                    choosePackCard pid cid model
 
                 _ ->
                     model
@@ -134,7 +134,7 @@ newUpdate update model =
         "pack_discard_card" ->
             case val of
                 [ pid, cid ] ->
-                    updateChoosePackDiscardCard pid cid model
+                    choosePackDiscardCard pid cid model
 
                 _ ->
                     model
@@ -142,7 +142,7 @@ newUpdate update model =
         "pack_discard_chosen" ->
             case val of
                 [ pid ] ->
-                    updateChoosePackDiscard pid model
+                    choosePackDiscard pid model
 
                 _ ->
                     model
@@ -151,8 +151,8 @@ newUpdate update model =
             model
 
 
-updateChooseDiscard : Int -> Model -> Model
-updateChooseDiscard pid model =
+chooseDiscard : Int -> Model -> Model
+chooseDiscard pid model =
     if pid == model.player_id then
         updateState ChosenDiscard model
 
@@ -160,8 +160,8 @@ updateChooseDiscard pid model =
         model
 
 
-updateChooseDiscardCard : Int -> Int -> Model -> Model
-updateChooseDiscardCard pid cid model =
+chooseDiscardCard : Int -> Int -> Model -> Model
+chooseDiscardCard pid cid model =
     let
         playerCard =
             getPlayerCard pid cid model
@@ -181,8 +181,8 @@ updateChooseDiscardCard pid cid model =
             model
 
 
-updateChoosePack : Int -> Model -> Model
-updateChoosePack pid model =
+choosePack : Int -> Model -> Model
+choosePack pid model =
     let
         state =
             if pid == model.player_id then
@@ -196,8 +196,8 @@ updateChoosePack pid model =
         |> updateState state
 
 
-updateChoosePackCard : Int -> Int -> Model -> Model
-updateChoosePackCard pid cid model =
+choosePackCard : Int -> Int -> Model -> Model
+choosePackCard pid cid model =
     let
         playerCard =
             getPlayerCard pid cid model
@@ -218,8 +218,8 @@ updateChoosePackCard pid cid model =
             model
 
 
-updateChoosePackDiscard : Int -> Model -> Model
-updateChoosePackDiscard pid model =
+choosePackDiscard : Int -> Model -> Model
+choosePackDiscard pid model =
     if pid == model.player_id then
         model
             |> updatePack model.pack.num
@@ -230,8 +230,8 @@ updateChoosePackDiscard pid model =
         model
 
 
-updateChoosePackDiscardCard : Int -> Int -> Model -> Model
-updateChoosePackDiscardCard pid cid model =
+choosePackDiscardCard : Int -> Int -> Model -> Model
+choosePackDiscardCard pid cid model =
     let
         playerCard =
             getPlayerCard pid cid model

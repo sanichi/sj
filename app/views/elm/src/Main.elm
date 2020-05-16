@@ -59,22 +59,22 @@ update msg model =
             ( Model.revealCard pid cid model, push msg )
 
         ChooseDiscard pid ->
-            ( Model.updateChooseDiscard pid model, push msg )
+            ( Model.chooseDiscard pid model, push msg )
 
         ChooseDiscardCard pid cid ->
-            ( Model.updateChooseDiscardCard pid cid model, push msg )
+            ( Model.chooseDiscardCard pid cid model, push msg )
 
         ChoosePack pid ->
-            ( Model.updateChoosePack pid model, push msg )
+            ( Model.choosePack pid model, push msg )
 
         ChoosePackCard pid cid ->
-            ( Model.updateChoosePackCard pid cid model, push msg )
+            ( Model.choosePackCard pid cid model, push msg )
 
         ChoosePackDiscard pid ->
-            ( Model.updateChoosePackDiscard pid model, push msg )
+            ( Model.choosePackDiscard pid model, push msg )
 
         ChoosePackDiscardCard pid cid ->
-            ( Model.updateChoosePackDiscardCard pid cid model, push msg )
+            ( Model.choosePackDiscardCard pid cid model, push msg )
 
         Noop ->
             ( model, Cmd.none )
