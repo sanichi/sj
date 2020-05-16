@@ -59,6 +59,10 @@ class Game < ApplicationRecord
     add_msg("pack_discard_card", [pid, cid, card], not: pid)
   end
 
+  def pack_discard_chosen(pid)
+    add_msg("pack_discard_chosen", pid, only_start: true)
+  end
+
   def can_be_joined_by?(user)
     return false unless state == WAITING
     return false if players.count >= participants

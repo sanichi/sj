@@ -141,15 +141,20 @@ newUpdate update model =
                 _ ->
                     model
 
+        "pack_discard_chosen" ->
+            case val of
+                [ pid ] ->
+                    updateChoosePackDiscard pid model
+
+                _ ->
+                    model
+
         "elm_state" ->
             case val of
                 [ pid, code ] ->
                     case code of
                         2 ->
                             updateChooseDiscard pid model
-
-                        3 ->
-                            updateChoosePackDiscard pid model
 
                         _ ->
                             model
@@ -234,10 +239,14 @@ updateChoosePackCard pid cid model =
 
 updateChoosePackDiscard : Int -> Model -> Model
 updateChoosePackDiscard pid model =
-    model
-        |> updatePack model.pack.num
-        |> updateDiscard model.pack.num
-        |> updateState ChosenPackDiscard
+    if pid == model.player_id then
+        model
+            |> updatePack model.pack.num
+            |> updateDiscard model.pack.num
+            |> updateState ChosenPackDiscard
+
+    else
+        model
 
 
 updateChoosePackDiscardCard : Int -> Int -> Model -> Model

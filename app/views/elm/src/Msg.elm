@@ -52,7 +52,7 @@ value msg =
         ChoosePackDiscard pid ->
             E.object
                 [ ( "player_id", E.int pid )
-                , ( "elm_state", E.int 3 )
+                , ( "pack_discard_chosen", E.int 1 )
                 ]
 
         ChoosePackDiscardCard pid cid ->
