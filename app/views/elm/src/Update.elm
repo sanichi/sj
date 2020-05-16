@@ -1,4 +1,7 @@
-module Update exposing (Update, decode)
+module Update exposing
+    ( Update
+    , decode
+    )
 
 import Json.Decode as D exposing (Decoder, Value)
 
@@ -10,6 +13,10 @@ type alias Update =
 decode : Value -> Update
 decode value =
     D.decodeValue updateDecoder value |> Result.withDefault default
+
+
+
+-- Private
 
 
 updateDecoder : Decoder Update

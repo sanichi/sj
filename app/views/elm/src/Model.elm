@@ -335,16 +335,11 @@ exposePack model =
     { model | pack = Card.exposed model.pack.num }
 
 
-getPlayer : Int -> Model -> Maybe Player
-getPlayer pid model =
-    Players.get pid model.players
-
-
 getPlayerCard : Int -> Int -> Model -> ( Maybe Player, Maybe Card )
 getPlayerCard pid cid model =
     let
         player =
-            getPlayer pid model
+            Players.get pid model.players
 
         card =
             case player of

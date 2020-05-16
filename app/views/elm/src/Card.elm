@@ -1,4 +1,9 @@
-module Card exposing (Card, exposed, hidden, score)
+module Card exposing
+    ( Card
+    , exposed
+    , hidden
+    , score
+    )
 
 
 type alias Card =

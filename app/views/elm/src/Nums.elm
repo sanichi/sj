@@ -1,4 +1,21 @@
-module Nums exposing (..)
+module Nums exposing
+    ( badgeHeight
+    , badgeOffset
+    , badgeTextSize
+    , badgeWidth
+    , cardHeight
+    , cardWidth
+    , cardX
+    , cardY
+    , cardsYOffset
+    , discardX
+    , discardY
+    , handOffset
+    , packX
+    , packY
+    , viewHeight
+    , viewWidth
+    )
 
 import Player exposing (Position(..))
 
@@ -15,11 +32,6 @@ viewWidth =
 viewHeight : Int
 viewHeight =
     1000
-
-
-viewMargin : Int
-viewMargin =
-    30
 
 
 
@@ -41,21 +53,6 @@ cardWidth =
 cardHeight : Int
 cardHeight =
     100
-
-
-cardImageHeight : Int
-cardImageHeight =
-    1000
-
-
-cardImageWidth : Int
-cardImageWidth =
-    654
-
-
-cardMargin : Int
-cardMargin =
-    4
 
 
 
@@ -104,11 +101,6 @@ badgeTextSize : Int
 badgeTextSize =
     -- match this with what's in card_table.sass
     25
-
-
-badgeMargin : Int
-badgeMargin =
-    20
 
 
 
@@ -190,7 +182,27 @@ badgeOffset position =
 
 
 
--- Useful quuantities
+-- Private
+
+
+badgeMargin : Int
+badgeMargin =
+    20
+
+
+cardImageWidth : Int
+cardImageWidth =
+    654
+
+
+cardImageHeight : Int
+cardImageHeight =
+    1000
+
+
+cardMargin : Int
+cardMargin =
+    4
 
 
 handHeight : Int
@@ -201,3 +213,8 @@ handHeight =
 handWidth : Int
 handWidth =
     cardWidth * 4 + cardMargin * 3
+
+
+viewMargin : Int
+viewMargin =
+    30

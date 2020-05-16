@@ -85,7 +85,9 @@ updatePackDiscardCard cid card player players =
 
 updateReveal : Int -> Card -> Player -> Players -> Players
 updateReveal cid card player players =
-    updateRevealTurns <| replace cid card player players
+    players
+        |> replace cid card player
+        |> updateRevealTurns
 
 
 

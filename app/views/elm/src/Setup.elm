@@ -1,12 +1,9 @@
-module Setup exposing (ProtoPlayer, decode)
+module Setup exposing
+    ( ProtoPlayer
+    , decode
+    )
 
 import Json.Decode as D exposing (Decoder, Value)
-
-
-type alias Setup =
-    { player_id : Int
-    , players : List ProtoPlayer
-    }
 
 
 type alias ProtoPlayer =
@@ -19,6 +16,16 @@ type alias ProtoPlayer =
 decode : Value -> Setup
 decode value =
     D.decodeValue flags value |> Result.withDefault default
+
+
+
+-- Private
+
+
+type alias Setup =
+    { player_id : Int
+    , players : List ProtoPlayer
+    }
 
 
 flags : Decoder Setup

@@ -1,4 +1,11 @@
-module View exposing (bg, box, debug, discard, hands, pack)
+module View exposing
+    ( bg
+    , box
+    , debug
+    , discard
+    , hands
+    , pack
+    )
 
 import Card exposing (Card)
 import Hand exposing (Hand)

@@ -1,7 +1,5 @@
 module Main exposing (main)
 
--- local modules
-
 import Browser
 import Html exposing (Html)
 import Json.Decode exposing (Value)
@@ -15,10 +13,6 @@ import Update exposing (Update)
 import View
 
 
-
--- main program
-
-
 main : Program Value Model Msg
 main =
     Browser.element
@@ -29,24 +23,11 @@ main =
         }
 
 
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Ports.pullUpdate (NewUpdate << Update.decode)
-
-
-
--- view
-
-
 view : Model -> Html Msg
 view model =
     [ View.bg, View.pack model, View.discard model, View.debug model ]
         ++ View.hands model
         |> Svg.svg [ Atr.id "card-table", Atr.version "1.1", View.box ]
-
-
-
--- update
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -80,8 +61,9 @@ update msg model =
             ( model, Cmd.none )
 
 
-
--- private
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Ports.pullUpdate (NewUpdate << Update.decode)
 
 
 push : Msg -> Cmd Msg

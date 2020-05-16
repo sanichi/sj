@@ -2,7 +2,6 @@ module Hand exposing
     ( Hand
     , exposed
     , get
-    , hidden
     , highest
     , init
     , map
@@ -36,11 +35,6 @@ map f hand =
 get : Int -> Hand -> Maybe Card
 get cid hand =
     Array.get cid hand
-
-
-hidden : Hand -> Int
-hidden hand =
-    Array.length <| Array.filter (not << .vis) hand
 
 
 highest : Hand -> Int
