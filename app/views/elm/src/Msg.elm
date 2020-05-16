@@ -20,46 +20,25 @@ value : Msg -> Value
 value msg =
     case msg of
         RevealCard pid cid ->
-            E.object
-                [ ( "player_id", E.int pid )
-                , ( "card_index", E.int cid )
-                ]
+            E.object [ ( "card_index", E.int cid ) ]
 
         ChooseDiscard pid ->
-            E.object
-                [ ( "player_id", E.int pid )
-                , ( "discard_chosen", E.int 1 )
-                ]
+            E.object [ ( "discard_chosen", E.int 1 ) ]
 
         ChooseDiscardCard pid cid ->
-            E.object
-                [ ( "player_id", E.int pid )
-                , ( "discard_card_index", E.int cid )
-                ]
+            E.object [ ( "discard_card_index", E.int cid ) ]
 
         ChoosePack pid ->
-            E.object
-                [ ( "player_id", E.int pid )
-                , ( "pack_chosen", E.int 1 )
-                ]
+            E.object [ ( "pack_chosen", E.int 1 ) ]
 
         ChoosePackCard pid cid ->
-            E.object
-                [ ( "player_id", E.int pid )
-                , ( "pack_card_index", E.int cid )
-                ]
+            E.object [ ( "pack_card_index", E.int cid ) ]
 
         ChoosePackDiscard pid ->
-            E.object
-                [ ( "player_id", E.int pid )
-                , ( "pack_discard_chosen", E.int 1 )
-                ]
+            E.object [ ( "pack_discard_chosen", E.int 1 ) ]
 
         ChoosePackDiscardCard pid cid ->
-            E.object
-                [ ( "player_id", E.int pid )
-                , ( "pack_discard_card_index", E.int cid )
-                ]
+            E.object [ ( "pack_discard_card_index", E.int cid ) ]
 
         _ ->
             E.null
