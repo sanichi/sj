@@ -209,13 +209,6 @@ updateChoosePackCard pid cid model =
     let
         playerCard =
             getPlayerCard pid cid model
-
-        state =
-            if pid == model.player_id then
-                Choose
-
-            else
-                model.state
     in
     case playerCard of
         ( Just player, Just card ) ->
@@ -227,7 +220,7 @@ updateChoosePackCard pid cid model =
                 |> updatePlayers players
                 |> updatePack model.pack.num
                 |> updateDiscard card.num
-                |> updateState state
+                |> updateState Choose
 
         _ ->
             model
