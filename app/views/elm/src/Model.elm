@@ -192,7 +192,7 @@ choosePack pid model =
                 model.state
     in
     model
-        |> updatePackExposed model.pack.num
+        |> exposePack
         |> updateState state
 
 
@@ -209,8 +209,8 @@ choosePackCard pid cid model =
                     Players.updatePackCard cid model.pack player model.players
             in
             model
+                |> hidePack
                 |> updatePlayers players
-                |> updatePack model.pack.num
                 |> updateDiscard card.num
                 |> updateState Choose
 
@@ -222,7 +222,7 @@ choosePackDiscard : Int -> Model -> Model
 choosePackDiscard pid model =
     if pid == model.player_id then
         model
-            |> updatePack model.pack.num
+            |> hidePack
             |> updateDiscard model.pack.num
             |> updateState ChosenPackDiscard
 
@@ -249,8 +249,8 @@ choosePackDiscardCard pid cid model =
 
             else
                 model
+                    |> hidePack
                     |> updatePlayers players
-                    |> updatePack model.pack.num
                     |> updateDiscard model.pack.num
 
         _ ->
@@ -281,7 +281,7 @@ revealCard pid cid model =
                         Choose
 
                     else
-                        model.state
+                        Reveal
             in
             model
                 |> updatePlayers players
@@ -330,6 +330,11 @@ debug model =
 -- Private
 
 
+exposePack : Model -> Model
+exposePack model =
+    { model | pack = Card.exposed model.pack.num }
+
+
 getPlayer : Int -> Model -> Maybe Player
 getPlayer pid model =
     Players.get pid model.players
@@ -350,6 +355,11 @@ getPlayerCard pid cid model =
                     Nothing
     in
     ( player, card )
+
+
+hidePack : Model -> Model
+hidePack model =
+    { model | pack = Card.hidden model.pack.num }
 
 
 playerHand : Int -> List Int -> Model -> Model
@@ -377,11 +387,6 @@ updateDiscard num model =
 updatePack : Int -> Model -> Model
 updatePack num model =
     { model | pack = Card.hidden num }
-
-
-updatePackExposed : Int -> Model -> Model
-updatePackExposed num model =
-    { model | pack = Card.exposed num }
 
 
 updatePlayers : Players -> Model -> Model
