@@ -67,7 +67,7 @@ newUpdate update model =
             update
     in
     case key of
-        "pack" ->
+        "deal_pack" ->
             case val of
                 [ num ] ->
                     updatePack num model
@@ -75,7 +75,7 @@ newUpdate update model =
                 _ ->
                     model
 
-        "discard" ->
+        "deal_discard" ->
             case val of
                 [ num ] ->
                     updateDiscard num model
@@ -83,7 +83,7 @@ newUpdate update model =
                 _ ->
                     model
 
-        "hand" ->
+        "deal_hand" ->
             case val of
                 pid :: nums ->
                     playerHand pid nums model
@@ -91,18 +91,10 @@ newUpdate update model =
                 _ ->
                     model
 
-        "reveal" ->
+        "reveal_card" ->
             case val of
                 [ pid, cid ] ->
                     revealCard pid cid model
-
-                _ ->
-                    model
-
-        "new_pack_card" ->
-            case val of
-                [ num ] ->
-                    updatePack num model
 
                 _ ->
                     model

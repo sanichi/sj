@@ -26,16 +26,16 @@ class Game < ApplicationRecord
   end
 
   def start
-    add_msg("pack", card)
-    add_msg("discard", card)
+    add_msg("deal_pack", card)
+    add_msg("deal_discard", card)
   end
 
   def deal(pid)
-    add_msg("hand", cards(12).unshift(pid))
+    add_msg("deal_hand", cards(12).unshift(pid))
   end
 
   def reveal(pid, cid)
-    add_msg("reveal", [pid, cid], not: pid)
+    add_msg("reveal_card", [pid, cid], not: pid)
   end
 
   def discard_card(pid, cid)
@@ -52,12 +52,12 @@ class Game < ApplicationRecord
 
   def pack_card(pid, cid)
     add_msg("pack_card", [pid, cid], not: pid)
-    add_msg("new_pack_card", card)
+    add_msg("deal_pack", card)
   end
 
   def pack_discard_card(pid, cid)
     add_msg("pack_discard_card", [pid, cid], not: pid)
-    add_msg("new_pack_card", card)
+    add_msg("deal_pack", card)
   end
 
   def pack_discard_chosen(pid)

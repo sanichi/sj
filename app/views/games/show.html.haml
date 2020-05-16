@@ -19,7 +19,8 @@
         %tr
           %td
             = t("game.players")
-            = "(%d/%d)" % [@game.players.count, @game.participants]
+            - unless @game.players.count == @game.participants
+              = "(%d/%d)" % [@game.players.count, @game.participants]
           %td= @game.players.map { |p| p.user.handle }.join(", ")
         %tr
           %td= t("game.dealt")
