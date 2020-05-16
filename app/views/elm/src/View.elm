@@ -232,7 +232,7 @@ cardMsg : State -> Player -> Int -> Card -> Msg
 cardMsg state player cid card =
     if player.active && player.turn then
         case state of
-            Revealing ->
+            Reveal ->
                 if not card.vis then
                     RevealCard player.pid cid
 

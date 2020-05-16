@@ -34,7 +34,7 @@ type alias Model =
 
 
 type State
-    = Revealing
+    = Reveal
     | Choose
     | ChosenPack
     | ChosenPackDiscard
@@ -51,7 +51,7 @@ init flags =
     , pack = Card.hidden 0
     , discard = Card.exposed 0
     , players = Players.init setup.player_id setup.players
-    , state = Revealing
+    , state = Reveal
     }
 
 
@@ -299,8 +299,8 @@ debug model =
 
         state =
             case model.state of
-                Revealing ->
-                    "Revealing"
+                Reveal ->
+                    "Reveal"
 
                 Choose ->
                     "Choose"
