@@ -30,6 +30,7 @@ type alias Model =
     , discard : Card
     , players : Players
     , state : State
+    , debug : Bool
     }
 
 
@@ -52,6 +53,7 @@ init flags =
     , discard = Card.exposed 0
     , players = Players.init setup.player_id setup.players
     , state = Reveal
+    , debug = setup.debug
     }
 
 
@@ -257,6 +259,45 @@ choosePackDiscardCard pid cid model =
             model
 
 
+debug : Model -> String
+debug model =
+    if model.debug then
+        let
+            pid =
+                String.fromInt model.player_id
+
+            state =
+                case model.state of
+                    Reveal ->
+                        "Reveal"
+
+                    Choose ->
+                        "Choose"
+
+                    ChosenPack ->
+                        "ChosenPack"
+
+                    ChosenDiscard ->
+                        "ChosenDiscard"
+
+                    ChosenPackDiscard ->
+                        "ChosenPackDiscard"
+
+            plrs =
+                List.map Player.debug <| Players.toList model.players
+
+            pck =
+                String.fromInt model.pack.num
+
+            mdl =
+                String.join " " [ pid, pck, state ]
+        in
+        String.join " | " (mdl :: plrs)
+
+    else
+        ""
+
+
 revealCard : Int -> Int -> Model -> Model
 revealCard pid cid model =
     let
@@ -289,41 +330,6 @@ revealCard pid cid model =
 
         _ ->
             model
-
-
-debug : Model -> String
-debug model =
-    let
-        pid =
-            String.fromInt model.player_id
-
-        state =
-            case model.state of
-                Reveal ->
-                    "Reveal"
-
-                Choose ->
-                    "Choose"
-
-                ChosenPack ->
-                    "ChosenPack"
-
-                ChosenDiscard ->
-                    "ChosenDiscard"
-
-                ChosenPackDiscard ->
-                    "ChosenPackDiscard"
-
-        plrs =
-            List.map Player.debug <| Players.toList model.players
-
-        pck =
-            String.fromInt model.pack.num
-
-        mdl =
-            String.join " " [ pid, pck, state ]
-    in
-    String.join " | " (mdl :: plrs)
 
 
 

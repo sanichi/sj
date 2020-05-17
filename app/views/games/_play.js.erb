@@ -2,6 +2,7 @@ var skyjo = (function() {
 
   var elm;
   var pulling = true;
+  var debug = <%= @game.debug ? 'true' : 'false' %>;
   var data = {
     player_id: <%= @player.id %>,
     last_message_id: 0
@@ -17,7 +18,7 @@ var skyjo = (function() {
           if (update.mid > data.last_message_id) data.last_message_id = update.mid;
           elm.ports.pullUpdate.send(update);
         });
-        if (!empty(json)) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
+        if (debug && !empty(json)) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
       },
       error: function(xhr) {
         console.log("ajax pull error: " + xhr.status);
@@ -64,7 +65,8 @@ $(function() {
     node: $('#elm-main').get(0),
     flags: {
       player_id: <%= @player.id %>,
-      players: [ <%= game_js_player_list(@game, @player.id) %> ]
+      players: [ <%= game_js_player_list(@game, @player.id) %> ],
+      debug: <%= @game.debug ? 'true' : 'false' %>
     }
   });
   app.ports.pushUpdates.subscribe(function(updates) {

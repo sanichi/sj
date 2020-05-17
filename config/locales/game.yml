@@ -1,7 +1,8 @@
 en:
   game:
     dealt: Dealt
-    game_id: "Game %{id}"
+    debug: Debug
+    game_id: 'Game %{id}'
     games: Games
     header: '%{participants} player game, ends at %{upto}'
     join: Join

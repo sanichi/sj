@@ -7,7 +7,7 @@ class GamesController < ApplicationController
   end
 
   def new
-    @game = Game.new
+    @game = Game.new(debug: current_user.admin?)
   end
 
   def create
@@ -57,6 +57,8 @@ class GamesController < ApplicationController
   end
 
   def resource_params
-    params.require(:game).permit(:participants, :upto)
+    permitted = [:participants, :upto]
+    permitted.push :debug if current_user.admin?
+    params.require(:game).permit(*permitted)
   end
 end

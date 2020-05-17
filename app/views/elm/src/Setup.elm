@@ -25,14 +25,16 @@ decode value =
 type alias Setup =
     { player_id : Int
     , players : List ProtoPlayer
+    , debug : Bool
     }
 
 
 flags : Decoder Setup
 flags =
-    D.map2 Setup
+    D.map3 Setup
         (D.field "player_id" D.int |> withDefault default.player_id)
         (D.field "players" (D.list pair) |> withDefault default.players)
+        (D.field "debug" D.bool |> withDefault default.debug)
 
 
 pair : Decoder ProtoPlayer
@@ -45,7 +47,7 @@ pair =
 
 default : Setup
 default =
-    Setup 0 []
+    Setup 0 [] False
 
 
 

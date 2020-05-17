@@ -19,20 +19,12 @@ import Svg.Attributes as Atr
 import Svg.Events exposing (onClick)
 
 
-
--- Visible box
-
-
 box : Attribute Msg
 box =
     [ 0, 0, Nums.viewWidth, Nums.viewHeight ]
         |> List.map String.fromInt
         |> String.join " "
         |> Atr.viewBox
-
-
-
--- Background
 
 
 bg : Svg Msg
@@ -47,8 +39,22 @@ bg =
     Svg.rect [ Atr.class "background", w, h ] []
 
 
+debug : Model -> Svg Msg
+debug model =
+    let
+        x =
+            Atr.x "10"
 
--- Pack
+        y =
+            Atr.y "20"
+
+        c =
+            Atr.class "debug"
+
+        t =
+            Svg.text <| Model.debug model
+    in
+    Svg.text_ [ x, y, c ] [ t ]
 
 
 pack : Model -> Svg Msg
@@ -66,10 +72,6 @@ pack model =
     cardGroup frame url msg
 
 
-
--- Discard pile
-
-
 discard : Model -> Svg Msg
 discard model =
     let
@@ -83,10 +85,6 @@ discard model =
             discardMsg model
     in
     cardGroup frame url msg
-
-
-
--- Players cards
 
 
 hands : Model -> List (Svg Msg)
@@ -385,25 +383,3 @@ packX =
 packY : Attribute Msg
 packY =
     Atr.y <| String.fromInt Nums.packY
-
-
-
--- Debug
-
-
-debug : Model -> Svg Msg
-debug model =
-    let
-        x =
-            Atr.x "10"
-
-        y =
-            Atr.y "20"
-
-        c =
-            Atr.class "debug"
-
-        t =
-            Svg.text <| Model.debug model
-    in
-    Svg.text_ [ x, y, c ] [ t ]
