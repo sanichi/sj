@@ -238,7 +238,7 @@ cardMsg state player cid card =
     if player.active && player.turn then
         case state of
             Reveal ->
-                if not card.vis then
+                if not card.exp then
                     RevealCard player.pid cid
 
                 else
@@ -251,7 +251,7 @@ cardMsg state player cid card =
                 ChoosePackCard player.pid cid
 
             ChosenPackDiscard ->
-                if not card.vis then
+                if not card.exp then
                     ChoosePackDiscardCard player.pid cid
 
                 else
@@ -268,7 +268,7 @@ cardUrl : Card -> Attribute Msg
 cardUrl card =
     let
         nam =
-            if not card.vis then
+            if not card.exp then
                 "back"
 
             else if card.num >= 0 && card.num <= 12 then

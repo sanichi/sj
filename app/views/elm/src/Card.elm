@@ -8,7 +8,7 @@ module Card exposing
 
 type alias Card =
     { num : Int
-    , vis : Bool
+    , exp : Bool
     }
 
 
@@ -24,7 +24,7 @@ hidden num =
 
 score : Card -> Int
 score card =
-    if card.vis then
+    if card.exp then
         card.num
 
     else
