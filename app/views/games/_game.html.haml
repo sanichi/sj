@@ -1,8 +1,36 @@
 %section
-  .header.font-weight-bold= t("game.header", participants: game.participants, upto: game.upto)
+  .header.font-weight-bold= "#{game.participants} player game to #{game.upto}"
   .body
-    %p= t("game.status.status", status: game_status(game))
-    %p= t("game.started", handle: game.user.handle, time: game_started(game))
+    %p
+      = "Started by"
+      %span.font-weight-bold= game.user.handle
+      = succeed(".") do
+        = game_started(game)
+    %p
+      = "Status:"
+      - handles = game.players.map {|p| p.user.handle }
+      - count = handles.size
+      - needed = game.participants - count
+      - if count == 0
+        = "no players have joined yet."
+      - elsif count == 1
+        = "1 player"
+        = render "handles", handles: handles
+        = "has joined, waiting for"
+        %span.font-weight-bold= needed
+        = "more."
+      - else
+        - if needed > 0
+          = "some players"
+          = render "handles", handles: handles
+          = "have joined, waiting for"
+          %span.font-weight-bold= needed
+          = "more."
+        - else
+          = "enough players"
+          = render "handles", handles: handles
+          = "have joined, ready to play."
+    %p
   .footer
     - if game.can_be_joined_by?(current_user)
       = link_to t("game.join"), join_game_path(game), class: "btn btn-success btn-sm"

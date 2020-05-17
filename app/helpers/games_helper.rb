@@ -17,25 +17,6 @@ module GamesHelper
     end
   end
 
-  def game_status(game)
-    handles = game.players.map {|p| p.user.handle }
-    count = handles.size
-    needed = game.participants - count
-    if count == 0
-      t("game.status.none")
-    elsif count == 1
-      t("game.status.one", handle: handles.first, number: needed)
-    else
-      last = handles.pop
-      list = "#{handles.join(', ')} and #{last}"
-      if needed > 0
-        t("game.status.some", some: count, handles: list, number: needed)
-      else
-        t("game.status.ready", handles: list)
-      end
-    end
-  end
-
   def game_js_player_list(game, player_id)
     players = game.players.sort_by { |p| p.id }
     south = players.index{ |p| p.id == player_id }.to_i

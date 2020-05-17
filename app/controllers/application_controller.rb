@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
-      format.html { redirect_to current_user.guest? ? root_path : waiting_games_path, alert: exception.message }
+      format.html { redirect_to current_user.guest? ? root_path : waiting_games_path, alert: Rails.env.test? ? exception.message : nil }
       format.json { head :forbidden, content_type: "text/html" }
       format.js   { head :forbidden, content_type: "text/html" }
     end
