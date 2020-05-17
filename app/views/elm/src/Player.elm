@@ -3,6 +3,8 @@ module Player exposing
     , Position(..)
     , badge
     , debug
+    , replace
+    , replaceAndCheck
     )
 
 import Card exposing (Card)
@@ -80,3 +82,49 @@ debug player =
                 "W"
     in
     String.join " " [ pid, pos, trn ]
+
+
+replace : Int -> Card -> Player -> Player
+replace cid card player =
+    let
+        uCard =
+            Card.exposed card.num
+
+        uHand =
+            Hand.set cid uCard player.hand
+    in
+    { player | hand = uHand }
+
+
+replaceAndCheck : Int -> Card -> Player -> ( Player, Maybe Int )
+replaceAndCheck cid card player =
+    let
+        uCard =
+            Card.exposed card.num
+
+        uHand =
+            Hand.set cid uCard player.hand
+
+        uPlayer =
+            { player | hand = uHand }
+
+        ( cPlayer, discard ) =
+            check uPlayer
+    in
+    ( cPlayer, discard )
+
+
+
+-- Private
+
+
+check : Player -> ( Player, Maybe Int )
+check player =
+    let
+        ( hand, discard ) =
+            Hand.check player.hand
+
+        cPlayer =
+            { player | hand = hand }
+    in
+    ( cPlayer, discard )

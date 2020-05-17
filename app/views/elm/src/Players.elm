@@ -5,9 +5,7 @@ module Players exposing
     , init
     , put
     , toList
-    , updateDiscardCard
-    , updatePackCard
-    , updatePackDiscardCard
+    , updateCard
     , updateReveal
     )
 
@@ -47,40 +45,16 @@ put pid player players =
     Dict.insert pid player players
 
 
-updateDiscardCard : Int -> Card -> Player -> Players -> Players
-updateDiscardCard cid card player players =
+updateCard : Int -> Card -> Player -> Players -> ( Players, Maybe Int )
+updateCard cid card player players =
     let
-        players_ =
-            replace cid card player players
+        ( uPlayers, discard ) =
+            replaceAndCheck cid card player players
 
         next =
-            updateNextTurn player.position (size players_)
+            updateNextTurn player.position (size uPlayers)
     in
-    Dict.map next players_
-
-
-updatePackCard : Int -> Card -> Player -> Players -> Players
-updatePackCard cid pack player players =
-    let
-        players_ =
-            replace cid pack player players
-
-        next =
-            updateNextTurn player.position (size players_)
-    in
-    Dict.map next players_
-
-
-updatePackDiscardCard : Int -> Card -> Player -> Players -> Players
-updatePackDiscardCard cid card player players =
-    let
-        players_ =
-            replace cid card player players
-
-        next =
-            updateNextTurn player.position (size players_)
-    in
-    Dict.map next players_
+    ( Dict.map next uPlayers, discard )
 
 
 updateReveal : Int -> Card -> Player -> Players -> Players
@@ -163,16 +137,22 @@ size players =
 replace : Int -> Card -> Player -> Players -> Players
 replace cid card player players =
     let
-        uCard =
-            Card.exposed card.num
-
-        uHand =
-            Hand.set cid uCard player.hand
-
         uPlayer =
-            { player | hand = uHand }
+            Player.replace cid card player
     in
     put player.pid uPlayer players
+
+
+replaceAndCheck : Int -> Card -> Player -> Players -> ( Players, Maybe Int )
+replaceAndCheck cid card player players =
+    let
+        ( uPlayer, discard ) =
+            Player.replaceAndCheck cid card player
+
+        uPlayers =
+            put player.pid uPlayer players
+    in
+    ( uPlayers, discard )
 
 
 updateNextTurn : Position -> Int -> Int -> Player -> Player

@@ -171,12 +171,12 @@ chooseDiscardCard pid cid model =
     case playerCard of
         ( Just player, Just card ) ->
             let
-                players =
-                    Players.updateDiscardCard cid model.discard player model.players
+                ( players, num ) =
+                    Players.updateCard cid model.discard player model.players
             in
             model
                 |> updatePlayers players
-                |> updateDiscard card.num
+                |> updateDiscard (Maybe.withDefault card.num num)
                 |> updateState Choose
 
         _ ->
@@ -207,13 +207,13 @@ choosePackCard pid cid model =
     case playerCard of
         ( Just player, Just card ) ->
             let
-                players =
-                    Players.updatePackCard cid model.pack player model.players
+                ( players, num ) =
+                    Players.updateCard cid model.pack player model.players
             in
             model
                 |> hidePack
                 |> updatePlayers players
-                |> updateDiscard card.num
+                |> updateDiscard (Maybe.withDefault card.num num)
                 |> updateState Choose
 
         _ ->
@@ -241,19 +241,20 @@ choosePackDiscardCard pid cid model =
     case playerCard of
         ( Just player, Just card ) ->
             let
-                players =
-                    Players.updatePackDiscardCard cid card player model.players
+                ( players, num ) =
+                    Players.updateCard cid card player model.players
             in
             if pid == model.player_id then
                 model
                     |> updatePlayers players
+                    |> updateDiscard (Maybe.withDefault model.discard.num num)
                     |> updateState Choose
 
             else
                 model
                     |> hidePack
                     |> updatePlayers players
-                    |> updateDiscard model.pack.num
+                    |> updateDiscard (Maybe.withDefault model.pack.num num)
 
         _ ->
             model

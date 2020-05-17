@@ -1,8 +1,8 @@
 module Card exposing
     ( Card
+    , blank
     , exposed
     , hidden
-    , poof
     , score
     )
 
@@ -14,6 +14,11 @@ type alias Card =
     }
 
 
+blank : Card
+blank =
+    Card 0 False False
+
+
 exposed : Int -> Card
 exposed num =
     Card num True True
@@ -22,11 +27,6 @@ exposed num =
 hidden : Int -> Card
 hidden num =
     Card num False True
-
-
-poof : Card -> Card
-poof card =
-    { card | exists = False }
 
 
 score : Card -> Int

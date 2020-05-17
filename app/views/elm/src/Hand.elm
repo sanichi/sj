@@ -1,5 +1,6 @@
 module Hand exposing
     ( Hand
+    , check
     , exposed
     , get
     , highest
@@ -15,6 +16,31 @@ import Card exposing (Card)
 
 type alias Hand =
     Array Card
+
+
+check : Hand -> ( Hand, Maybe Int )
+check hand =
+    case matched 1 hand of
+        Just discard ->
+            ( poof 1 hand, Just discard )
+
+        _ ->
+            case matched 2 hand of
+                Just discard ->
+                    ( poof 2 hand, Just discard )
+
+                _ ->
+                    case matched 3 hand of
+                        Just discard ->
+                            ( poof 3 hand, Just discard )
+
+                        _ ->
+                            case matched 4 hand of
+                                Just discard ->
+                                    ( poof 4 hand, Just discard )
+
+                                _ ->
+                                    ( hand, Nothing )
 
 
 exposed : Hand -> Int
@@ -55,3 +81,59 @@ score hand =
 set : Int -> Card -> Hand -> Hand
 set cid card hand =
     Array.set cid card hand
+
+
+
+-- Private
+
+
+columnIndexes : Int -> List Int
+columnIndexes col =
+    List.map (\d -> d + col) [ -1, 3, 7 ]
+
+
+matched : Int -> Hand -> Maybe Int
+matched col hand =
+    let
+        cards =
+            columnIndexes col
+                |> List.map get
+                |> List.map (\f -> f hand)
+    in
+    case cards of
+        [ Just c1, Just c2, Just c3 ] ->
+            let
+                allExist =
+                    [ c1, c2, c3 ]
+                        |> List.map .exists
+                        |> List.foldl (&&) True
+
+                allExposed =
+                    [ c1, c2, c3 ]
+                        |> List.map .exposed
+                        |> List.foldl (&&) True
+            in
+            if allExist && allExposed && c1.num == c2.num && c1.num == c3.num then
+                Just c1.num
+
+            else
+                Nothing
+
+        _ ->
+            Nothing
+
+
+poof : Int -> Hand -> Hand
+poof col hand =
+    remove (columnIndexes col) hand
+
+
+remove : List Int -> Hand -> Hand
+remove cids hand =
+    case cids of
+        cid :: rest ->
+            set cid Card.blank hand
+                |> remove rest
+
+        [] ->
+            hand
