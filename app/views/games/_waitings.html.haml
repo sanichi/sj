@@ -1,2 +1,7 @@
+- if games.empty?
+  %p.faded.text-center
+    = "No games available to join just now. Please wait for someone to click"
+    = succeed(".") do
+      = link_to t("game.new"), new_game_path
 - games.each do |game|
   = render "game", game: game

@@ -15,7 +15,7 @@ describe Game do
       click_link t("game.new")
       select data.participants.to_s, from: t("game.participants")
       select data.upto.to_s, from: t("game.upto")
-      click_button t("save")
+      click_button t("game.save")
 
       expect(page).to have_title t("game.games")
       expect(Game.count).to eq 2
