@@ -190,19 +190,26 @@ cardsOffset position =
     Atr.transform <| "translate(0 " ++ y ++ ")"
 
 
-cardElement : State -> Player -> Int -> Card -> Svg Msg
+cardElement : State -> Player -> Int -> Card -> Maybe (Svg Msg)
 cardElement state player cid card =
-    let
-        frame =
-            [ cardX cid, cardY cid, cardWidth, cardHeight ]
+    if card.exists then
+        let
+            frame =
+                [ cardX cid, cardY cid, cardWidth, cardHeight ]
 
-        url =
-            cardUrl card
+            url =
+                cardUrl card
 
-        msg =
-            cardMsg state player cid card
-    in
-    cardGroup frame url msg
+            msg =
+                cardMsg state player cid card
+
+            grp =
+                cardGroup frame url msg
+        in
+        Just grp
+
+    else
+        Nothing
 
 
 cardGroup : List (Attribute Msg) -> Attribute Msg -> Msg -> Svg Msg
@@ -238,7 +245,7 @@ cardMsg state player cid card =
     if player.active && player.turn then
         case state of
             Reveal ->
-                if not card.exp then
+                if not card.exposed then
                     RevealCard player.pid cid
 
                 else
@@ -251,7 +258,7 @@ cardMsg state player cid card =
                 ChoosePackCard player.pid cid
 
             ChosenPackDiscard ->
-                if not card.exp then
+                if not card.exposed then
                     ChoosePackDiscardCard player.pid cid
 
                 else
@@ -268,7 +275,7 @@ cardUrl : Card -> Attribute Msg
 cardUrl card =
     let
         nam =
-            if not card.exp then
+            if not card.exposed then
                 "back"
 
             else if card.num >= 0 && card.num <= 12 then
@@ -338,7 +345,15 @@ discardY =
 
 groupedCards : State -> Player -> Svg Msg
 groupedCards state player =
-    Svg.g [ cardsOffset player.position ] (Hand.map (cardElement state player) player.hand)
+    let
+        mapper =
+            cardElement state player
+
+        elements =
+            Hand.map mapper player.hand
+                |> List.filterMap identity
+    in
+    Svg.g [ cardsOffset player.position ] elements
 
 
 handOffset : Position -> Attribute Msg

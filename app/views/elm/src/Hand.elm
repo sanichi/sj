@@ -19,7 +19,7 @@ type alias Hand =
 
 exposed : Hand -> Int
 exposed hand =
-    Array.length <| Array.filter .exp hand
+    Array.length <| Array.filter .exposed hand
 
 
 init : List Int -> Hand

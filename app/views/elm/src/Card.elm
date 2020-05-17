@@ -2,29 +2,36 @@ module Card exposing
     ( Card
     , exposed
     , hidden
+    , poof
     , score
     )
 
 
 type alias Card =
     { num : Int
-    , exp : Bool
+    , exposed : Bool
+    , exists : Bool
     }
 
 
 exposed : Int -> Card
 exposed num =
-    Card num True
+    Card num True True
 
 
 hidden : Int -> Card
 hidden num =
-    Card num False
+    Card num False True
+
+
+poof : Card -> Card
+poof card =
+    { card | exists = False }
 
 
 score : Card -> Int
 score card =
-    if card.exp then
+    if card.exists && card.exposed then
         card.num
 
     else
