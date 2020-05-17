@@ -7,8 +7,6 @@ import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Platform.Sub
 import Ports
-import Svg
-import Svg.Attributes as Atr
 import Update exposing (Update)
 import View
 
@@ -25,9 +23,7 @@ main =
 
 view : Model -> Html Msg
 view model =
-    [ View.bg, View.pack model, View.discard model, View.debug model ]
-        ++ View.hands model
-        |> Svg.svg [ Atr.id "card-table", Atr.version "1.1", View.box ]
+    View.view model
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

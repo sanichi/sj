@@ -4,6 +4,7 @@ module Players exposing
     , get
     , init
     , put
+    , size
     , toList
     , updateCard
     , updateReveal
@@ -33,6 +34,11 @@ get pid players =
 init : Int -> List ProtoPlayer -> Players
 init pid list =
     build pid list Dict.empty
+
+
+size : Players -> Int
+size players =
+    Dict.size players
 
 
 toList : Players -> List Player
@@ -127,11 +133,6 @@ decode position =
 
         _ ->
             S
-
-
-size : Players -> Int
-size players =
-    Dict.size players
 
 
 replace : Int -> Card -> Player -> Players -> Players

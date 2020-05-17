@@ -1,14 +1,8 @@
-module View exposing
-    ( bg
-    , box
-    , debug
-    , discard
-    , hands
-    , pack
-    )
+module View exposing (view)
 
 import Card exposing (Card)
 import Hand exposing (Hand)
+import Html exposing (Html)
 import Model exposing (Model, State(..))
 import Msg exposing (Msg(..))
 import Nums
@@ -17,6 +11,18 @@ import Players exposing (Players)
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
 import Svg.Events exposing (onClick)
+
+
+view : Model -> Html Msg
+view model =
+    [ bg, pack model, discard model ]
+        ++ hands model
+        ++ [ debug model, score model ]
+        |> Svg.svg [ Atr.id "card-table", Atr.version "1.1", box ]
+
+
+
+-- Main helpers
 
 
 box : Attribute Msg
@@ -92,8 +98,20 @@ hands model =
     List.map (cardsAndName model.state) <| Players.all model.players
 
 
+score : Model -> Svg Msg
+score model =
+    let
+        num =
+            Players.size model.players
 
--- Private
+        frame =
+            [ scoreX, scoreY num, scoreWidth, scoreHeight num, Atr.class "score" ]
+    in
+    Svg.rect frame []
+
+
+
+-- Helpers
 
 
 badge : Player -> Svg Msg
@@ -398,3 +416,23 @@ packX =
 packY : Attribute Msg
 packY =
     Atr.y <| String.fromInt Nums.packY
+
+
+scoreX : Attribute Msg
+scoreX =
+    Atr.x <| String.fromInt Nums.scoreX
+
+
+scoreY : Int -> Attribute Msg
+scoreY num =
+    Atr.y <| String.fromInt <| Nums.scoreY num
+
+
+scoreWidth : Attribute Msg
+scoreWidth =
+    Atr.width <| String.fromInt Nums.scoreWidth
+
+
+scoreHeight : Int -> Attribute Msg
+scoreHeight num =
+    Atr.height <| String.fromInt <| Nums.scoreHeight num

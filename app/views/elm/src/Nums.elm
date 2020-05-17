@@ -13,6 +13,10 @@ module Nums exposing
     , handOffset
     , packX
     , packY
+    , scoreHeight
+    , scoreWidth
+    , scoreX
+    , scoreY
     , viewHeight
     , viewWidth
     )
@@ -101,6 +105,30 @@ badgeTextSize : Int
 badgeTextSize =
     -- match this with what's in card_table.sass
     25
+
+
+
+-- Score
+
+
+scoreX : Int
+scoreX =
+    scoreMargin
+
+
+scoreY : Int -> Int
+scoreY num =
+    (viewHeight - scorePlayerHeight * num) // 2
+
+
+scoreWidth : Int
+scoreWidth =
+    viewWidth - 2 * scoreMargin
+
+
+scoreHeight : Int -> Int
+scoreHeight num =
+    scorePlayerHeight * num
 
 
 
@@ -213,6 +241,16 @@ handHeight =
 handWidth : Int
 handWidth =
     cardWidth * 4 + cardMargin * 3
+
+
+scoreMargin : Int
+scoreMargin =
+    160
+
+
+scorePlayerHeight : Int
+scorePlayerHeight =
+    200
 
 
 viewMargin : Int
