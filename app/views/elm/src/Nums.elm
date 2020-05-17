@@ -112,16 +112,16 @@ handOffset position =
     let
         x =
             case position of
-                E ->
+                W ->
                     viewMargin
 
-                W ->
+                E ->
                     viewWidth - handWidth - viewMargin
 
-                NE ->
+                NW ->
                     viewMargin
 
-                NW ->
+                NE ->
                     viewWidth - handWidth - viewMargin
 
                 _ ->
