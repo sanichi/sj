@@ -33,25 +33,25 @@ update msg model =
             ( Model.newUpdate u model, Cmd.none )
 
         RevealCard cid ->
-            ( Model.revealCard model.player_id cid model, push msg )
+            ( Model.revealCard model.pid cid model, push msg )
 
         ChooseDiscard ->
-            ( Model.chooseDiscard model.player_id model, push msg )
+            ( Model.chooseDiscard model.pid model, push msg )
 
         ChooseDiscardCard cid ->
-            ( Model.chooseDiscardCard model.player_id cid model, push msg )
+            ( Model.chooseDiscardCard model.pid cid model, push msg )
 
         ChoosePack ->
-            ( Model.choosePack model.player_id model, push msg )
+            ( Model.choosePack model.pid model, push msg )
 
         ChoosePackCard cid ->
-            ( Model.choosePackCard model.player_id cid model, push msg )
+            ( Model.choosePackCard model.pid cid model, push msg )
 
         ChoosePackDiscard ->
-            ( Model.choosePackDiscard model.player_id model, push msg )
+            ( Model.choosePackDiscard model.pid model, push msg )
 
         ChoosePackDiscardCard cid ->
-            ( Model.choosePackDiscardCard model.player_id cid model, push msg )
+            ( Model.choosePackDiscardCard model.pid cid model, push msg )
 
         NextHand score ->
             ( model, push msg )

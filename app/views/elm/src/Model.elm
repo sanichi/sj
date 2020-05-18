@@ -26,7 +26,7 @@ import Update exposing (Update)
 
 
 type alias Model =
-    { player_id : Int
+    { pid : Int
     , pack : Card
     , discard : Card
     , players : Players
@@ -51,7 +51,7 @@ init flags =
         setup =
             Setup.decode flags
     in
-    { player_id = setup.player_id
+    { pid = setup.player_id
     , pack = Card.hidden 0
     , discard = Card.exposed 0
     , players = Players.init setup.player_id setup.players
@@ -63,12 +63,12 @@ init flags =
 
 mainPlayer : Model -> Maybe Player
 mainPlayer model =
-    Players.get model.player_id model.players
+    Players.get model.pid model.players
 
 
 myTotalScore : Model -> Int
 myTotalScore model =
-    Players.totalScore model.player_id model.players
+    Players.totalScore model.pid model.players
 
 
 newUpdate : Update -> Model -> Model
@@ -164,7 +164,7 @@ newUpdate update model =
 
 chooseDiscard : Int -> Model -> Model
 chooseDiscard pid model =
-    if pid == model.player_id then
+    if pid == model.pid then
         updateState ChosenDiscard model
 
     else
@@ -196,7 +196,7 @@ choosePack : Int -> Model -> Model
 choosePack pid model =
     let
         state =
-            if pid == model.player_id then
+            if pid == model.pid then
                 ChosenPack
 
             else
@@ -231,7 +231,7 @@ choosePackCard pid cid model =
 
 choosePackDiscard : Int -> Model -> Model
 choosePackDiscard pid model =
-    if pid == model.player_id then
+    if pid == model.pid then
         model
             |> hidePack
             |> updateDiscard model.pack.num
@@ -253,7 +253,7 @@ choosePackDiscardCard pid cid model =
                 ( players, num ) =
                     Players.updateCard cid card player model.players
             in
-            if pid == model.player_id then
+            if pid == model.pid then
                 model
                     |> updatePlayers players
                     |> updateDiscard (Maybe.withDefault model.discard.num num)
@@ -274,7 +274,7 @@ debug : Model -> String
 debug model =
     let
         pid =
-            String.fromInt model.player_id
+            String.fromInt model.pid
 
         state =
             case model.state of
