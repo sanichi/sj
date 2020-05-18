@@ -41,6 +41,7 @@ type State
     | ChosenPack
     | ChosenPackDiscard
     | ChosenDiscard
+    | HandOver
 
 
 init : Value -> Model
@@ -264,41 +265,40 @@ choosePackDiscardCard pid cid model =
 
 debug : Model -> String
 debug model =
-    if model.debug then
-        let
-            pid =
-                String.fromInt model.player_id
+    let
+        pid =
+            String.fromInt model.player_id
 
-            state =
-                case model.state of
-                    Reveal ->
-                        "Reveal"
+        state =
+            case model.state of
+                Reveal ->
+                    "Reveal"
 
-                    Choose ->
-                        "Choose"
+                Choose ->
+                    "Choose"
 
-                    ChosenPack ->
-                        "ChosenPack"
+                ChosenPack ->
+                    "ChosenPack"
 
-                    ChosenDiscard ->
-                        "ChosenDiscard"
+                ChosenDiscard ->
+                    "ChosenDiscard"
 
-                    ChosenPackDiscard ->
-                        "ChosenPackDiscard"
+                ChosenPackDiscard ->
+                    "ChosenPackDiscard"
 
-            plrs =
-                List.map Player.debug <| Players.toList model.players
+                HandOver ->
+                    "HandOver"
 
-            pck =
-                String.fromInt model.pack.num
+        plrs =
+            List.map Player.debug <| Players.toList model.players
 
-            mdl =
-                String.join " " [ pid, pck, state ]
-        in
-        String.join " | " (mdl :: plrs)
+        pck =
+            String.fromInt model.pack.num
 
-    else
-        ""
+        mdl =
+            String.join " " [ pid, pck, state ]
+    in
+    String.join " | " (mdl :: plrs)
 
 
 revealCard : Int -> Int -> Model -> Model

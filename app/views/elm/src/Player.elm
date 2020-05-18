@@ -6,6 +6,7 @@ module Player exposing
     , replace
     , replaceAndCheck
     , scoreText
+    , totalScore
     )
 
 import Card exposing (Card)
@@ -131,6 +132,11 @@ scoreText player =
         ++ String.fromInt score
         ++ " = "
         ++ String.fromInt total
+
+
+totalScore : Player -> Int
+totalScore player =
+    Hand.score player.hand + player.score
 
 
 

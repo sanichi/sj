@@ -15,9 +15,24 @@ import Svg.Events exposing (onClick)
 
 view : Model -> Html Msg
 view model =
+    let
+        extras_ =
+            if model.debug then
+                [ debug model ]
+
+            else
+                []
+
+        extras =
+            if model.state == HandOver then
+                score model :: extras_
+
+            else
+                extras_
+    in
     [ bg, pack model, discard model ]
         ++ hands model
-        ++ [ debug model, score model ]
+        ++ extras
         |> Svg.svg [ Atr.id "card-table", Atr.version "1.1", box ]
 
 
@@ -31,7 +46,7 @@ box =
 
 bg : Svg Msg
 bg =
-    Svg.rect [ cc "background", ww Nums.viewWidth, hh Nums.viewHeight ] []
+    Svg.rect [ ww Nums.viewWidth, hh Nums.viewHeight, cc "background" ] []
 
 
 debug : Model -> Svg Msg
@@ -71,7 +86,7 @@ badgeRect player =
                 else
                     "wait"
     in
-    Svg.rect [ x0, y0, ww Nums.badgeWidth, hh Nums.badgeHeight, c, rx, ry ] []
+    Svg.rect [ ww Nums.badgeWidth, hh Nums.badgeHeight, c, rx, ry ] []
 
 
 badgeText : Player -> Svg Msg
@@ -369,7 +384,7 @@ score model =
 
 scoreBackground : Int -> Svg Msg
 scoreBackground players =
-    Svg.rect [ x0, y0, ww Nums.scoreWidth, hh <| Nums.scoreHeight players, rx, ry, cc "score-bg" ] []
+    Svg.rect [ ww Nums.scoreWidth, hh <| Nums.scoreHeight players, rx, ry, cc "score-bg" ] []
 
 
 scoreOffset : Int -> Attribute Msg
@@ -380,21 +395,25 @@ scoreOffset players =
 scorePlayers : Model -> List (Svg Msg)
 scorePlayers model =
     Players.all model.players
-        |> List.indexedMap scorePlayer
+        |> List.indexedMap (scorePlayer model.upto)
 
 
-scorePlayer : Int -> Player -> Svg Msg
-scorePlayer position player =
+scorePlayer : Int -> Int -> Player -> Svg Msg
+scorePlayer upto position player =
+    let
+        percent =
+            Player.totalScore player * 100 // upto
+    in
     Svg.g [ cc "player-score", scorePlayerOffset position ]
         [ scorePlayerBackground
-        , scorePlayerProgress
+        , scorePlayerProgress percent
         , scorePlayerText player
         ]
 
 
 scorePlayerBackground : Svg Msg
 scorePlayerBackground =
-    Svg.rect [ x0, y0, ww Nums.scorePlayerWidth, hh Nums.scorePlayerHeight, cc "player-score-bg" ] []
+    Svg.rect [ ww Nums.scorePlayerWidth, hh Nums.scorePlayerHeight, cc "player-score-bg" ] []
 
 
 scorePlayerOffset : Int -> Attribute Msg
@@ -407,16 +426,13 @@ scorePlayerText player =
     Svg.text_ [ xx Nums.scorePlayerTextX, yy Nums.scorePlayerTextY ] [ tx <| Player.scoreText player ]
 
 
-scorePlayerProgress : Svg Msg
-scorePlayerProgress =
+scorePlayerProgress : Int -> Svg Msg
+scorePlayerProgress percent =
     let
-        percent =
-            50
-
         width =
             Nums.scorePlayerWidth * percent // 100
     in
-    Svg.rect [ x0, y0, ww width, hh Nums.scorePlayerHeight, cc "player-progress" ] []
+    Svg.rect [ ww width, hh Nums.scorePlayerHeight, cc "player-progress" ] []
 
 
 
@@ -456,16 +472,6 @@ tt x y =
 tx : String -> Svg Msg
 tx t =
     Svg.text t
-
-
-x0 : Attribute Msg
-x0 =
-    Atr.x "0"
-
-
-y0 : Attribute Msg
-y0 =
-    Atr.y "0"
 
 
 xx : Int -> Attribute Msg
