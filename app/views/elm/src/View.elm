@@ -476,7 +476,7 @@ hh h =
 
 rx : Attribute Msg
 rx =
-    Atr.rx "16"
+    Atr.rx "14"
 
 
 ry : Attribute Msg
