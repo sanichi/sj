@@ -34,13 +34,24 @@
 
   // Score
   g.score
-    opacity: 0.8
+    opacity: 0.9
 
     rect.score-bg
-      fill: white
+      fill: $teal
 
     rect.player-score-bg
-      fill: red
+      fill: white
+
+    rect.player-progress
+      fill: $gray-300
+
+    text
+      font-family: "Courier New", Courier, monospace
+      font-size: 30px // match this with Nums.scoreTextSize
+      font-weight: normal
+      text-anchor: start
+      fill: black
+
 
 
   // Debug text

@@ -91,6 +91,16 @@ badgeTextSize =
     25
 
 
+badgeTextX : Int
+badgeTextX =
+    badgeWidth // 2
+
+
+badgeTextY : Int
+badgeTextY =
+    badgeHeight // 2 + badgeTextSize // 4
+
+
 
 -- Relative positions
 
@@ -245,6 +255,22 @@ scorePlayerX =
 scorePlayerY : Int -> Int
 scorePlayerY position =
     scorePlayerHeight * position + scoreInsideMargin * (position + 1)
+
+
+scorePlayerTextX : Int
+scorePlayerTextX =
+    scoreInsideMargin
+
+
+scorePlayerTextY : Int
+scorePlayerTextY =
+    scorePlayerHeight // 2 + scoreTextSize // 4
+
+
+scoreTextSize : Int
+scoreTextSize =
+    -- match this with what's in card_table.sass
+    30
 
 
 scoreX : Int

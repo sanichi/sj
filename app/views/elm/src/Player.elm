@@ -5,6 +5,7 @@ module Player exposing
     , debug
     , replace
     , replaceAndCheck
+    , scoreText
     )
 
 import Card exposing (Card)
@@ -112,6 +113,24 @@ replaceAndCheck cid card player =
             check uPlayer
     in
     ( cPlayer, discard )
+
+
+scoreText : Player -> String
+scoreText player =
+    let
+        score =
+            Hand.score player.hand
+
+        total =
+            score + player.score
+    in
+    player.handle
+        ++ ": "
+        ++ String.fromInt player.score
+        ++ " + "
+        ++ String.fromInt score
+        ++ " = "
+        ++ String.fromInt total
 
 
 

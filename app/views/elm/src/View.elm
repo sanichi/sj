@@ -36,11 +36,7 @@ bg =
 
 debug : Model -> Svg Msg
 debug model =
-    let
-        t =
-            Svg.text <| Model.debug model
-    in
-    Svg.text_ [ xx 10, yy 20, cc "debug" ] [ t ]
+    Svg.text_ [ xx 10, yy 20, cc "debug" ] [ tx <| Model.debug model ]
 
 
 
@@ -75,22 +71,12 @@ badgeRect player =
                 else
                     "wait"
     in
-    Svg.rect [ x0, y0, ww Nums.badgeWidth, hh Nums.badgeHeight, c, Atr.rx "10", Atr.ry "10" ] []
+    Svg.rect [ x0, y0, ww Nums.badgeWidth, hh Nums.badgeHeight, c, rx, ry ] []
 
 
 badgeText : Player -> Svg Msg
 badgeText player =
-    let
-        x =
-            xx <| Nums.badgeWidth // 2
-
-        y =
-            yy <| Nums.badgeHeight // 2 + Nums.badgeTextSize // 4
-
-        t =
-            Svg.text <| Player.badge player
-    in
-    Svg.text_ [ x, y ] [ t ]
+    Svg.text_ [ xx Nums.badgeTextX, yy Nums.badgeTextY ] [ tx <| Player.badge player ]
 
 
 
@@ -243,6 +229,28 @@ cardY cid =
     yy <| Nums.cardY cid
 
 
+groupedCards : State -> Player -> Svg Msg
+groupedCards state player =
+    let
+        mapper =
+            cardElement state player
+
+        elements =
+            Hand.map mapper player.hand
+                |> List.filterMap identity
+    in
+    Svg.g [ cardsOffset player.position ] elements
+
+
+handOffset : Position -> Attribute Msg
+handOffset position =
+    let
+        ( x, y ) =
+            Nums.handOffset position
+    in
+    tt x y
+
+
 
 -- Discard pile
 
@@ -292,28 +300,6 @@ discardX =
 discardY : Attribute Msg
 discardY =
     yy Nums.discardY
-
-
-groupedCards : State -> Player -> Svg Msg
-groupedCards state player =
-    let
-        mapper =
-            cardElement state player
-
-        elements =
-            Hand.map mapper player.hand
-                |> List.filterMap identity
-    in
-    Svg.g [ cardsOffset player.position ] elements
-
-
-handOffset : Position -> Attribute Msg
-handOffset position =
-    let
-        ( x, y ) =
-            Nums.handOffset position
-    in
-    tt x y
 
 
 
@@ -383,7 +369,7 @@ score model =
 
 scoreBackground : Int -> Svg Msg
 scoreBackground players =
-    Svg.rect [ x0, y0, scoreWidth, scoreHeight players, cc "score-bg" ] []
+    Svg.rect [ x0, y0, ww Nums.scoreWidth, hh <| Nums.scoreHeight players, rx, ry, cc "score-bg" ] []
 
 
 scoreOffset : Int -> Attribute Msg
@@ -400,12 +386,15 @@ scorePlayers model =
 scorePlayer : Int -> Player -> Svg Msg
 scorePlayer position player =
     Svg.g [ cc "player-score", scorePlayerOffset position ]
-        [ scorePlayerBackground ]
+        [ scorePlayerBackground
+        , scorePlayerProgress
+        , scorePlayerText player
+        ]
 
 
 scorePlayerBackground : Svg Msg
 scorePlayerBackground =
-    Svg.rect [ x0, y0, scorePlayerWidth, scorePlayerHeight, cc "player-score-bg" ] []
+    Svg.rect [ x0, y0, ww Nums.scorePlayerWidth, hh Nums.scorePlayerHeight, cc "player-score-bg" ] []
 
 
 scorePlayerOffset : Int -> Attribute Msg
@@ -413,44 +402,21 @@ scorePlayerOffset position =
     tt Nums.scorePlayerX <| Nums.scorePlayerY position
 
 
-scoreX : Attribute Msg
-scoreX =
-    xx Nums.scoreInsideMargin
+scorePlayerText : Player -> Svg Msg
+scorePlayerText player =
+    Svg.text_ [ xx Nums.scorePlayerTextX, yy Nums.scorePlayerTextY ] [ tx <| Player.scoreText player ]
 
 
-scoreY : Int -> Attribute Msg
-scoreY position =
-    yy Nums.scoreInsideMargin
+scorePlayerProgress : Svg Msg
+scorePlayerProgress =
+    let
+        percent =
+            50
 
-
-scorePlayerX : Attribute Msg
-scorePlayerX =
-    xx Nums.scorePlayerX
-
-
-scorePlayerY : Int -> Attribute Msg
-scorePlayerY num =
-    yy <| Nums.scorePlayerY num
-
-
-scorePlayerWidth : Attribute Msg
-scorePlayerWidth =
-    ww Nums.scorePlayerWidth
-
-
-scorePlayerHeight : Attribute Msg
-scorePlayerHeight =
-    hh Nums.scorePlayerHeight
-
-
-scoreWidth : Attribute Msg
-scoreWidth =
-    ww Nums.scoreWidth
-
-
-scoreHeight : Int -> Attribute Msg
-scoreHeight num =
-    hh <| Nums.scoreHeight num
+        width =
+            Nums.scorePlayerWidth * percent // 100
+    in
+    Svg.rect [ x0, y0, ww width, hh Nums.scorePlayerHeight, cc "player-progress" ] []
 
 
 
@@ -472,9 +438,24 @@ hh h =
     Atr.height <| String.fromInt h
 
 
+rx : Attribute Msg
+rx =
+    Atr.rx "16"
+
+
+ry : Attribute Msg
+ry =
+    Atr.ry "10"
+
+
 tt : Int -> Int -> Attribute Msg
 tt x y =
     Atr.transform <| "translate(" ++ String.fromInt x ++ " " ++ String.fromInt y ++ ")"
+
+
+tx : String -> Svg Msg
+tx t =
+    Svg.text t
 
 
 x0 : Attribute Msg
