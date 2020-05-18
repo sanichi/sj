@@ -401,8 +401,15 @@ scorePlayers model =
 scorePlayer : Int -> Int -> Player -> Svg Msg
 scorePlayer upto position player =
     let
+        total =
+            Player.totalScore player
+
         percent =
-            Player.totalScore player * 100 // upto
+            if total >= upto then
+                100
+
+            else
+                total * 100 // upto
     in
     Svg.g [ cc "player-score", scorePlayerOffset position ]
         [ scorePlayerBackground

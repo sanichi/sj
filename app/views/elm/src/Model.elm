@@ -180,7 +180,7 @@ chooseDiscardCard pid cid model =
             model
                 |> updatePlayers players
                 |> updateDiscard (Maybe.withDefault card.num num)
-                |> updateState Choose
+                |> checkTurn
 
         _ ->
             model
@@ -217,7 +217,7 @@ choosePackCard pid cid model =
                 |> hidePack
                 |> updatePlayers players
                 |> updateDiscard (Maybe.withDefault card.num num)
-                |> updateState Choose
+                |> checkTurn
 
         _ ->
             model
@@ -251,13 +251,14 @@ choosePackDiscardCard pid cid model =
                 model
                     |> updatePlayers players
                     |> updateDiscard (Maybe.withDefault model.discard.num num)
-                    |> updateState Choose
+                    |> checkTurn
 
             else
                 model
                     |> hidePack
                     |> updatePlayers players
                     |> updateDiscard (Maybe.withDefault model.pack.num num)
+                    |> checkTurn
 
         _ ->
             model
@@ -337,6 +338,27 @@ revealCard pid cid model =
 
 
 -- Private
+
+
+checkTurn : Model -> Model
+checkTurn model =
+    let
+        toMove =
+            Players.toMove model.players
+
+        state =
+            case toMove of
+                Just player ->
+                    if Hand.out player.hand then
+                        HandOver
+
+                    else
+                        Choose
+
+                Nothing ->
+                    HandOver
+    in
+    updateState state model
 
 
 exposePack : Model -> Model

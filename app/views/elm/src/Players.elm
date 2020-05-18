@@ -6,6 +6,7 @@ module Players exposing
     , put
     , size
     , toList
+    , toMove
     , updateCard
     , updateReveal
     )
@@ -44,6 +45,20 @@ size players =
 toList : Players -> List Player
 toList players =
     Dict.values players
+
+
+toMove : Players -> Maybe Player
+toMove players =
+    let
+        onMove =
+            List.filter .turn (all players)
+    in
+    case onMove of
+        [ player ] ->
+            Just player
+
+        _ ->
+            Nothing
 
 
 put : Int -> Player -> Players -> Players

@@ -6,6 +6,7 @@ module Hand exposing
     , highest
     , init
     , map
+    , out
     , score
     , set
     )
@@ -53,11 +54,6 @@ init nums =
     Array.fromList <| List.map Card.hidden nums
 
 
-map : (Int -> Card -> a) -> Hand -> List a
-map f hand =
-    Array.indexedMap f hand |> Array.toList
-
-
 get : Int -> Hand -> Maybe Card
 get cid hand =
     Array.get cid hand
@@ -71,6 +67,19 @@ highest hand =
 
         Nothing ->
             0
+
+
+map : (Int -> Card -> a) -> Hand -> List a
+map f hand =
+    Array.indexedMap f hand |> Array.toList
+
+
+out : Hand -> Bool
+out hand =
+    hand
+        |> Array.toList
+        |> List.filter (\c -> c.exists && not c.exposed)
+        |> List.isEmpty
 
 
 score : Hand -> Int
