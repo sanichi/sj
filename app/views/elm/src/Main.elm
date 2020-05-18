@@ -54,7 +54,7 @@ update msg model =
             ( Model.choosePackDiscardCard model.pid cid model, push msg )
 
         NextHand score ->
-            ( model, push msg )
+            ( Model.newHand model.pid score model, push msg )
 
         Noop ->
             ( model, Cmd.none )

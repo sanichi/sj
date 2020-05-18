@@ -24,7 +24,7 @@ view model =
                 []
 
         extras =
-            if model.state == HandOver then
+            if model.state == HandOver || model.state == Waiting then
                 score model :: extras_
 
             else
@@ -362,7 +362,7 @@ score model =
             Model.myTotalScore model
 
         button =
-            scoreButton total
+            scoreButton total (model.state == Waiting)
     in
     Svg.g [ cc "score", scoreOffset num ]
         ([ scoreBackground num, button ] ++ players)
@@ -373,21 +373,33 @@ scoreBackground players =
     Svg.rect [ ww Nums.scoreWidth, hh <| Nums.scoreHeight players, rx, ry, cc "score-bg" ] []
 
 
-scoreButton : Int -> Svg Msg
-scoreButton total =
+scoreButton : Int -> Bool -> Svg Msg
+scoreButton total waiting =
     let
-        msg =
-            NextHand total
+        attrs =
+            if waiting then
+                [ scoreButtonOffset ]
+
+            else
+                [ scoreButtonOffset, onClick (NextHand total) ]
     in
-    Svg.g [ scoreButtonOffset, onClick msg ]
-        [ scoreButtonBackground
-        , scoreButtonText
+    Svg.g attrs
+        [ scoreButtonBackground waiting
+        , scoreButtonText waiting
         ]
 
 
-scoreButtonBackground : Svg Msg
-scoreButtonBackground =
-    Svg.rect [ ww Nums.scoreButtonWidth, hh Nums.scoreButtonHeight, rx, ry, cc "score-button" ] []
+scoreButtonBackground : Bool -> Svg Msg
+scoreButtonBackground waiting =
+    let
+        class =
+            if waiting then
+                "score-button-disabled"
+
+            else
+                "score-button"
+    in
+    Svg.rect [ ww Nums.scoreButtonWidth, hh Nums.scoreButtonHeight, rx, ry, cc class ] []
 
 
 scoreButtonOffset : Attribute Msg
@@ -395,9 +407,17 @@ scoreButtonOffset =
     tt Nums.scoreButtonX Nums.scoreButtonY
 
 
-scoreButtonText : Svg Msg
-scoreButtonText =
-    Svg.text_ [ xx Nums.scoreButtonTextX, yy Nums.scoreButtonTextY ] [ tx "next hand" ]
+scoreButtonText : Bool -> Svg Msg
+scoreButtonText waiting =
+    let
+        t =
+            if waiting then
+                "please wait"
+
+            else
+                "next hand"
+    in
+    Svg.text_ [ xx Nums.scoreButtonTextX, yy Nums.scoreButtonTextY ] [ tx t ]
 
 
 scoreOffset : Int -> Attribute Msg

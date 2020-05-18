@@ -11,6 +11,7 @@ module Model exposing
     , init
     , mainPlayer
     , myTotalScore
+    , newHand
     , newUpdate
     , revealCard
     )
@@ -43,6 +44,7 @@ type State
     | ChosenPackDiscard
     | ChosenDiscard
     | HandOver
+    | Waiting
 
 
 init : Value -> Model
@@ -154,6 +156,14 @@ newUpdate update model =
             case val of
                 [ pid ] ->
                     choosePackDiscard pid model
+
+                _ ->
+                    model
+
+        "new_hand" ->
+            case val of
+                [ pid, score ] ->
+                    newHand pid score model
 
                 _ ->
                     model
@@ -270,6 +280,15 @@ choosePackDiscardCard pid cid model =
             model
 
 
+newHand : Int -> Int -> Model -> Model
+newHand pid score model =
+    if pid == model.pid then
+        updateState Waiting model
+
+    else
+        model
+
+
 debug : Model -> String
 debug model =
     let
@@ -295,6 +314,9 @@ debug model =
 
                 HandOver ->
                     "HandOver"
+
+                Waiting ->
+                    "Waiting"
 
         plrs =
             List.map Player.debug <| Players.toList model.players
