@@ -355,16 +355,54 @@ score model =
         num =
             Players.size model.players
 
+        pid =
+            model.player_id
+
         players =
             scorePlayers model
+
+        total =
+            Model.myTotalScore model
+
+        button =
+            scoreButton pid total
     in
     Svg.g [ cc "score", scoreOffset num ]
-        (scoreBackground num :: players)
+        ([ scoreBackground num, button ] ++ players)
 
 
 scoreBackground : Int -> Svg Msg
 scoreBackground players =
     Svg.rect [ ww Nums.scoreWidth, hh <| Nums.scoreHeight players, rx, ry, cc "score-bg" ] []
+
+
+scoreButton : Int -> Int -> Svg Msg
+scoreButton pid total =
+    let
+        msg =
+            ChooseDiscardCard pid total
+
+        -- XXX need to change
+    in
+    Svg.g [ scoreButtonOffset, onClick msg ]
+        [ scoreButtonBackground
+        , scoreButtonText
+        ]
+
+
+scoreButtonBackground : Svg Msg
+scoreButtonBackground =
+    Svg.rect [ ww Nums.scoreButtonWidth, hh Nums.scoreButtonHeight, rx, ry, cc "score-button" ] []
+
+
+scoreButtonOffset : Attribute Msg
+scoreButtonOffset =
+    tt Nums.scoreButtonX Nums.scoreButtonY
+
+
+scoreButtonText : Svg Msg
+scoreButtonText =
+    Svg.text_ [ xx Nums.scoreButtonTextX, yy Nums.scoreButtonTextY ] [ tx "next hand" ]
 
 
 scoreOffset : Int -> Attribute Msg

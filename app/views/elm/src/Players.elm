@@ -7,6 +7,7 @@ module Players exposing
     , size
     , toList
     , toMove
+    , totalScore
     , updateCard
     , updateReveal
     )
@@ -40,6 +41,20 @@ init pid list =
 size : Players -> Int
 size players =
     Dict.size players
+
+
+totalScore : Int -> Players -> Int
+totalScore pid players =
+    let
+        p =
+            get pid players
+    in
+    case p of
+        Just player ->
+            Player.totalScore player
+
+        Nothing ->
+            0
 
 
 toList : Players -> List Player

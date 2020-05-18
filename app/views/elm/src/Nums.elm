@@ -217,9 +217,39 @@ handWidth =
 -- Score
 
 
+scoreButtonHeight : Int
+scoreButtonHeight =
+    scorePlayerHeight
+
+
+scoreButtonWidth : Int
+scoreButtonWidth =
+    200
+
+
+scoreButtonTextX : Int
+scoreButtonTextX =
+    scoreButtonWidth // 2
+
+
+scoreButtonTextY : Int
+scoreButtonTextY =
+    scorePlayerHeight // 2 + scoreTextSize // 4
+
+
+scoreButtonX : Int
+scoreButtonX =
+    (scoreWidth - scoreButtonWidth) // 2
+
+
+scoreButtonY : Int
+scoreButtonY =
+    scorePlayerY -1
+
+
 scoreHeight : Int -> Int
 scoreHeight num =
-    scorePlayerHeight * num + scoreInsideMargin * (num + 1)
+    scorePlayerHeight * (num + 1) + scoreInsideMargin * (num + 2)
 
 
 scoreWidth : Int
@@ -244,7 +274,7 @@ scorePlayerWidth =
 
 scorePlayerHeight : Int
 scorePlayerHeight =
-    100
+    60
 
 
 scorePlayerX : Int
@@ -254,12 +284,12 @@ scorePlayerX =
 
 scorePlayerY : Int -> Int
 scorePlayerY position =
-    scorePlayerHeight * position + scoreInsideMargin * (position + 1)
+    scorePlayerHeight * (position + 1) + scoreInsideMargin * (position + 2)
 
 
 scorePlayerTextX : Int
 scorePlayerTextX =
-    scoreInsideMargin
+    scorePlayerWidth // 2
 
 
 scorePlayerTextY : Int

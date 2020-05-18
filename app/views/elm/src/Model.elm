@@ -10,6 +10,7 @@ module Model exposing
     , debug
     , init
     , mainPlayer
+    , myTotalScore
     , newUpdate
     , revealCard
     )
@@ -63,6 +64,11 @@ init flags =
 mainPlayer : Model -> Maybe Player
 mainPlayer model =
     Players.get model.player_id model.players
+
+
+myTotalScore : Model -> Int
+myTotalScore model =
+    Players.totalScore model.player_id model.players
 
 
 newUpdate : Update -> Model -> Model
