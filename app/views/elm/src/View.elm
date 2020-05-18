@@ -355,9 +355,6 @@ score model =
         num =
             Players.size model.players
 
-        pid =
-            model.player_id
-
         players =
             scorePlayers model
 
@@ -365,7 +362,7 @@ score model =
             Model.myTotalScore model
 
         button =
-            scoreButton pid total
+            scoreButton total
     in
     Svg.g [ cc "score", scoreOffset num ]
         ([ scoreBackground num, button ] ++ players)
@@ -376,13 +373,11 @@ scoreBackground players =
     Svg.rect [ ww Nums.scoreWidth, hh <| Nums.scoreHeight players, rx, ry, cc "score-bg" ] []
 
 
-scoreButton : Int -> Int -> Svg Msg
-scoreButton pid total =
+scoreButton : Int -> Svg Msg
+scoreButton total =
     let
         msg =
-            ChooseDiscardCard pid total
-
-        -- XXX need to change
+            NextHand total
     in
     Svg.g [ scoreButtonOffset, onClick msg ]
         [ scoreButtonBackground

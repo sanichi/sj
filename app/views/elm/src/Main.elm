@@ -53,6 +53,9 @@ update msg model =
         ChoosePackDiscardCard pid cid ->
             ( Model.choosePackDiscardCard pid cid model, push msg )
 
+        NextHand score ->
+            ( model, push msg )
+
         Noop ->
             ( model, Cmd.none )
 

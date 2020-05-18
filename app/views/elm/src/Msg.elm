@@ -13,6 +13,7 @@ type Msg
     | ChoosePackDiscardCard Int Int
     | ChooseDiscard Int
     | ChooseDiscardCard Int Int
+    | NextHand Int
     | Noop
 
 
@@ -39,6 +40,9 @@ value msg =
 
         ChoosePackDiscardCard pid cid ->
             E.object [ ( "pack_discard_card_index", E.int cid ) ]
+
+        NextHand score ->
+            E.object [ ( "next_hand", E.int score ) ]
 
         _ ->
             E.null
