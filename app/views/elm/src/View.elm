@@ -274,7 +274,7 @@ discard : Model -> Svg Msg
 discard model =
     let
         frame =
-            [ discardX, discardY, cardWidth, cardHeight ]
+            [ xx Nums.discardX, yy Nums.discardY, cardWidth, cardHeight ]
 
         url =
             cardUrl model.discard
@@ -307,16 +307,6 @@ discardMsg model =
             Noop
 
 
-discardX : Attribute Msg
-discardX =
-    xx Nums.discardX
-
-
-discardY : Attribute Msg
-discardY =
-    yy Nums.discardY
-
-
 
 -- Pack
 
@@ -325,7 +315,7 @@ pack : Model -> Svg Msg
 pack model =
     let
         frame =
-            [ packX, packY, cardWidth, cardHeight ]
+            [ xx Nums.packX, yy Nums.packY, cardWidth, cardHeight ]
 
         url =
             cardUrl model.pack
@@ -353,16 +343,6 @@ packMsg model =
 
         Nothing ->
             Noop
-
-
-packX : Attribute Msg
-packX =
-    xx Nums.packX
-
-
-packY : Attribute Msg
-packY =
-    yy Nums.packY
 
 
 
