@@ -64,6 +64,16 @@ class Game < ApplicationRecord
     add_msg("pack_discard_chosen", pid, only_start: true)
   end
 
+  def next_hand(player, score)
+    add_msg("next_hand", [player.id, score], only_start: true)
+    player.update_column(:score, score)
+    if resets + 1 == participants
+      update_column(:resets, 0)
+    else
+      update_column(:resets, resets + 1)
+    end
+  end
+
   def can_be_joined_by?(user)
     return false unless state == WAITING
     return false if players.count >= participants

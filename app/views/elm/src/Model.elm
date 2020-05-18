@@ -160,7 +160,7 @@ newUpdate update model =
                 _ ->
                     model
 
-        "new_hand" ->
+        "next_hand" ->
             case val of
                 [ pid, score ] ->
                     newHand pid score model
