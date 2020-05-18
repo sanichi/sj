@@ -5,7 +5,7 @@ class CreateGame < ActiveRecord::Migration[6.0]
 
       t.boolean :debug, default: false
       t.integer :participants, limit: 1, default: 2
-      t.integer :resets, limit: 1, default: 0
+      t.integer :votes, limit: 1, default: 0
       t.string  :state, limit: 10, default: Game::WAITING
       t.integer :upto, limit: 2, default: 100
 

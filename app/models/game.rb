@@ -67,10 +67,10 @@ class Game < ApplicationRecord
   def next_hand(player, score)
     add_msg("next_hand", [player.id, score], only_start: true)
     player.update_column(:score, score)
-    if resets + 1 == participants
-      update_column(:resets, 0)
+    if votes + 1 == participants
+      update_column(:votes, 0)
     else
-      update_column(:resets, resets + 1)
+      update_column(:votes, votes + 1)
     end
   end
 

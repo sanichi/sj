@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2020_05_04_131315) do
     t.bigint "user_id"
     t.boolean "debug", default: false
     t.integer "participants", limit: 2, default: 2
-    t.integer "resets", limit: 2, default: 0
+    t.integer "votes", limit: 2, default: 0
     t.string "state", limit: 10, default: "waiting"
     t.integer "upto", limit: 2, default: 100
     t.integer "m2", limit: 2, default: 5
