@@ -6,13 +6,13 @@ import Update exposing (Update)
 
 type Msg
     = NewUpdate Update
-    | RevealCard Int Int
-    | ChoosePack Int
-    | ChoosePackCard Int Int
-    | ChoosePackDiscard Int
-    | ChoosePackDiscardCard Int Int
-    | ChooseDiscard Int
-    | ChooseDiscardCard Int Int
+    | RevealCard Int
+    | ChooseDiscard
+    | ChooseDiscardCard Int
+    | ChoosePack
+    | ChoosePackCard Int
+    | ChoosePackDiscard
+    | ChoosePackDiscardCard Int
     | NextHand Int
     | Noop
 
@@ -20,25 +20,25 @@ type Msg
 value : Msg -> Value
 value msg =
     case msg of
-        RevealCard pid cid ->
+        RevealCard cid ->
             E.object [ ( "card_index", E.int cid ) ]
 
-        ChooseDiscard pid ->
+        ChooseDiscard ->
             E.object [ ( "discard_chosen", E.int 1 ) ]
 
-        ChooseDiscardCard pid cid ->
+        ChooseDiscardCard cid ->
             E.object [ ( "discard_card_index", E.int cid ) ]
 
-        ChoosePack pid ->
+        ChoosePack ->
             E.object [ ( "pack_chosen", E.int 1 ) ]
 
-        ChoosePackCard pid cid ->
+        ChoosePackCard cid ->
             E.object [ ( "pack_card_index", E.int cid ) ]
 
-        ChoosePackDiscard pid ->
+        ChoosePackDiscard ->
             E.object [ ( "pack_discard_chosen", E.int 1 ) ]
 
-        ChoosePackDiscardCard pid cid ->
+        ChoosePackDiscardCard cid ->
             E.object [ ( "pack_discard_card_index", E.int cid ) ]
 
         NextHand score ->

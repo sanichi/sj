@@ -311,3 +311,17 @@ scoreX =
 scoreY : Int -> Int
 scoreY num =
     (viewHeight - scoreHeight num) // 2
+
+
+
+-- Debug
+
+
+debugTextX : Int
+debugTextX =
+    viewWidth // 2
+
+
+debugTextY : Int
+debugTextY =
+    20

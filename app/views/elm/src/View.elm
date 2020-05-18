@@ -51,7 +51,7 @@ bg =
 
 debug : Model -> Svg Msg
 debug model =
-    Svg.text_ [ xx 10, yy 20, cc "debug" ] [ tx <| Model.debug model ]
+    Svg.text_ [ xx Nums.debugTextX, yy Nums.debugTextY, cc "debug" ] [ tx <| Model.debug model ]
 
 
 
@@ -179,20 +179,20 @@ cardMsg state player cid card =
         case state of
             Reveal ->
                 if not card.exposed then
-                    RevealCard player.pid cid
+                    RevealCard cid
 
                 else
                     Noop
 
             ChosenDiscard ->
-                ChooseDiscardCard player.pid cid
+                ChooseDiscardCard cid
 
             ChosenPack ->
-                ChoosePackCard player.pid cid
+                ChoosePackCard cid
 
             ChosenPackDiscard ->
                 if not card.exposed then
-                    ChoosePackDiscardCard player.pid cid
+                    ChoosePackDiscardCard cid
 
                 else
                     Noop
@@ -292,10 +292,10 @@ discardMsg model =
             if player.turn then
                 case model.state of
                     Choose ->
-                        ChooseDiscard player.pid
+                        ChooseDiscard
 
                     ChosenPack ->
-                        ChoosePackDiscard player.pid
+                        ChoosePackDiscard
 
                     _ ->
                         Noop
@@ -333,7 +333,7 @@ packMsg model =
             if player.turn then
                 case model.state of
                     Choose ->
-                        ChoosePack player.pid
+                        ChoosePack
 
                     _ ->
                         Noop
