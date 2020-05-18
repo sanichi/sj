@@ -21,10 +21,6 @@ view model =
         |> Svg.svg [ Atr.id "card-table", Atr.version "1.1", box ]
 
 
-
--- Main helpers
-
-
 box : Attribute Msg
 box =
     [ 0, 0, Nums.viewWidth, Nums.viewHeight ]
@@ -35,88 +31,25 @@ box =
 
 bg : Svg Msg
 bg =
-    let
-        w =
-            String.fromInt Nums.viewWidth |> Atr.width
-
-        h =
-            String.fromInt Nums.viewHeight |> Atr.height
-    in
-    Svg.rect [ Atr.class "background", w, h ] []
+    Svg.rect [ cc "background", ww Nums.viewWidth, hh Nums.viewHeight ] []
 
 
 debug : Model -> Svg Msg
 debug model =
     let
-        x =
-            Atr.x "10"
-
-        y =
-            Atr.y "20"
-
-        c =
-            Atr.class "debug"
-
         t =
             Svg.text <| Model.debug model
     in
-    Svg.text_ [ x, y, c ] [ t ]
-
-
-pack : Model -> Svg Msg
-pack model =
-    let
-        frame =
-            [ packX, packY, cardWidth, cardHeight ]
-
-        url =
-            cardUrl model.pack
-
-        msg =
-            packMsg model
-    in
-    cardGroup frame url msg
-
-
-discard : Model -> Svg Msg
-discard model =
-    let
-        frame =
-            [ discardX, discardY, cardWidth, cardHeight ]
-
-        url =
-            cardUrl model.discard
-
-        msg =
-            discardMsg model
-    in
-    cardGroup frame url msg
-
-
-hands : Model -> List (Svg Msg)
-hands model =
-    List.map (cardsAndName model.state) <| Players.all model.players
-
-
-score : Model -> Svg Msg
-score model =
-    let
-        num =
-            Players.size model.players
-
-        frame =
-            [ scoreX, scoreY num, scoreWidth, scoreHeight num, Atr.class "score" ]
-    in
-    Svg.rect frame []
+    Svg.text_ [ xx 10, yy 20, cc "debug" ] [ t ]
 
 
 
--- Helpers
+-- Player badges
 
 
 badge : Player -> Svg Msg
 badge player =
-    Svg.g [ Atr.class "badge", badgeOffset player.position ]
+    Svg.g [ cc "badge", badgeOffset player.position ]
         [ badgeRect player
         , badgeText player
         ]
@@ -125,63 +58,48 @@ badge player =
 badgeOffset : Position -> Attribute Msg
 badgeOffset position =
     let
-        ( i, j ) =
+        ( x, y ) =
             Nums.badgeOffset position
-
-        x =
-            String.fromInt i
-
-        y =
-            String.fromInt j
     in
-    Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
+    tt x y
 
 
 badgeRect : Player -> Svg Msg
 badgeRect player =
     let
-        x =
-            Atr.x "0"
-
-        y =
-            Atr.y "0"
-
-        w =
-            Atr.width <| String.fromInt Nums.badgeWidth
-
-        h =
-            Atr.height <| String.fromInt Nums.badgeHeight
-
         c =
-            Atr.class <|
+            cc <|
                 if player.turn then
                     "turn"
 
                 else
                     "wait"
-
-        rx =
-            Atr.rx "10"
-
-        ry =
-            Atr.ry "10"
     in
-    Svg.rect [ x, y, w, h, c, rx, ry ] []
+    Svg.rect [ x0, y0, ww Nums.badgeWidth, hh Nums.badgeHeight, c, Atr.rx "10", Atr.ry "10" ] []
 
 
 badgeText : Player -> Svg Msg
 badgeText player =
     let
         x =
-            Atr.x <| String.fromInt <| Nums.badgeWidth // 2
+            xx <| Nums.badgeWidth // 2
 
         y =
-            Atr.y <| String.fromInt <| Nums.badgeHeight // 2 + Nums.badgeTextSize // 4
+            yy <| Nums.badgeHeight // 2 + Nums.badgeTextSize // 4
 
         t =
             Svg.text <| Player.badge player
     in
     Svg.text_ [ x, y ] [ t ]
+
+
+
+-- Player cards
+
+
+hands : Model -> List (Svg Msg)
+hands model =
+    List.map (cardsAndName model.state) <| Players.all model.players
 
 
 cardsAndName : State -> Player -> Svg Msg
@@ -201,11 +119,7 @@ cardsAndName state player =
 
 cardsOffset : Position -> Attribute Msg
 cardsOffset position =
-    let
-        y =
-            Nums.cardsYOffset position |> String.fromInt
-    in
-    Atr.transform <| "translate(0 " ++ y ++ ")"
+    tt 0 <| Nums.cardsYOffset position
 
 
 cardElement : State -> Player -> Int -> Card -> Maybe (Svg Msg)
@@ -245,9 +159,9 @@ cardGroup frame url msg =
                 frame
 
             else
-                Atr.class "clickable" :: frame
+                cc "clickable" :: frame
     in
-    Svg.g [ Atr.class "card" ]
+    Svg.g [ cc "card" ]
         [ Svg.image picture []
         , Svg.rect border []
         ]
@@ -255,7 +169,7 @@ cardGroup frame url msg =
 
 cardHeight : Attribute Msg
 cardHeight =
-    String.fromInt Nums.cardHeight |> Atr.height
+    hh Nums.cardHeight
 
 
 cardMsg : State -> Player -> Int -> Card -> Msg
@@ -316,17 +230,36 @@ cardUrl card =
 
 cardWidth : Attribute Msg
 cardWidth =
-    String.fromInt Nums.cardWidth |> Atr.width
+    ww Nums.cardWidth
 
 
 cardX : Int -> Attribute Msg
 cardX cid =
-    Atr.x <| String.fromInt <| Nums.cardX cid
+    xx <| Nums.cardX cid
 
 
 cardY : Int -> Attribute Msg
 cardY cid =
-    Atr.y <| String.fromInt <| Nums.cardY cid
+    yy <| Nums.cardY cid
+
+
+
+-- Discard pile
+
+
+discard : Model -> Svg Msg
+discard model =
+    let
+        frame =
+            [ discardX, discardY, cardWidth, cardHeight ]
+
+        url =
+            cardUrl model.discard
+
+        msg =
+            discardMsg model
+    in
+    cardGroup frame url msg
 
 
 discardMsg : Model -> Msg
@@ -353,12 +286,12 @@ discardMsg model =
 
 discardX : Attribute Msg
 discardX =
-    Atr.x <| String.fromInt Nums.discardX
+    xx Nums.discardX
 
 
 discardY : Attribute Msg
 discardY =
-    Atr.y <| String.fromInt Nums.discardY
+    yy Nums.discardY
 
 
 groupedCards : State -> Player -> Svg Msg
@@ -377,16 +310,29 @@ groupedCards state player =
 handOffset : Position -> Attribute Msg
 handOffset position =
     let
-        ( i, j ) =
+        ( x, y ) =
             Nums.handOffset position
-
-        x =
-            String.fromInt i
-
-        y =
-            String.fromInt j
     in
-    Atr.transform <| "translate(" ++ x ++ " " ++ y ++ ")"
+    tt x y
+
+
+
+-- Pack
+
+
+pack : Model -> Svg Msg
+pack model =
+    let
+        frame =
+            [ packX, packY, cardWidth, cardHeight ]
+
+        url =
+            cardUrl model.pack
+
+        msg =
+            packMsg model
+    in
+    cardGroup frame url msg
 
 
 packMsg : Model -> Msg
@@ -410,29 +356,142 @@ packMsg model =
 
 packX : Attribute Msg
 packX =
-    Atr.x <| String.fromInt Nums.packX
+    xx Nums.packX
 
 
 packY : Attribute Msg
 packY =
-    Atr.y <| String.fromInt Nums.packY
+    yy Nums.packY
+
+
+
+-- Score
+
+
+score : Model -> Svg Msg
+score model =
+    let
+        num =
+            Players.size model.players
+
+        players =
+            scorePlayers model
+    in
+    Svg.g [ cc "score", scoreOffset num ]
+        (scoreBackground num :: players)
+
+
+scoreBackground : Int -> Svg Msg
+scoreBackground players =
+    Svg.rect [ x0, y0, scoreWidth, scoreHeight players, cc "score-bg" ] []
+
+
+scoreOffset : Int -> Attribute Msg
+scoreOffset players =
+    tt Nums.scoreX <| Nums.scoreY players
+
+
+scorePlayers : Model -> List (Svg Msg)
+scorePlayers model =
+    Players.all model.players
+        |> List.indexedMap scorePlayer
+
+
+scorePlayer : Int -> Player -> Svg Msg
+scorePlayer position player =
+    Svg.g [ cc "player-score", scorePlayerOffset position ]
+        [ scorePlayerBackground ]
+
+
+scorePlayerBackground : Svg Msg
+scorePlayerBackground =
+    Svg.rect [ x0, y0, scorePlayerWidth, scorePlayerHeight, cc "player-score-bg" ] []
+
+
+scorePlayerOffset : Int -> Attribute Msg
+scorePlayerOffset position =
+    tt Nums.scorePlayerX <| Nums.scorePlayerY position
 
 
 scoreX : Attribute Msg
 scoreX =
-    Atr.x <| String.fromInt Nums.scoreX
+    xx Nums.scoreInsideMargin
 
 
 scoreY : Int -> Attribute Msg
-scoreY num =
-    Atr.y <| String.fromInt <| Nums.scoreY num
+scoreY position =
+    yy Nums.scoreInsideMargin
+
+
+scorePlayerX : Attribute Msg
+scorePlayerX =
+    xx Nums.scorePlayerX
+
+
+scorePlayerY : Int -> Attribute Msg
+scorePlayerY num =
+    yy <| Nums.scorePlayerY num
+
+
+scorePlayerWidth : Attribute Msg
+scorePlayerWidth =
+    ww Nums.scorePlayerWidth
+
+
+scorePlayerHeight : Attribute Msg
+scorePlayerHeight =
+    hh Nums.scorePlayerHeight
 
 
 scoreWidth : Attribute Msg
 scoreWidth =
-    Atr.width <| String.fromInt Nums.scoreWidth
+    ww Nums.scoreWidth
 
 
 scoreHeight : Int -> Attribute Msg
 scoreHeight num =
-    Atr.height <| String.fromInt <| Nums.scoreHeight num
+    hh <| Nums.scoreHeight num
+
+
+
+-- Utilities
+
+
+cc : String -> Attribute Msg
+cc c =
+    Atr.class c
+
+
+ww : Int -> Attribute Msg
+ww w =
+    Atr.width <| String.fromInt w
+
+
+hh : Int -> Attribute Msg
+hh h =
+    Atr.height <| String.fromInt h
+
+
+tt : Int -> Int -> Attribute Msg
+tt x y =
+    Atr.transform <| "translate(" ++ String.fromInt x ++ " " ++ String.fromInt y ++ ")"
+
+
+x0 : Attribute Msg
+x0 =
+    Atr.x "0"
+
+
+y0 : Attribute Msg
+y0 =
+    Atr.y "0"
+
+
+xx : Int -> Attribute Msg
+xx x =
+    Atr.x <| String.fromInt x
+
+
+yy : Int -> Attribute Msg
+yy y =
+    Atr.y <| String.fromInt y

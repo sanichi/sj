@@ -1,31 +1,10 @@
-module Nums exposing
-    ( badgeHeight
-    , badgeOffset
-    , badgeTextSize
-    , badgeWidth
-    , cardHeight
-    , cardWidth
-    , cardX
-    , cardY
-    , cardsYOffset
-    , discardX
-    , discardY
-    , handOffset
-    , packX
-    , packY
-    , scoreHeight
-    , scoreWidth
-    , scoreX
-    , scoreY
-    , viewHeight
-    , viewWidth
-    )
+module Nums exposing (..)
 
 import Player exposing (Position(..))
 
 
 
--- Table
+-- Overall view
 
 
 viewWidth : Int
@@ -36,6 +15,11 @@ viewWidth =
 viewHeight : Int
 viewHeight =
     1000
+
+
+viewMargin : Int
+viewMargin =
+    30
 
 
 
@@ -105,30 +89,6 @@ badgeTextSize : Int
 badgeTextSize =
     -- match this with what's in card_table.sass
     25
-
-
-
--- Score
-
-
-scoreX : Int
-scoreX =
-    scoreMargin
-
-
-scoreY : Int -> Int
-scoreY num =
-    (viewHeight - scorePlayerHeight * num) // 2
-
-
-scoreWidth : Int
-scoreWidth =
-    viewWidth - 2 * scoreMargin
-
-
-scoreHeight : Int -> Int
-scoreHeight num =
-    scorePlayerHeight * num
 
 
 
@@ -243,16 +203,55 @@ handWidth =
     cardWidth * 4 + cardMargin * 3
 
 
-scoreMargin : Int
-scoreMargin =
-    160
+
+-- Score
+
+
+scoreHeight : Int -> Int
+scoreHeight num =
+    scorePlayerHeight * num + scoreInsideMargin * (num + 1)
+
+
+scoreWidth : Int
+scoreWidth =
+    viewWidth - 2 * scoreOutsideMargin
+
+
+scoreInsideMargin : Int
+scoreInsideMargin =
+    50
+
+
+scoreOutsideMargin : Int
+scoreOutsideMargin =
+    100
+
+
+scorePlayerWidth : Int
+scorePlayerWidth =
+    scoreWidth - 2 * scoreInsideMargin
 
 
 scorePlayerHeight : Int
 scorePlayerHeight =
-    200
+    100
 
 
-viewMargin : Int
-viewMargin =
-    30
+scorePlayerX : Int
+scorePlayerX =
+    scoreInsideMargin
+
+
+scorePlayerY : Int -> Int
+scorePlayerY position =
+    scorePlayerHeight * position + scoreInsideMargin * (position + 1)
+
+
+scoreX : Int
+scoreX =
+    scoreOutsideMargin
+
+
+scoreY : Int -> Int
+scoreY num =
+    (viewHeight - scoreHeight num) // 2
