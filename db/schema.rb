@@ -17,10 +17,11 @@ ActiveRecord::Schema.define(version: 2020_05_04_131315) do
 
   create_table "games", force: :cascade do |t|
     t.bigint "user_id"
-    t.integer "participants", limit: 2, default: 2
-    t.integer "upto", limit: 2, default: 100
-    t.string "state", limit: 10, default: "waiting"
     t.boolean "debug", default: false
+    t.integer "participants", limit: 2, default: 2
+    t.integer "resets", limit: 2, default: 0
+    t.string "state", limit: 10, default: "waiting"
+    t.integer "upto", limit: 2, default: 100
     t.integer "m2", limit: 2, default: 5
     t.integer "m1", limit: 2, default: 10
     t.integer "p0", limit: 2, default: 15
