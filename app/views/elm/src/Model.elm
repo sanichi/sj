@@ -30,6 +30,7 @@ type alias Model =
     , discard : Card
     , players : Players
     , state : State
+    , upto : Int
     , debug : Bool
     }
 
@@ -53,6 +54,7 @@ init flags =
     , discard = Card.exposed 0
     , players = Players.init setup.player_id setup.players
     , state = Reveal
+    , upto = setup.upto
     , debug = setup.debug
     }
 
