@@ -21,6 +21,13 @@ describe User do
       expect(page).to have_title t("session.sign_in")
     end
 
+    it "can't search games" do
+      visit games_path
+
+      expect_error(page, KINSHI)
+      expect(page).to have_title t("session.sign_in")
+    end
+
     it "can't list users" do
       expect(page).to_not have_css "a", text: t("user.users")
 
@@ -53,6 +60,13 @@ describe User do
       click_link t("session.sign_out")
 
       expect(page).to have_title t("session.sign_in")
+    end
+
+    it "can't search games" do
+      visit games_path
+
+      expect_error(page, KINSHI)
+      expect(page).to have_title t("game.games")
     end
 
     it "can't list users" do

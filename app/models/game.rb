@@ -28,7 +28,6 @@ class Game < ApplicationRecord
     paginate(matches, params, path, opt)
   end
 
-
   def get_messages(target, last_message_id)
     return messages if last_message_id == 0
 
