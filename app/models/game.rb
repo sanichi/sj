@@ -3,7 +3,7 @@ class Game < ApplicationRecord
 
   CARDS = (-2..12).to_a
   PARTICIPANTS = [2, 3, 4]
-  UPTO = [50, 100, 200, 300, 400, 500]
+  UPTO = [25, 50, 100, 200, 300, 400, 500]
 
   WAITING = "waiting"
   STARTED = "started"
@@ -84,7 +84,7 @@ class Game < ApplicationRecord
       players.each do |p|
         add_msg("reset_player", [p.id, p.score])
       end
-      shuffle
+      new_pack if shuffle?
       add_msg("deal_pack", card)
       add_msg("deal_discard", card)
       players.each do |p|
@@ -171,7 +171,7 @@ class Game < ApplicationRecord
 
   private
 
-  def shuffle
+  def new_pack
     self.m2 =  5
     self.m1 = 10
     self.p0 = 15
