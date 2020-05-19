@@ -81,6 +81,15 @@ class Game < ApplicationRecord
     player.update_column(:score, score)
     if votes + 1 == participants
       update_column(:votes, 0)
+      players.each do |p|
+        add_msg("reset_player", [p.id, p.score])
+      end
+      shuffle
+      add_msg("deal_pack", card)
+      add_msg("deal_discard", card)
+      players.each do |p|
+        add_msg("deal_hand", cards(12).unshift(p.id))
+      end
     else
       update_column(:votes, votes + 1)
     end
@@ -161,6 +170,25 @@ class Game < ApplicationRecord
   end
 
   private
+
+  def shuffle
+    self.m2 =  5
+    self.m1 = 10
+    self.p0 = 15
+    self.p1 = 10
+    self.p2 = 10
+    self.p3 = 10
+    self.p4 = 10
+    self.p5 = 10
+    self.p6 = 10
+    self.p7 = 10
+    self.p8 = 10
+    self.p9 = 10
+    self.p10 = 10
+    self.p11 = 10
+    self.p12 = 10
+    save
+  end
 
   def card_to_attr(c)
     "#{c < 0 ? 'm' : 'p'}#{c.abs}"

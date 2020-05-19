@@ -168,6 +168,14 @@ newUpdate update model =
                 _ ->
                     model
 
+        "reset_player" ->
+            case val of
+                [ pid, score ] ->
+                    resetPlayer pid score model
+
+                _ ->
+                    model
+
         _ ->
             model
 
@@ -287,6 +295,27 @@ newHand pid score model =
 
     else
         model
+
+
+resetPlayer : Int -> Int -> Model -> Model
+resetPlayer pid score model =
+    let
+        player =
+            Players.get pid model.players
+    in
+    case player of
+        Just p ->
+            let
+                uPlayer =
+                    { p | score = score, turn = True }
+
+                uPlayers =
+                    Players.put pid uPlayer model.players
+            in
+            { model | players = uPlayers, state = Reveal }
+
+        Nothing ->
+            model
 
 
 debug : Model -> String
@@ -427,7 +456,14 @@ playerHand pid nums model =
     in
     case player of
         Just p ->
-            { model | players = Players.put pid { p | hand = hand } model.players }
+            let
+                uPlayer =
+                    { p | hand = hand }
+
+                uPlayers =
+                    Players.put pid uPlayer model.players
+            in
+            { model | players = uPlayers }
 
         Nothing ->
             model
