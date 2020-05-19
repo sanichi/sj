@@ -8,6 +8,7 @@ module Model exposing
     , choosePackDiscard
     , choosePackDiscardCard
     , debug
+    , endGame
     , init
     , mainPlayer
     , myTotalScore
@@ -296,6 +297,11 @@ newHand pid score model =
 
     else
         model
+
+
+endGame : Model -> Model
+endGame model =
+    updateState Waiting model
 
 
 resetPlayer : Int -> Int -> Model -> Model

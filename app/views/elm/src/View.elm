@@ -23,8 +23,11 @@ view model =
             else
                 []
 
+        state =
+            model.state
+
         extras =
-            if model.state == HandOver || model.state == Waiting || model.state == GameOver then
+            if state == HandOver || state == Waiting || state == GameOver then
                 score model :: extras_
 
             else
@@ -381,6 +384,9 @@ scoreButton total state =
                 HandOver ->
                     [ scoreButtonOffset, onClick (NextHand total) ]
 
+                GameOver ->
+                    [ scoreButtonOffset, onClick (EndGame total) ]
+
                 _ ->
                     [ scoreButtonOffset ]
     in
@@ -418,7 +424,7 @@ scoreButtonText state =
                     "next hand"
 
                 GameOver ->
-                    "view results"
+                    "save results"
 
                 _ ->
                     "please wait"
