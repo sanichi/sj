@@ -7,6 +7,7 @@ module Player exposing
     , replaceAndCheck
     , scoreText
     , totalScore
+    , unveil
     )
 
 import Card exposing (Card)
@@ -137,6 +138,11 @@ scoreText player =
 totalScore : Player -> Int
 totalScore player =
     Hand.score player.hand + player.score
+
+
+unveil : Int -> Player -> Player
+unveil pid player =
+    { player | hand = Hand.unveil player.hand }
 
 
 

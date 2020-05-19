@@ -40,11 +40,12 @@ type alias Model =
 type State
     = Reveal
     | Choose
+    | ChosenDiscard
     | ChosenPack
     | ChosenPackDiscard
-    | ChosenDiscard
     | HandOver
     | Waiting
+    | GameOver
 
 
 init : Value -> Model
@@ -332,11 +333,11 @@ debug model =
                 Choose ->
                     "Choose"
 
-                ChosenPack ->
-                    "ChosenPack"
-
                 ChosenDiscard ->
                     "ChosenDiscard"
+
+                ChosenPack ->
+                    "ChosenPack"
 
                 ChosenPackDiscard ->
                     "ChosenPackDiscard"
@@ -346,6 +347,9 @@ debug model =
 
                 Waiting ->
                     "Waiting"
+
+                GameOver ->
+                    "GameOver"
 
         plrs =
             List.map Player.debug <| Players.toList model.players
@@ -414,8 +418,15 @@ checkTurn model =
 
                 Nothing ->
                     HandOver
+
+        players =
+            if state == HandOver then
+                Players.unveilAll model.players
+
+            else
+                model.players
     in
-    updateState state model
+    { model | state = state, players = players }
 
 
 exposePack : Model -> Model

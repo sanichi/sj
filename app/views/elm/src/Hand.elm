@@ -9,6 +9,7 @@ module Hand exposing
     , out
     , score
     , set
+    , unveil
     )
 
 import Array exposing (Array)
@@ -90,6 +91,11 @@ score hand =
 set : Int -> Card -> Hand -> Hand
 set cid card hand =
     Array.set cid card hand
+
+
+unveil : Hand -> Hand
+unveil hand =
+    Array.map Card.unveil hand
 
 
 

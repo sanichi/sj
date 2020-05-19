@@ -8,6 +8,7 @@ module Players exposing
     , toList
     , toMove
     , totalScore
+    , unveilAll
     , updateCard
     , updateReveal
     )
@@ -79,6 +80,11 @@ toMove players =
 put : Int -> Player -> Players -> Players
 put pid player players =
     Dict.insert pid player players
+
+
+unveilAll : Players -> Players
+unveilAll players =
+    Dict.map Player.unveil players
 
 
 updateCard : Int -> Card -> Player -> Players -> ( Players, Maybe Int )

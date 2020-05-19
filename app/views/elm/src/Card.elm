@@ -4,6 +4,7 @@ module Card exposing
     , exposed
     , hidden
     , score
+    , unveil
     )
 
 
@@ -36,3 +37,12 @@ score card =
 
     else
         0
+
+
+unveil : Card -> Card
+unveil card =
+    if card.exists && not card.exposed then
+        { card | exposed = True }
+
+    else
+        card
