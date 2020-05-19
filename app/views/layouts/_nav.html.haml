@@ -6,6 +6,8 @@
       %li= link_to t("game.games"), waiting_games_path
       - if can?(:create, Game)
         %li= link_to t("game.new"), new_game_path
+      - if can?(:scores, User)
+        %li= link_to t("game.scores"), scores_user_path(current_user)
       - if can?(:index, User)
         %li= link_to t("user.users"), users_path
       - if can?(:index, Game)

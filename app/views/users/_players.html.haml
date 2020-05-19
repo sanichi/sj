@@ -1,0 +1,3 @@
+- players.each_with_index do |player, i|
+  = succeed(i < players.size - 1 ? ',' : '') do
+    = "#{player.user.handle} (#{player.score})"

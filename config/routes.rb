@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   %w/push pull/.each { |a| get a => "messages##{a}" }
 
-  resources :users
+  resources :users do
+    get :scores, on: :member
+  end
   resources :games, only: [:new, :create, :destroy, :show, :index] do
     get :join, on: :member
     get :leave, on: :member

@@ -11,6 +11,7 @@ class Ability
       can [:waiting, :create, :join, :leave, :play], Game
       can :destroy, Game, user_id: user.id, state: Game::WAITING
       can [:push, :pull], :message
+      can :scores, User
     end
   end
 end

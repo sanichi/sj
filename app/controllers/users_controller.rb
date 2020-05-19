@@ -24,6 +24,10 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
 
+  def scores
+    @players = @user.players.includes(:game)
+  end
+
   private
 
   def resource_params

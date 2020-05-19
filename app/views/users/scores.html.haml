@@ -1,0 +1,28 @@
+- set_meta_tags title: t("game.scores")
+
+- if @players.empty?
+  %p.faded.text-center
+    = "No games played yet. Start a"
+    = succeed("?") do
+      = link_to t("game.new"), new_game_path
+- else
+  .row
+    %div{class: center(xl: 8, md: 10)}
+      %section
+        .header.text-center
+          %h3= @user.handle
+        .body
+          %table{class: "table table-bordered table-striped table-sm mt-3"}
+            %thead
+              %tr
+                %th.text-center= t("game.opponents")
+                %th.text-center= t("game.score")
+                %th.text-center= t("game.upto")
+                %th= t("game.date")
+            %tbody
+              - @players.each do |player|
+                %tr
+                  %td= render "players", players: player.game.players.where.not(user_id: @user.id)
+                  %td.text-center= player.score
+                  %td.text-center= player.game.upto
+                  %td= player.game.created_at.strftime("%Y-%m-%d")

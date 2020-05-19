@@ -21,7 +21,7 @@
             = t("game.players")
             - unless @game.players.count == @game.participants
               = "(%d/%d)" % [@game.players.count, @game.participants]
-          %td= @game.players.map { |p| p.user.handle }.join(", ")
+          %td= @game.players.map { |p| "#{p.user.handle} (#{p.score})" }.join(", ")
         %tr
           %td= t("game.upto")
           %td= @game.upto
