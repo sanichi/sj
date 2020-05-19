@@ -38,4 +38,10 @@ module GamesHelper
   def game_upto_menu(selected)
     options_for_select(Game::UPTO.map { |n| [n.to_s, n] }, selected)
   end
+
+  def game_started_by_menu(selected)
+    opts = User.pluck(:handle, :id)
+    opts.unshift [t("any"), ""]
+    options_for_select(opts, selected)
+  end
 end

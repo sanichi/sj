@@ -6,6 +6,8 @@ class User < ApplicationRecord
   MIN_HANDLE = 2
   MIN_PASSWORD = 6
 
+  has_many :games
+
   before_validation :normalize_attributes
 
   validates :handle,
@@ -15,6 +17,8 @@ class User < ApplicationRecord
   validates :password, length: { minimum: MIN_PASSWORD }, allow_nil: true
   validates :first_name, format: { with: /\A[A-Z][a-z]+\z/ }, length: { maximum: MAX_NAME }
   validates :last_name, format: { with: /\A(O'|Mac|Mc)?[A-Z][a-z]+\z/ }, length: { maximum: MAX_NAME }
+
+  default_scope { order(:handle) }
 
   def guest?
     false

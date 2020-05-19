@@ -1,4 +1,5 @@
 en:
+  any: Any
   cancel: Cancel
   created: Created
   data: Data
@@ -6,7 +7,14 @@ en:
   edit: Edit
   id: ID
   save: Save
+  search: Search
   sure: Are you sure?
   title: SJ
+  pagination:
+    frst: first
+    next: next
+    prev: previous
+    last: last
+    of: of
   symbol:
     cross: ✘

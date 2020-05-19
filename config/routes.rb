@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   %w/push pull/.each { |a| get a => "messages##{a}" }
 
   resources :users
-  resources :games, only: [:new, :create, :destroy, :show] do
+  resources :games, only: [:new, :create, :destroy, :show, :index] do
     get :join, on: :member
     get :leave, on: :member
     get :play, on: :member

@@ -6,6 +6,10 @@ class GamesController < ApplicationController
     @games = Game.where.not(state: Game::FINISHED)
   end
 
+  def index
+    @games = Game.search(params, games_path, remote: true, per_page: 10)
+  end
+
   def new
     @game = Game.new(debug: current_user.admin?)
   end

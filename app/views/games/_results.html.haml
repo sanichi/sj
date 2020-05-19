@@ -1,0 +1,9 @@
+- games.matches.each do |game|
+  %tr
+    %td
+      = game.players.map { |p| p.user.handle }.join(", ")
+      = "(#{game.players.count}/#{game.participants})"
+    %td= link_to game.state, game
+    %td= game.user.handle
+    %td.text-center= game.created_at.strftime("%Y-%m-%d %H:%M:%S")
+= render "utils/pagination/links", pager: games, columns: 4

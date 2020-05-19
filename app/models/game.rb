@@ -1,4 +1,6 @@
 class Game < ApplicationRecord
+  include Pageable
+
   CARDS = (-2..12).to_a
   PARTICIPANTS = [2, 3, 4]
   UPTO = [50, 100, 200, 300, 400, 500]
@@ -15,6 +17,17 @@ class Game < ApplicationRecord
   validates :upto, numericality: { integer_only: true, greater_than_or_equal_to: UPTO.first, less_than_or_equal_to: UPTO.last }
 
   default_scope { order(created_at: :desc) }
+
+  def self.search(params, path, opt={})
+    if user = User.find_by(id: params[:user_id])
+      matches = user.games
+    else
+      matches = all
+    end
+    matches = matches.includes(:user).includes(:players)
+    paginate(matches, params, path, opt)
+  end
+
 
   def get_messages(target, last_message_id)
     return messages if last_message_id == 0
