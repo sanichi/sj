@@ -29,7 +29,7 @@ describe Game do
     it "delete game" do
       expect(Game.count).to eq 1
 
-      click_link t("delete")
+      click_link t("game.delete")
 
       expect(page).to have_title t("game.games")
       expect(Game.count).to eq 0
