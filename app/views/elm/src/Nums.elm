@@ -224,7 +224,7 @@ scoreButtonHeight =
 
 scoreButtonWidth : Int
 scoreButtonWidth =
-    240
+    260
 
 
 scoreButtonTextX : Int

@@ -23,6 +23,9 @@
               = "(%d/%d)" % [@game.players.count, @game.participants]
           %td= @game.players.map { |p| p.user.handle }.join(", ")
         %tr
+          %td= t("game.upto")
+          %td= @game.upto
+        %tr
           %td= t("game.dealt")
           %td= @game.total_dealt
         %tr

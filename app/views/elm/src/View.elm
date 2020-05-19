@@ -24,7 +24,7 @@ view model =
                 []
 
         extras =
-            if model.state == HandOver || model.state == Waiting then
+            if model.state == HandOver || model.state == Waiting || model.state == GameOver then
                 score model :: extras_
 
             else
@@ -362,7 +362,7 @@ score model =
             Model.myTotalScore model
 
         button =
-            scoreButton total (model.state == Waiting)
+            scoreButton total model.state
     in
     Svg.g [ cc "score", scoreOffset num ]
         ([ scoreBackground num, button ] ++ players)
@@ -373,31 +373,33 @@ scoreBackground players =
     Svg.rect [ ww Nums.scoreWidth, hh <| Nums.scoreHeight players, rx, ry, cc "score-bg" ] []
 
 
-scoreButton : Int -> Bool -> Svg Msg
-scoreButton total waiting =
+scoreButton : Int -> State -> Svg Msg
+scoreButton total state =
     let
         attrs =
-            if waiting then
-                [ scoreButtonOffset ]
+            case state of
+                HandOver ->
+                    [ scoreButtonOffset, onClick (NextHand total) ]
 
-            else
-                [ scoreButtonOffset, onClick (NextHand total) ]
+                _ ->
+                    [ scoreButtonOffset ]
     in
     Svg.g attrs
-        [ scoreButtonBackground waiting
-        , scoreButtonText waiting
+        [ scoreButtonBackground state
+        , scoreButtonText state
         ]
 
 
-scoreButtonBackground : Bool -> Svg Msg
-scoreButtonBackground waiting =
+scoreButtonBackground : State -> Svg Msg
+scoreButtonBackground state =
     let
         class =
-            if waiting then
-                "score-button-disabled"
+            case state of
+                Waiting ->
+                    "score-button-disabled"
 
-            else
-                "score-button"
+                _ ->
+                    "score-button"
     in
     Svg.rect [ ww Nums.scoreButtonWidth, hh Nums.scoreButtonHeight, rx, ry, cc class ] []
 
@@ -407,15 +409,19 @@ scoreButtonOffset =
     tt Nums.scoreButtonX Nums.scoreButtonY
 
 
-scoreButtonText : Bool -> Svg Msg
-scoreButtonText waiting =
+scoreButtonText : State -> Svg Msg
+scoreButtonText state =
     let
         t =
-            if waiting then
-                "please wait"
+            case state of
+                HandOver ->
+                    "next hand"
 
-            else
-                "next hand"
+                GameOver ->
+                    "view results"
+
+                _ ->
+                    "please wait"
     in
     Svg.text_ [ xx Nums.scoreButtonTextX, yy Nums.scoreButtonTextY ] [ tx t ]
 

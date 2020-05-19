@@ -425,8 +425,22 @@ checkTurn model =
 
             else
                 model.players
+
+        gameOver =
+            if state == HandOver then
+                Players.uptoExceeded model.upto model.players
+
+            else
+                False
+
+        finalState =
+            if gameOver then
+                GameOver
+
+            else
+                state
     in
-    { model | state = state, players = players }
+    { model | state = finalState, players = players }
 
 
 exposePack : Model -> Model

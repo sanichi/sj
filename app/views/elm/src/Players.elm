@@ -11,6 +11,7 @@ module Players exposing
     , unveilAll
     , updateCard
     , updateReveal
+    , uptoExceeded
     )
 
 import Card exposing (Card)
@@ -104,6 +105,19 @@ updateReveal cid card player players =
     players
         |> replace cid card player
         |> updateRevealTurns
+
+
+uptoExceeded : Int -> Players -> Bool
+uptoExceeded upto players =
+    let
+        highest =
+            players
+                |> toList
+                |> List.map Player.totalScore
+                |> List.maximum
+                |> Maybe.withDefault 0
+    in
+    highest >= upto
 
 
 
