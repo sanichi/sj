@@ -79,12 +79,12 @@ debug player =
 
         trn =
             if player.turn then
-                "T"
+                "*"
 
             else
-                "W"
+                ""
     in
-    String.join " " [ pid, pos, trn ]
+    pid ++ trn ++ " " ++ pos
 
 
 replace : Int -> Card -> Player -> Player
