@@ -4,7 +4,7 @@
   #navbar.collapse.navbar-collapse
     %ul.left
       %li= link_to t("game.games"), waiting_games_path
-      - if controller_name == "games" && action_name == "waiting" && can?(:create, Game)
+      - if can?(:create, Game)
         %li= link_to t("game.new"), new_game_path
       - if can?(:index, User)
         %li= link_to t("user.users"), users_path

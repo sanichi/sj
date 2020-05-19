@@ -19,6 +19,6 @@
           %th= t("game.players")
           %th= t("game.state")
           %th= t("game.started_by")
-          %th.text-center= t("game.started_at")
+          %th= t("game.started_at")
       %tbody#results
         = render "results", games: @games
