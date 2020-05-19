@@ -178,6 +178,14 @@ newUpdate update model =
                 _ ->
                     model
 
+        "end_game" ->
+            case val of
+                [ pid ] ->
+                    endGame pid model
+
+                _ ->
+                    model
+
         _ ->
             model
 
@@ -299,9 +307,13 @@ newHand pid score model =
         model
 
 
-endGame : Model -> Model
-endGame model =
-    updateState Waiting model
+endGame : Int -> Model -> Model
+endGame pid model =
+    if pid == model.pid then
+        updateState Waiting model
+
+    else
+        model
 
 
 resetPlayer : Int -> Int -> Model -> Model

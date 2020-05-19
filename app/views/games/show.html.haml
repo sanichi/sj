@@ -37,6 +37,10 @@
         %tr
           %td= t("game.debug")
           %td= @game.debug
+        %tr
+          %td.text-center{colspan: 2}
+            = link_to t("game.play"), play_game_path(@game), class: "btn btn-success btn-sm"
+            = link_to t("game.delete"), @game, class: "btn btn-danger btn-sm", method: :delete, data: { confirm: t("sure") }
 
 .row
   %div{class: center(xl: 8, md: 10)}

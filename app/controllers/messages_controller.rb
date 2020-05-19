@@ -34,6 +34,8 @@ class MessagesController < ApplicationController
         game.pack_discard_card(pid, pack_discard_card_index)
       elsif next_hand
         game.next_hand(@player, next_hand)
+      elsif end_game
+        game.end_game(@player, end_game)
       end
     end
   end
@@ -45,7 +47,7 @@ class MessagesController < ApplicationController
   end
 
   PARAMS =
-    [:last_message_id, :card_index, :next_hand,
+    [:last_message_id, :card_index, :next_hand, :end_game,
      :discard_chosen, :discard_card_index,
      :pack_chosen, :pack_card_index,
      :pack_discard_chosen, :pack_discard_card_index,

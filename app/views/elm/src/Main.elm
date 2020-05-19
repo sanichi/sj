@@ -57,7 +57,7 @@ update msg model =
             ( Model.newHand model.pid score model, push msg )
 
         EndGame score ->
-            ( Model.endGame model, push msg )
+            ( Model.endGame model.pid model, push msg )
 
         Noop ->
             ( model, Cmd.none )

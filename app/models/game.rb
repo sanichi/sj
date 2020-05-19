@@ -95,6 +95,12 @@ class Game < ApplicationRecord
     end
   end
 
+  def end_game(player, score)
+    player.update_column(:score, score)
+    update_column(:state, FINISHED)
+    add_msg("end_game", player.id, only_start: true)
+  end
+
   def can_be_joined_by?(user)
     return false unless state == WAITING
     return false if players.count >= participants
@@ -103,7 +109,7 @@ class Game < ApplicationRecord
   end
 
   def can_be_played_by?(user)
-    return false unless state != FINISHED
+    # return false unless state != FINISHED - allowed for debugging
     return false unless players.count == participants
     return false unless players.pluck(:user_id).include?(user.id)
     true
