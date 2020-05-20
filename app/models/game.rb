@@ -180,6 +180,10 @@ class Game < ApplicationRecord
     messages.create(msg)
   end
 
+  def finished?
+    state == FINISHED
+  end
+
   def forget(from)
     messages.where("id >= ?", from).each { |m| m.destroy }
     update_column(:state, STARTED)

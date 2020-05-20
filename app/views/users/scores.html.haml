@@ -2,7 +2,7 @@
 
 - if @players.empty?
   %p.faded.text-center
-    = "No games played yet. Start a"
+    = "No games finished yet. Start a"
     = succeed("?") do
       = link_to t("game.new"), new_game_path
 - else

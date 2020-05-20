@@ -1,7 +1,7 @@
 var skyjo = (function() {
 
   var elm;
-  var pulling = true;
+  var more = <%= @game.finished? ? 'false' : 'true' %>;
   var debug = <%= @game.debug ? 'true' : 'false' %>;
   var data = {
     player_id: <%= @player.id %>,
@@ -24,7 +24,7 @@ var skyjo = (function() {
         console.log("ajax pull error: " + xhr.status);
       },
       complete: function(xhr) {
-        if (pulling) setTimeout(pull, 1000);
+        if (more) setTimeout(pull, 1000);
       }
     });
   }

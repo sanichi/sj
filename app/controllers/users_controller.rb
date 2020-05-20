@@ -25,7 +25,7 @@ class UsersController < ApplicationController
   end
 
   def scores
-    @players = @user.players.order(updated_at: :desc).includes(:game)
+    @players = @user.players.finished
   end
 
   private
