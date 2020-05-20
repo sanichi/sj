@@ -8,6 +8,7 @@ module Players exposing
     , toList
     , toMove
     , totalScore
+    , totalScores
     , unveilAll
     , updateCard
     , updateReveal
@@ -57,6 +58,14 @@ totalScore pid players =
 
         Nothing ->
             0
+
+
+totalScores : Players -> List Int
+totalScores players =
+    players
+        |> all
+        |> List.map (\p -> [ p.pid, Player.totalScore p ])
+        |> List.concat
 
 
 toList : Players -> List Player

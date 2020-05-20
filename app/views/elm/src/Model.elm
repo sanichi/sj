@@ -11,10 +11,11 @@ module Model exposing
     , endGame
     , init
     , mainPlayer
-    , myTotalScore
     , newHand
     , newUpdate
     , revealCard
+    , totalForMain
+    , totalsForAll
     )
 
 import Card exposing (Card)
@@ -70,9 +71,14 @@ mainPlayer model =
     Players.get model.pid model.players
 
 
-myTotalScore : Model -> Int
-myTotalScore model =
+totalForMain : Model -> Int
+totalForMain model =
     Players.totalScore model.pid model.players
+
+
+totalsForAll : Model -> List Int
+totalsForAll model =
+    Players.totalScores model.players
 
 
 newUpdate : Update -> Model -> Model

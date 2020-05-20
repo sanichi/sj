@@ -361,11 +361,8 @@ score model =
         players =
             scorePlayers model
 
-        total =
-            Model.myTotalScore model
-
         button =
-            scoreButton total model.state
+            scoreButton model
     in
     Svg.g [ cc "score", scoreOffset num ]
         ([ scoreBackground num, button ] ++ players)
@@ -376,23 +373,31 @@ scoreBackground players =
     Svg.rect [ ww Nums.scoreWidth, hh <| Nums.scoreHeight players, rx, ry, cc "score-bg" ] []
 
 
-scoreButton : Int -> State -> Svg Msg
-scoreButton total state =
+scoreButton : Model -> Svg Msg
+scoreButton model =
     let
         attrs =
-            case state of
+            case model.state of
                 HandOver ->
+                    let
+                        total =
+                            Model.totalForMain model
+                    in
                     [ scoreButtonOffset, onClick (NextHand total) ]
 
                 GameOver ->
-                    [ scoreButtonOffset, onClick (EndGame total) ]
+                    let
+                        totals =
+                            Model.totalsForAll model
+                    in
+                    [ scoreButtonOffset, onClick (EndGame totals) ]
 
                 _ ->
                     [ scoreButtonOffset ]
     in
     Svg.g attrs
-        [ scoreButtonBackground state
-        , scoreButtonText state
+        [ scoreButtonBackground model.state
+        , scoreButtonText model.state
         ]
 
 

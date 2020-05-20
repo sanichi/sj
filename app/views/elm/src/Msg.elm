@@ -14,7 +14,7 @@ type Msg
     | ChoosePackDiscard
     | ChoosePackDiscardCard Int
     | NextHand Int
-    | EndGame Int
+    | EndGame (List Int)
     | Noop
 
 
@@ -46,7 +46,7 @@ value msg =
             E.object [ ( "next_hand", E.int score ) ]
 
         EndGame score ->
-            E.object [ ( "end_game", E.int score ) ]
+            E.object [ ( "end_game", E.list E.int score ) ]
 
         _ ->
             E.null
