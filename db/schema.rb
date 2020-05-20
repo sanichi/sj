@@ -57,6 +57,8 @@ ActiveRecord::Schema.define(version: 2020_05_04_131315) do
     t.bigint "user_id"
     t.bigint "game_id"
     t.integer "score", limit: 2, default: 0
+    t.integer "pscore", limit: 2, default: 0
+    t.integer "place", limit: 2, default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["game_id"], name: "index_players_on_game_id"
