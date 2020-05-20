@@ -95,9 +95,14 @@ class Game < ApplicationRecord
     end
   end
 
-  def end_game(player, score)
-    player.update_column(:score, score)
-    update_column(:state, FINISHED)
+  def end_game(player, pid_scores)
+    unless state == FINISHED
+      update_column(:state, FINISHED)
+      pid_scores.each_slice(2) do |pid, score|
+        player = Player.find_by(id: pid)
+        player.update_column(:score, score) if player && score
+      end
+    end
     add_msg("end_game", player.id, only_start: true)
   end
 
