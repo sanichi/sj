@@ -115,11 +115,9 @@ class Game < ApplicationRecord
     true
   end
 
-  def can_be_played_by?(user)
-    # return false unless state != FINISHED - allowed for debugging
-    return false unless players.count == participants
-    return false unless players.pluck(:user_id).include?(user.id)
-    true
+  def can_be_played_by(user)
+    return unless players.count == participants
+    players.find_by(user: user)
   end
 
   def can_be_left_by?(user)

@@ -33,8 +33,7 @@ class GamesController < ApplicationController
 
   def join
     if @game && @game.can_be_joined_by?(current_user)
-      player = @game.players.create(user: current_user)
-      @game.deal(player.id)
+      @game.players.create(user: current_user)
     end
     redirect_to waiting_games_path
   end
@@ -47,9 +46,9 @@ class GamesController < ApplicationController
   end
 
   def play
-    if @game && @game.can_be_played_by?(current_user)
+    if @game && (@player = @game.can_be_played_by(current_user))
       @game.update_column(:state, Game::STARTED) if @game.state == Game::WAITING
-      @player = @game.players.find_by(user: current_user)
+      @game.deal(@player.id)
     else
       redirect_to waiting_games_path
     end
