@@ -102,6 +102,7 @@ class Game < ApplicationRecord
         player = Player.find_by(id: pid)
         player.update_column(:score, score) if player && score
       end
+      finalise_scores
     end
     add_msg("end_game", player.id, only_start: true)
   end
@@ -180,6 +181,11 @@ class Game < ApplicationRecord
     messages.create(msg)
   end
 
+  def forget(from)
+    messages.where("id >= ?", from).each { |m| m.destroy }
+    update_column(:state, STARTED)
+  end
+
   private
 
   def new_pack
@@ -203,5 +209,15 @@ class Game < ApplicationRecord
 
   def card_to_attr(c)
     "#{c < 0 ? 'm' : 'p'}#{c.abs}"
+  end
+
+  def finalise_scores
+    scores = players.pluck(:score)
+    counts = scores.reduce(Hash.new(0)) { |h,s| h[s] = h[s] += 1; h }
+    places = scores.uniq.sort.each_with_index.reduce(Hash.new(0)) { |h,(s,p)| h[s] = p + 1; h }
+    players.each do |player|
+      player.update_column(:pscore, (player.score * 100.0 / upto).round)
+      player.update_column(:place, places[player.score] * (counts[player.score] == 1 ? 1 : -1))
+    end
   end
 end

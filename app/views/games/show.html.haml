@@ -17,11 +17,12 @@
           %td= t("game.state")
           %td= @game.state
         %tr
-          %td
-            = t("game.players")
-            - unless @game.players.count == @game.participants
-              = "(%d/%d)" % [@game.players.count, @game.participants]
-          %td= @game.players.map { |p| "#{p.user.handle} (#{p.score})" }.join(", ")
+          %td= t("game.participants")
+          %td= "%d/%d" % [@game.players.count, @game.participants]
+        - @game.players.each do |player|
+          %tr
+            %td= t("game.player")
+            %td= "%d %s %d/%d %d" % [player.id, player.user.handle, player.score, player.pscore, player.place]
         %tr
           %td= t("game.upto")
           %td= @game.upto
