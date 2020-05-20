@@ -6,6 +6,7 @@ class CreatePlayers < ActiveRecord::Migration[6.0]
       t.integer    :score, limit: 2, default: 0
       t.integer    :pscore, limit: 2, default: 0
       t.integer    :place, limit: 1, default: 0
+      t.boolean    :dealt, default: false
 
       t.timestamps
     end
