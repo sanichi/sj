@@ -1,9 +1,9 @@
 en:
   game:
-    date: Date
     dealt: Dealt
     debug: Debug
     delete: Abandon
+    ended: Ended
     game_id: 'Game %{id}'
     games: Games
     join: Join
@@ -12,9 +12,11 @@ en:
     new: New Game
     opponents: Opponents
     participants: Participants
+    place: Place
     player: Player
     play: Play
     players: Players
+    pscore: '%'
     save: Start
     score: Score
     scores: Scores

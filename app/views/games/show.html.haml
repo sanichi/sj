@@ -19,14 +19,14 @@
         %tr
           %td= t("game.participants")
           %td= "%d/%d" % [@game.players.count, @game.participants]
+        %tr
+          %td= t("game.upto")
+          %td= @game.upto
         - @game.players.each do |player|
           %tr
             %td= t("game.player")
             %td= "%d %s %d/%d %d" % [player.id, player.user.handle, player.score, player.pscore, player.place]
-        %tr
-          %td= t("game.upto")
-          %td= @game.upto
-        %tr
+          %tr
           %td= t("game.dealt")
           %td= @game.total_dealt
         %tr

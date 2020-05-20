@@ -11,18 +11,19 @@
       %section
         .header.text-center
           %h3= @user.handle
+          %span.faded= @user.name
         .body
           %table{class: "table table-bordered table-striped table-sm mt-3"}
             %thead
               %tr
-                %th.text-center= t("game.opponents")
+                %th.text-center= t("game.place")
                 %th.text-center= t("game.score")
-                %th.text-center= t("game.upto")
-                %th= t("game.date")
+                %th= t("game.opponents")
+                %th= t("game.ended")
             %tbody
               - @players.each do |player|
                 %tr
+                  %td.text-center{class: player.place.abs == 1 ? 'font-weight-bold' : ''}= place(player.place)
+                  %td.text-center= "%d/%d" % [player.score, player.game.upto]
                   %td= render "players", players: player.game.players.where.not(user_id: @user.id)
-                  %td.text-center= player.score
-                  %td.text-center= player.game.upto
-                  %td= player.game.created_at.strftime("%Y-%m-%d")
+                  %td= link_to_if can?(:show, Game), time_ago(player.game.updated_at), game_path(player.game)

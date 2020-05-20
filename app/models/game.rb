@@ -98,6 +98,7 @@ class Game < ApplicationRecord
   def end_game(player, pid_scores)
     unless state == FINISHED
       update_column(:state, FINISHED)
+      touch
       pid_scores.each_slice(2) do |pid, score|
         player = Player.find_by(id: pid)
         player.update_column(:score, score) if player && score
@@ -218,6 +219,7 @@ class Game < ApplicationRecord
     players.each do |player|
       player.update_column(:pscore, (player.score * 100.0 / upto).round)
       player.update_column(:place, places[player.score] * (counts[player.score] == 1 ? 1 : -1))
+      player.touch
     end
   end
 end

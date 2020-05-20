@@ -5,7 +5,7 @@
       = "Started by"
       %span.font-weight-bold= game.user.handle
       = succeed(".") do
-        = game_started(game)
+        = time_ago(game.created_at)
     %p
       = "Status:"
       - handles = game.players.map {|p| p.user.handle }

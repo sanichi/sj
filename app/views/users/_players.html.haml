@@ -1,3 +1,4 @@
 - players.each_with_index do |player, i|
   = succeed(i < players.size - 1 ? ',' : '') do
-    = "#{player.user.handle} (#{player.score})"
+    = link_to player.user.handle, scores_user_path(player.user)
+    = "%d (%s)" % [player.score, place(player.place)]
