@@ -22,6 +22,7 @@ type alias Player =
     , position : Position
     , hand : Hand
     , turn : Bool
+    , penalty : Int
     , active : Bool
     , score : Int
     }
@@ -124,20 +125,28 @@ scoreText player =
             Hand.score player.hand
 
         total =
-            score + player.score
+            player.penalty * score + player.score
+
+        penalty =
+            if player.penalty == 2 then
+                " × 2 "
+
+            else
+                ""
     in
     player.handle
         ++ ": "
         ++ String.fromInt player.score
         ++ " + "
         ++ String.fromInt score
+        ++ penalty
         ++ " = "
         ++ String.fromInt total
 
 
 totalScore : Player -> Int
 totalScore player =
-    Hand.score player.hand + player.score
+    player.penalty * Hand.score player.hand + player.score
 
 
 unveil : Int -> Player -> Player

@@ -92,9 +92,29 @@ put pid player players =
     Dict.insert pid player players
 
 
-unveilAll : Players -> Players
-unveilAll players =
-    Dict.map Player.unveil players
+unveilAll : Int -> Players -> Players
+unveilAll outPid players =
+    let
+        unveiled =
+            Dict.map Player.unveil players
+
+        totals =
+            all unveiled |> List.map (\p -> Hand.score p.hand)
+
+        lowest =
+            List.minimum totals |> Maybe.withDefault 1000
+
+        duplicates =
+            List.map (\t -> t == lowest) totals |> List.length
+
+        penaliser pid player =
+            if player.pid == outPid && (Hand.score player.hand > lowest || duplicates > 1) then
+                { player | penalty = 2 }
+
+            else
+                player
+    in
+    Dict.map penaliser unveiled
 
 
 updateCard : Int -> Card -> Player -> Players -> ( Players, Maybe Int )
@@ -166,7 +186,7 @@ convert pid proto =
             else
                 False
     in
-    Player proto.pid proto.handle position hand True active 0
+    Player proto.pid proto.handle position hand True 1 active 0
 
 
 decode : String -> Position

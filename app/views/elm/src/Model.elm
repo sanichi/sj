@@ -332,7 +332,7 @@ resetPlayer pid score model =
         Just p ->
             let
                 uPlayer =
-                    { p | score = score, turn = True }
+                    { p | score = score, turn = True, penalty = 1 }
 
                 uPlayers =
                     Players.put pid uPlayer model.players
@@ -431,21 +431,21 @@ checkTurn model =
         toMove =
             Players.toMove model.players
 
-        state =
+        ( state, outPid ) =
             case toMove of
                 Just player ->
                     if Hand.out player.hand then
-                        HandOver
+                        ( HandOver, player.pid )
 
                     else
-                        Choose
+                        ( Choose, 0 )
 
                 Nothing ->
-                    HandOver
+                    ( HandOver, 0 )
 
         players =
             if state == HandOver then
-                Players.unveilAll model.players
+                Players.unveilAll outPid model.players
 
             else
                 model.players
