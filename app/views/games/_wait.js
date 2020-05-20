@@ -10,7 +10,7 @@ var refresher = (function() {
       },
 
       complete: function(xhr) {
-        setTimeout(refresh, 2500);
+        setTimeout(refresh, 3000);
       }
 
     });
