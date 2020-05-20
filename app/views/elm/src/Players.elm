@@ -105,7 +105,7 @@ unveilAll outPid players =
             List.minimum totals |> Maybe.withDefault 1000
 
         duplicates =
-            List.map (\t -> t == lowest) totals |> List.length
+            List.filter (\t -> t == lowest) totals |> List.length
 
         penaliser pid player =
             if player.pid == outPid && (Hand.score player.hand > lowest || duplicates > 1) then
