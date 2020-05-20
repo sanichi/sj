@@ -48,7 +48,10 @@ class GamesController < ApplicationController
   def play
     if @game && (@player = @game.can_be_played_by(current_user))
       @game.update_column(:state, Game::STARTED) if @game.state == Game::WAITING
-      @game.deal(@player.id)
+      unless @player.dealt?
+        @game.deal(@player.id)
+        @player.update_column(:dealt, true)
+      end
     else
       redirect_to waiting_games_path
     end
