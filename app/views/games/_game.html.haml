@@ -1,16 +1,13 @@
+:ruby
+  handles = game.players.map {|p| p.user.handle }
+  count = handles.size
+  needed = game.participants - count
+
 %section
   .header.font-weight-bold= "#{game.participants} player game to #{game.upto}"
   .body
-    %p
-      = "Started by"
-      %span.font-weight-bold= game.user.handle
-      = succeed(".") do
-        = time_ago(game.created_at)
-    %p
+    %span
       = "Status:"
-      - handles = game.players.map {|p| p.user.handle }
-      - count = handles.size
-      - needed = game.participants - count
       - if count == 0
         = "no players have joined yet."
       - elsif count == 1
@@ -36,6 +33,13 @@
             - else
               = "play has"
               %span.font-weight-bold= "already started"
+    - if count == 0
+      %span
+        = "Started by"
+        %span.font-weight-bold= game.user.handle
+        = succeed(".") do
+          = time_ago(game.created_at)
+
   .footer
     - if game.can_be_joined_by?(current_user)
       = link_to t("game.join"), join_game_path(game), class: "btn btn-success btn-sm"

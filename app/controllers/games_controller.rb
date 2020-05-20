@@ -18,6 +18,7 @@ class GamesController < ApplicationController
     @game = Game.new resource_params
     @game.user = current_user
     if @game.save
+      @game.players.create(user: current_user)
       @game.start
       redirect_to waiting_games_path
     else

@@ -24,7 +24,7 @@ var skyjo = (function() {
         console.log("ajax pull error: " + xhr.status);
       },
       complete: function(xhr) {
-        if (pulling) setTimeout(pull, 2500);
+        if (pulling) setTimeout(pull, 2000);
       }
     });
   }
