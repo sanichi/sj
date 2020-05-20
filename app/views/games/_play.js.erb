@@ -13,7 +13,7 @@ var skyjo = (function() {
       data: data,
       dataType: 'json',
       success: function(json, status, xhr) {
-        if (json.abort) abort();
+        if (json.abort) window.location.href = '<%= waiting_games_path %>';
         $.each(json.updates, function(i, update) {
           if (update.mid > data.last_message_id) data.last_message_id = update.mid;
           elm.ports.pullUpdate.send(update);
@@ -36,12 +36,11 @@ var skyjo = (function() {
       dataType: 'json',
       error: function(xhr) {
         console.log("ajax push error: " + xhr.status);
+      },
+      complete: function(xhr) {
+        if (updates.end_game) window.location.href = '<%= scores_user_path(@player.user) %>';
       }
     });
-  }
-
-  function abort() {
-    window.location.href = '<%= waiting_games_path %>';
   }
 
   function empty(obj) {
