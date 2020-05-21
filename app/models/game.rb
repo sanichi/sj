@@ -77,35 +77,40 @@ class Game < ApplicationRecord
   end
 
   def next_hand(player, score)
-    add_msg("next_hand", [player.id, score], only_start: true)
-    player.update_column(:score, score)
-    if votes + 1 == participants
-      update_column(:votes, 0)
-      players.each do |p|
-        add_msg("reset_player", [p.id, p.score])
+    # https://www.peterdebelak.com/blog/pessimistic-locking-in-rails-by-example/
+    with_lock do
+      add_msg("next_hand", [player.id, score], only_start: true)
+      player.update_column(:score, score)
+      if votes + 1 == participants
+        update_column(:votes, 0)
+        players.each do |p|
+          add_msg("reset_player", [p.id, p.score])
+        end
+        new_pack if shuffle?
+        add_msg("deal_pack", card)
+        add_msg("deal_discard", card)
+        players.each do |p|
+          add_msg("deal_hand", cards(12).unshift(p.id))
+        end
+      else
+        update_column(:votes, votes + 1)
       end
-      new_pack if shuffle?
-      add_msg("deal_pack", card)
-      add_msg("deal_discard", card)
-      players.each do |p|
-        add_msg("deal_hand", cards(12).unshift(p.id))
-      end
-    else
-      update_column(:votes, votes + 1)
     end
   end
 
   def end_game(player, pid_scores)
-    unless state == FINISHED
-      update_column(:state, FINISHED)
-      touch
-      pid_scores.each_slice(2) do |pid, score|
-        player = Player.find_by(id: pid)
-        player.update_column(:score, score) if player && score
+    with_lock do
+      unless state == FINISHED
+        update_column(:state, FINISHED)
+        touch
+        pid_scores.each_slice(2) do |pid, score|
+          player = Player.find_by(id: pid)
+          player.update_column(:score, score) if player && score
+        end
+        finalise_scores
       end
-      finalise_scores
+      add_msg("end_game", player.id, only_start: true)
     end
-    add_msg("end_game", player.id, only_start: true)
   end
 
   def can_be_joined_by?(user)
