@@ -11,7 +11,7 @@ class GamesController < ApplicationController
   end
 
   def new
-    @game = Game.new(debug: current_user.admin?)
+    @game = Game.new
   end
 
   def create

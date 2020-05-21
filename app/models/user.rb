@@ -11,7 +11,7 @@ class User < ApplicationRecord
   before_validation :normalize_attributes
 
   validates :handle,
-    format: { with: /\A[a-z]\w+\z/i },
+    format: { with: /\A[A-Z]\w+\z/i },
     length: { minimum: MIN_HANDLE, maximum: MAX_HANDLE },
     uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: MIN_PASSWORD }, allow_nil: true

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    sequence(:handle) { |n| "user#{n}" }
+    sequence(:handle) { |n| "User#{n}" }
     password          { Faker::Internet.password(min_length: User::MIN_PASSWORD) }
     admin             { [true, false].sample }
     first_name        { %w(Mark Sandra John Pat Penny Rob).sample }
