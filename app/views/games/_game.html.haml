@@ -12,12 +12,13 @@
         %span
           = "#{count} players"
           = render "handles", handles: handles
-          = "have already"
+          = "are already"
           = succeed(".") do
-            %span.font-weight-bold= "started"
+            %span.font-weight-bold= "playing"
       - else
         - if count == 0
-          = "no players have joined yet."
+          %span.font-weight-bold= "no players"
+          = "have joined yet."
           = "Started by"
           %span.font-weight-bold= game.user.handle
           = succeed(".") do
