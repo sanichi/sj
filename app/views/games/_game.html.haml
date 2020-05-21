@@ -12,9 +12,7 @@
         %span
           = "#{count} players"
           = render "handles", handles: handles
-          = "are already"
-          = succeed(".") do
-            %span.font-weight-bold= "playing"
+          = "are playing."
       - else
         - if count == 0
           %span.font-weight-bold= "no players"
@@ -27,15 +25,15 @@
           = "1 player"
           = render "handles", handles: handles
           = "has joined, waiting for"
-          %span.font-weight-bold= needed
-          = "more."
+          = succeed(".") do
+            %span.font-weight-bold= "#{needed} more"
         - else
           - if needed > 0
             = "some players"
             = render "handles", handles: handles
             = "have joined, waiting for"
-            %span.font-weight-bold= needed
-            = "more."
+            = succeed(".") do
+              %span.font-weight-bold= "#{needed} more"
           - else
             = "enough players"
             = render "handles", handles: handles
@@ -43,13 +41,24 @@
             = succeed(".") do
               %span.font-weight-bold= "ready to play"
   .footer
+    - links = false
     - if game.can_be_joined_by?(current_user)
       = link_to t("game.join"), join_game_path(game), class: "btn btn-success btn-sm"
+      - links = true
     - if game.can_be_played_by(current_user)
       = link_to t("game.play"), play_game_path(game), class: "btn btn-success btn-sm"
+      - links = true
     - if game.can_be_left_by?(current_user)
       = link_to t("game.leave"), leave_game_path(game), class: "btn btn-warning btn-sm"
+      - links = true
     - if can?(:show, game)
       = link_to t("game.show"), game, class: "btn btn-info btn-sm"
+      - links = true
     - if game.can_be_deleted_by?(current_user)
       = link_to t("game.delete"), game, class: "btn btn-danger btn-sm", method: :delete, data: { confirm: t("sure") }
+      - links = true
+    - unless links
+      = "Started by"
+      = game.user.handle
+      = succeed(".") do
+        = time_ago(game.created_at)
