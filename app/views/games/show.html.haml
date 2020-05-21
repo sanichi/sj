@@ -50,16 +50,16 @@
         %tr
           %th.text-center{colspan: 5}= t("game.messages")
         %tr
-          %th= t("id")
+          %th.text-center= t("id")
           %th.text-center= t("created")
-          %th= t("message.target")
+          %th.text-center= t("message.target")
           %th.text-center= t("message.only_start")
           %th= t("data")
       %tbody
         - @game.messages.each do |m|
           %tr
-            %td= m.id
-            %td.text-center= m.created_at.strftime("%H:%M:%S")
-            %td= m.target
+            %td.text-center= m.id
+            %td.text-center= m.created_at.strftime("%M:%S.%L")
+            %td.text-center= m.target
             %td.text-center= m.only_start ? "T" : "F"
             %td= m.json
