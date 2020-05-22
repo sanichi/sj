@@ -12,7 +12,9 @@
         %span
           = "#{count} players"
           = render "handles", handles: handles
-          = "are playing."
+          = "have dealt the"
+          = game.hand.ordinalize
+          = "hand."
       - else
         - if count == 0
           %span.font-weight-bold= "no players"

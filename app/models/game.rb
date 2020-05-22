@@ -83,6 +83,7 @@ class Game < ApplicationRecord
       player.update_column(:score, score)
       if votes + 1 == participants
         update_column(:votes, 0)
+        update_column(:hand, hand + 1)
         players.each do |p|
           add_msg("reset_player", [p.id, p.score])
         end

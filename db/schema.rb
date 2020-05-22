@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_04_131315) do
+ActiveRecord::Schema.define(version: 2020_05_22_082759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2020_05_04_131315) do
     t.integer "p12", limit: 2, default: 10
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "hand", limit: 2, default: 1
     t.index ["user_id"], name: "index_games_on_user_id"
   end
 
