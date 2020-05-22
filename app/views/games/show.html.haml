@@ -19,6 +19,8 @@
             = @game.state
             - if @game.state == Game::STARTED
               = @game.hand.ordinalize
+            - elsif @game.state == Game::FINISHED
+              = @game.hand
         %tr
           %td= t("game.participants")
           %td= "%d/%d" % [@game.players.count, @game.participants]
