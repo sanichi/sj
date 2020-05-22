@@ -452,7 +452,7 @@ checkTurn model =
 
         gameOver =
             if state == HandOver then
-                Players.uptoExceeded model.upto model.players
+                Players.uptoExceeded model.upto players
 
             else
                 False
