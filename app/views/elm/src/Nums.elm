@@ -98,7 +98,7 @@ badgeTextX =
 
 badgeTextY : Int
 badgeTextY =
-    badgeHeight // 2 + badgeTextSize // 4
+    badgeHeight // 2 + badgeTextSize // 3
 
 
 
@@ -294,7 +294,7 @@ scorePlayerTextX =
 
 scorePlayerTextY : Int
 scorePlayerTextY =
-    scorePlayerHeight // 2 + scoreTextSize // 4
+    scorePlayerHeight // 2 + scoreTextSize // 3
 
 
 scoreTextSize : Int

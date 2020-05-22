@@ -2,7 +2,7 @@ en:
   game:
     dealt: Dealt
     debug: Debug
-    delete: Abandon
+    delete: Abort
     ended: Ended
     game_id: 'Game %{id}'
     games: Games
