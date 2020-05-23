@@ -8,7 +8,6 @@ Rails.application.routes.draw do
   end
   resources :games, only: [:new, :create, :destroy, :show, :index] do
     get :join, on: :member
-    get :leave, on: :member
     get :play, on: :member
     get :waiting, on: :collection
   end

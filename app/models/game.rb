@@ -126,12 +126,6 @@ class Game < ApplicationRecord
     players.find_by(user: user)
   end
 
-  def can_be_left_by?(user)
-    return false unless state == WAITING
-    return false unless players.pluck(:user_id).include?(user.id)
-    true
-  end
-
   def can_be_deleted_by?(user)
     user == self.user && state == WAITING
   end

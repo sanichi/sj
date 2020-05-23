@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
   authorize_resource
-  before_action :find_game, only: [:destroy, :show, :join, :leave, :play]
+  before_action :find_game, only: [:destroy, :show, :join, :play]
 
   def waiting
     @games = Game.where.not(state: Game::FINISHED)
@@ -34,13 +34,6 @@ class GamesController < ApplicationController
   def join
     if @game && @game.can_be_joined_by?(current_user)
       @game.players.create(user: current_user)
-    end
-    redirect_to waiting_games_path
-  end
-
-  def leave
-    if @game && @game.can_be_left_by?(current_user)
-      @game.players.each { |p| p.destroy if p.user == current_user }
     end
     redirect_to waiting_games_path
   end

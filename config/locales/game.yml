@@ -7,7 +7,6 @@ en:
     game_id: 'Game %{id}'
     games: Games
     join: Join
-    leave: Leave
     messages: Messages
     new: New Game
     opponents: Opponents
