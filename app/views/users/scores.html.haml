@@ -19,11 +19,11 @@
                 %th.text-center= t("game.place")
                 %th.text-center= t("game.score")
                 %th= t("game.opponents")
-                %th= t("game.ended")
+                %th.text-center= t("game.ended")
             %tbody
               - @players.each do |player|
                 %tr
                   %td.text-center{class: player.place.abs == 1 ? 'font-weight-bold' : ''}= place(player.place)
                   %td.text-center= player.score
                   %td= render "players", players: player.game.players.where.not(user_id: @user.id)
-                  %td= link_to_if can?(:show, Game), time_ago(player.game.updated_at), game_path(player.game)
+                  %td.text-center= link_to_if can?(:show, Game), time_ago(player.game.updated_at), game_path(player.game)

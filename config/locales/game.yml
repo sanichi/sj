@@ -3,7 +3,7 @@ en:
     dealt: Dealt
     debug: Debug
     delete: Abort
-    ended: Ended
+    ended: When
     game_id: 'Game %{id}'
     games: Games
     join: Join
