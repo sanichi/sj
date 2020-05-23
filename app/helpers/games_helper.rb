@@ -29,7 +29,6 @@ module GamesHelper
 
   def place(place)
     case place.abs
-    when 0 then "none"
     when 1 then "1st"
     when 2 then "2nd"
     when 3 then "3rd"
