@@ -2,7 +2,8 @@
   %tr
     %td
       = game.players.map { |p| p.user.handle }.join(", ")
-      = "(#{game.players.count}/#{game.participants})"
+      - unless game.players.count == game.participants
+        = "(#{game.players.count}/#{game.participants})"
     %td= link_to game.state, game
     %td= game.user.handle
     %td= time_ago(game.created_at)
