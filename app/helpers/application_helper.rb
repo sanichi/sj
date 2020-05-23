@@ -34,6 +34,6 @@ module ApplicationHelper
     when days    < 31 then "#{days.round}d ago"
     when year    < 1  then time.strftime('%b')
     else                   time.strftime('%Y')
-    end
+    end.gsub(" ", "&nbsp;").html_safe
   end
 end
