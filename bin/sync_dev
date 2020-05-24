@@ -7,7 +7,7 @@ my $tsu_db  = 'sni_sj_app_production';
 my $tmp_sql = '/tmp/wd.sql';
 my $loc_app = '/Users/mjo/Projects/sni_sj_app';
 my $loc_db  = 'sni_sj_app_development';
-my $ssh_usr = 'sanichi@thessaloniki.markorr.net';
+my $ssh_usr = 'sanichi@thessaloniki.sanichi.me';
 
 # Sanity check.
 &check(-d $loc_app, "directory $loc_app does not exist");
