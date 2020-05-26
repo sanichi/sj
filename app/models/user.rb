@@ -7,6 +7,7 @@ class User < ApplicationRecord
   MIN_PASSWORD = 6
 
   has_many :players
+  has_many :games
 
   before_validation :normalize_attributes
 
