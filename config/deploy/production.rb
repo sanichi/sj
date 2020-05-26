@@ -1,5 +1,5 @@
 server "thessaloniki.sanichi.me", user: "sanichi", roles: %w{web app db}
-set :deploy_to, "/var/www/sj.sanichi.me"
+set :deploy_to, "/var/www/me.sanichi.sj"
 set :rails_env, 'production'
 
 set :rbenv_type, :user
