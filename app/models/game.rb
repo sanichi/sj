@@ -127,7 +127,7 @@ class Game < ApplicationRecord
   end
 
   def can_be_deleted_by?(user)
-    user == self.user && state == WAITING
+    user == self.user && state != FINISHED
   end
 
   def total_remaining
