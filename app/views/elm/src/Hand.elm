@@ -1,6 +1,6 @@
 module Hand exposing
     ( Hand
-    , check
+    , checkPoof
     , exposed
     , get
     , highest
@@ -9,7 +9,6 @@ module Hand exposing
     , out
     , score
     , set
-    , unveil
     )
 
 import Array exposing (Array)
@@ -20,8 +19,8 @@ type alias Hand =
     Array Card
 
 
-check : Hand -> ( Hand, Maybe Int )
-check hand =
+checkPoof : Hand -> ( Hand, Maybe Int )
+checkPoof hand =
     case matched 1 hand of
         Just discard ->
             ( poof 1 hand, Just discard )
@@ -91,11 +90,6 @@ score hand =
 set : Int -> Card -> Hand -> Hand
 set cid card hand =
     Array.set cid card hand
-
-
-unveil : Hand -> Hand
-unveil hand =
-    Array.map Card.unveil hand
 
 
 

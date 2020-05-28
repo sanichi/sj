@@ -28,7 +28,7 @@ view model =
 
         extras =
             if state == HandOver || state == Waiting || state == GameOver then
-                score model :: extras_
+                button model :: extras_
 
             else
                 extras_
@@ -180,7 +180,7 @@ cardMsg : State -> Player -> Int -> Card -> Msg
 cardMsg state player cid card =
     if player.active && player.turn then
         case state of
-            Reveal ->
+            Reveal2 ->
                 if not card.exposed then
                     RevealCard cid
 
@@ -196,6 +196,13 @@ cardMsg state player cid card =
             ChosenPackDiscard ->
                 if not card.exposed then
                     ChoosePackDiscardCard cid
+
+                else
+                    Noop
+
+            RevealRest outPid ->
+                if not card.exposed then
+                    RevealCard cid
 
                 else
                     Noop
@@ -349,32 +356,17 @@ packMsg model =
 
 
 
--- Score
+-- Button
 
 
-score : Model -> Svg Msg
-score model =
-    let
-        num =
-            Players.size model.players
-
-        players =
-            scorePlayers model
-
-        button =
-            scoreButton model
-    in
-    Svg.g [ cc "score", scoreOffset num ]
-        ([ scoreBackground num, button ] ++ players)
+button : Model -> Svg Msg
+button model =
+    Svg.g [ cc "score", buttonOffset ]
+        [ buttonGroup model ]
 
 
-scoreBackground : Int -> Svg Msg
-scoreBackground players =
-    Svg.rect [ ww Nums.scoreWidth, hh <| Nums.scoreHeight players, rx, ry, cc "score-bg" ] []
-
-
-scoreButton : Model -> Svg Msg
-scoreButton model =
+buttonGroup : Model -> Svg Msg
+buttonGroup model =
     let
         attrs =
             case model.state of
@@ -383,26 +375,26 @@ scoreButton model =
                         total =
                             Model.totalForMain model
                     in
-                    [ scoreButtonOffset, onClick (NextHand total) ]
+                    [ onClick (NextHand total) ]
 
                 GameOver ->
                     let
                         totals =
                             Model.totalsForAll model
                     in
-                    [ scoreButtonOffset, onClick (EndGame totals) ]
+                    [ onClick (EndGame totals) ]
 
                 _ ->
-                    [ scoreButtonOffset ]
+                    []
     in
     Svg.g attrs
-        [ scoreButtonBackground model.state
-        , scoreButtonText model.state
+        [ buttonBackground model.state
+        , buttonText model.state
         ]
 
 
-scoreButtonBackground : State -> Svg Msg
-scoreButtonBackground state =
+buttonBackground : State -> Svg Msg
+buttonBackground state =
     let
         class =
             case state of
@@ -412,16 +404,11 @@ scoreButtonBackground state =
                 _ ->
                     "score-button"
     in
-    Svg.rect [ ww Nums.scoreButtonWidth, hh Nums.scoreButtonHeight, rx, ry, cc class ] []
+    Svg.rect [ ww Nums.buttonWidth, hh Nums.buttonHeight, rx, ry, cc class ] []
 
 
-scoreButtonOffset : Attribute Msg
-scoreButtonOffset =
-    tt Nums.scoreButtonX Nums.scoreButtonY
-
-
-scoreButtonText : State -> Svg Msg
-scoreButtonText state =
+buttonText : State -> Svg Msg
+buttonText state =
     let
         t =
             case state of
@@ -434,62 +421,12 @@ scoreButtonText state =
                 _ ->
                     "please wait"
     in
-    Svg.text_ [ xx Nums.scoreButtonTextX, yy Nums.scoreButtonTextY ] [ tx t ]
+    Svg.text_ [ xx Nums.buttonTextX, yy Nums.buttonTextY ] [ tx t ]
 
 
-scoreOffset : Int -> Attribute Msg
-scoreOffset players =
-    tt Nums.scoreX <| Nums.scoreY players
-
-
-scorePlayers : Model -> List (Svg Msg)
-scorePlayers model =
-    Players.all model.players
-        |> List.indexedMap (scorePlayer model.upto)
-
-
-scorePlayer : Int -> Int -> Player -> Svg Msg
-scorePlayer upto position player =
-    let
-        total =
-            Player.totalScore player
-
-        percent =
-            if total >= upto then
-                100
-
-            else
-                total * 100 // upto
-    in
-    Svg.g [ cc "player-score", scorePlayerOffset position ]
-        [ scorePlayerBackground
-        , scorePlayerProgress percent
-        , scorePlayerText player
-        ]
-
-
-scorePlayerBackground : Svg Msg
-scorePlayerBackground =
-    Svg.rect [ ww Nums.scorePlayerWidth, hh Nums.scorePlayerHeight, cc "player-score-bg" ] []
-
-
-scorePlayerOffset : Int -> Attribute Msg
-scorePlayerOffset position =
-    tt Nums.scorePlayerX <| Nums.scorePlayerY position
-
-
-scorePlayerText : Player -> Svg Msg
-scorePlayerText player =
-    Svg.text_ [ xx Nums.scorePlayerTextX, yy Nums.scorePlayerTextY ] [ tx <| Player.scoreText player ]
-
-
-scorePlayerProgress : Int -> Svg Msg
-scorePlayerProgress percent =
-    let
-        width =
-            Nums.scorePlayerWidth * percent // 100
-    in
-    Svg.rect [ ww width, hh Nums.scorePlayerHeight, cc "player-progress" ] []
+buttonOffset : Attribute Msg
+buttonOffset =
+    tt Nums.buttonX Nums.buttonY
 
 
 

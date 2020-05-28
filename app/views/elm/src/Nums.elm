@@ -19,11 +19,26 @@ viewHeight =
 
 viewMargin : Int
 viewMargin =
-    30
+    40
 
 
 
 -- Playing cards
+
+
+cardImageWidth : Int
+cardImageWidth =
+    654
+
+
+cardImageHeight : Int
+cardImageHeight =
+    1000
+
+
+cardMargin : Int
+cardMargin =
+    4
 
 
 cardWidth : Int
@@ -43,66 +58,24 @@ cardHeight =
     100
 
 
-
--- Pack
-
-
-packX : Int
-packX =
-    viewWidth // 2 - cardWidth - (cardMargin // 2)
+cardX : Int -> Int
+cardX cid =
+    remainderBy 4 cid * (cardWidth + cardMargin)
 
 
-packY : Int
-packY =
-    viewHeight // 2 - (cardHeight // 2)
+cardY : Int -> Int
+cardY cid =
+    (cid // 4) * (cardHeight + cardMargin)
 
 
+cardsYOffset : Position -> Int
+cardsYOffset position =
+    case position of
+        S ->
+            0
 
--- Discard pile
-
-
-discardX : Int
-discardX =
-    viewWidth // 2 + (cardMargin // 2)
-
-
-discardY : Int
-discardY =
-    viewHeight // 2 - (cardHeight // 2)
-
-
-
--- Name badges
-
-
-badgeWidth : Int
-badgeWidth =
-    handWidth
-
-
-badgeHeight : Int
-badgeHeight =
-    50
-
-
-badgeTextSize : Int
-badgeTextSize =
-    -- match this with what's in card_table.sass
-    25
-
-
-badgeTextX : Int
-badgeTextX =
-    badgeWidth // 2
-
-
-badgeTextY : Int
-badgeTextY =
-    badgeHeight // 2 + badgeTextSize // 3
-
-
-
--- Relative positions
+        _ ->
+            badgeHeight + badgeMargin
 
 
 handOffset : Position -> ( Int, Int )
@@ -142,24 +115,61 @@ handOffset position =
     ( x, y )
 
 
-cardsYOffset : Position -> Int
-cardsYOffset position =
-    case position of
-        S ->
-            0
-
-        _ ->
-            badgeHeight + badgeMargin
+handHeight : Int
+handHeight =
+    cardHeight * 3 + cardMargin * 2 + badgeMargin + badgeHeight
 
 
-cardX : Int -> Int
-cardX cid =
-    remainderBy 4 cid * (cardWidth + cardMargin)
+handWidth : Int
+handWidth =
+    cardWidth * 4 + cardMargin * 3
 
 
-cardY : Int -> Int
-cardY cid =
-    (cid // 4) * (cardHeight + cardMargin)
+
+-- Pack
+
+
+packX : Int
+packX =
+    viewWidth // 2 - cardWidth - (cardMargin // 2)
+
+
+packY : Int
+packY =
+    viewHeight // 2 - (cardHeight // 2)
+
+
+
+-- Discard pile
+
+
+discardX : Int
+discardX =
+    viewWidth // 2 + (cardMargin // 2)
+
+
+discardY : Int
+discardY =
+    viewHeight // 2 - (cardHeight // 2)
+
+
+
+-- Name badges
+
+
+badgeMargin : Int
+badgeMargin =
+    20
+
+
+badgeWidth : Int
+badgeWidth =
+    handWidth + 44
+
+
+badgeHeight : Int
+badgeHeight =
+    50
 
 
 badgeOffset : Position -> ( Int, Int )
@@ -179,122 +189,44 @@ badgeOffset position =
     ( x, y )
 
 
-
--- Private
-
-
-badgeMargin : Int
-badgeMargin =
-    20
+badgeTextSize : Int
+badgeTextSize =
+    -- match this with what's in card_table.sass
+    24
 
 
-cardImageWidth : Int
-cardImageWidth =
-    654
+badgeTextX : Int
+badgeTextX =
+    badgeWidth // 2
 
 
-cardImageHeight : Int
-cardImageHeight =
-    1000
-
-
-cardMargin : Int
-cardMargin =
-    4
-
-
-handHeight : Int
-handHeight =
-    cardHeight * 3 + cardMargin * 2 + badgeMargin + badgeHeight
-
-
-handWidth : Int
-handWidth =
-    cardWidth * 4 + cardMargin * 3
+badgeTextY : Int
+badgeTextY =
+    badgeHeight // 2 + badgeTextSize // 3
 
 
 
--- Score
+-- Button
 
 
-scoreButtonHeight : Int
-scoreButtonHeight =
-    scorePlayerHeight
-
-
-scoreButtonWidth : Int
-scoreButtonWidth =
-    260
-
-
-scoreButtonTextX : Int
-scoreButtonTextX =
-    scoreButtonWidth // 2
-
-
-scoreButtonTextY : Int
-scoreButtonTextY =
-    scorePlayerHeight // 2 + scoreTextSize // 4
-
-
-scoreButtonX : Int
-scoreButtonX =
-    (scoreWidth - scoreButtonWidth) // 2
-
-
-scoreButtonY : Int
-scoreButtonY =
-    scorePlayerY -1
-
-
-scoreHeight : Int -> Int
-scoreHeight num =
-    scorePlayerHeight * (num + 1) + scoreInsideMargin * (num + 2)
-
-
-scoreWidth : Int
-scoreWidth =
-    viewWidth - 2 * scoreOutsideMargin
-
-
-scoreInsideMargin : Int
-scoreInsideMargin =
-    50
-
-
-scoreOutsideMargin : Int
-scoreOutsideMargin =
-    100
-
-
-scorePlayerWidth : Int
-scorePlayerWidth =
-    scoreWidth - 2 * scoreInsideMargin
-
-
-scorePlayerHeight : Int
-scorePlayerHeight =
+buttonHeight : Int
+buttonHeight =
     60
 
 
-scorePlayerX : Int
-scorePlayerX =
-    scoreInsideMargin
+buttonWidth : Int
+buttonWidth =
+    260
 
 
-scorePlayerY : Int -> Int
-scorePlayerY position =
-    scorePlayerHeight * (position + 1) + scoreInsideMargin * (position + 2)
+buttonTextX : Int
+buttonTextX =
+    buttonWidth // 2
 
 
-scorePlayerTextX : Int
-scorePlayerTextX =
-    scorePlayerWidth // 2
-
-
-scorePlayerTextY : Int
-scorePlayerTextY =
-    scorePlayerHeight // 2 + scoreTextSize // 3
+buttonTextY : Int
+buttonTextY =
+    buttonHeight // 2 + scoreTextSize // 4
 
 
 scoreTextSize : Int
@@ -303,14 +235,14 @@ scoreTextSize =
     30
 
 
-scoreX : Int
-scoreX =
-    scoreOutsideMargin
+buttonX : Int
+buttonX =
+    viewWidth // 2 - buttonWidth // 2
 
 
-scoreY : Int -> Int
-scoreY num =
-    (viewHeight - scoreHeight num) // 2
+buttonY : Int
+buttonY =
+    viewHeight // 2 - buttonHeight // 2
 
 
 

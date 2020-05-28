@@ -4,10 +4,9 @@ module Player exposing
     , badge
     , debug
     , replace
-    , replaceAndCheck
+    , replaceAndCheckPoof
     , scoreText
     , totalScore
-    , unveil
     )
 
 import Card exposing (Card)
@@ -40,16 +39,37 @@ type Position
 badge : Player -> String
 badge player =
     let
-        handle =
-            player.handle
+        old_ =
+            if player.score == 0 then
+                ""
+
+            else
+                String.fromInt player.score ++ " + "
+
+        score =
+            Hand.score player.hand
+
+        score_ =
+            String.fromInt score
 
         total =
-            String.fromInt player.score
+            player.penalty * score + player.score
 
-        current =
-            String.fromInt (Hand.score player.hand)
+        penalty =
+            if player.penalty == 2 then
+                " × 2 "
+
+            else
+                ""
+
+        total_ =
+            if total == score then
+                ""
+
+            else
+                penalty ++ " = " ++ String.fromInt total
     in
-    player.handle ++ " " ++ total ++ "•" ++ current
+    player.handle ++ " " ++ old_ ++ score_ ++ total_
 
 
 debug : Player -> String
@@ -100,8 +120,8 @@ replace cid card player =
     { player | hand = uHand }
 
 
-replaceAndCheck : Int -> Card -> Player -> ( Player, Maybe Int )
-replaceAndCheck cid card player =
+replaceAndCheckPoof : Int -> Card -> Player -> ( Player, Maybe Int )
+replaceAndCheckPoof cid card player =
     let
         uCard =
             Card.exposed card.num
@@ -113,7 +133,7 @@ replaceAndCheck cid card player =
             { player | hand = uHand }
 
         ( cPlayer, discard ) =
-            check uPlayer
+            checkPoof uPlayer
     in
     ( cPlayer, discard )
 
@@ -149,20 +169,15 @@ totalScore player =
     player.penalty * Hand.score player.hand + player.score
 
 
-unveil : Int -> Player -> Player
-unveil pid player =
-    { player | hand = Hand.unveil player.hand }
-
-
 
 -- Private
 
 
-check : Player -> ( Player, Maybe Int )
-check player =
+checkPoof : Player -> ( Player, Maybe Int )
+checkPoof player =
     let
         ( hand, discard ) =
-            Hand.check player.hand
+            Hand.checkPoof player.hand
 
         cPlayer =
             { player | hand = hand }

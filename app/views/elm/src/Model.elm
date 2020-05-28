@@ -40,11 +40,12 @@ type alias Model =
 
 
 type State
-    = Reveal
+    = Reveal2
     | Choose
     | ChosenDiscard
     | ChosenPack
     | ChosenPackDiscard
+    | RevealRest Int
     | HandOver
     | Waiting
     | GameOver
@@ -60,7 +61,7 @@ init flags =
     , pack = Card.hidden 0
     , discard = Card.exposed 0
     , players = Players.init setup.player_id setup.players
-    , state = Reveal
+    , state = Reveal2
     , upto = setup.upto
     , debug = setup.debug
     }
@@ -220,7 +221,7 @@ chooseDiscardCard pid cid model =
             model
                 |> updatePlayers players
                 |> updateDiscard (Maybe.withDefault card.num num)
-                |> checkTurn
+                |> checkOver
 
         _ ->
             model
@@ -257,7 +258,7 @@ choosePackCard pid cid model =
                 |> hidePack
                 |> updatePlayers players
                 |> updateDiscard (Maybe.withDefault card.num num)
-                |> checkTurn
+                |> checkOver
 
         _ ->
             model
@@ -291,14 +292,14 @@ choosePackDiscardCard pid cid model =
                 model
                     |> updatePlayers players
                     |> updateDiscard (Maybe.withDefault model.discard.num num)
-                    |> checkTurn
+                    |> checkOver
 
             else
                 model
                     |> hidePack
                     |> updatePlayers players
                     |> updateDiscard (Maybe.withDefault model.pack.num num)
-                    |> checkTurn
+                    |> checkOver
 
         _ ->
             model
@@ -337,7 +338,7 @@ resetPlayer pid score model =
                 uPlayers =
                     Players.put pid uPlayer model.players
             in
-            { model | players = uPlayers, state = Reveal }
+            { model | players = uPlayers, state = Reveal2 }
 
         Nothing ->
             model
@@ -351,8 +352,8 @@ debug model =
 
         state =
             case model.state of
-                Reveal ->
-                    "Reveal"
+                Reveal2 ->
+                    "Reveal2"
 
                 Choose ->
                     "Choose"
@@ -365,6 +366,9 @@ debug model =
 
                 ChosenPackDiscard ->
                     "ChosenPackDiscard"
+
+                RevealRest outPid ->
+                    "RevealRest " ++ String.fromInt outPid
 
                 HandOver ->
                     "HandOver"
@@ -395,27 +399,15 @@ revealCard pid cid model =
     in
     case playerCard of
         ( Just player, Just card ) ->
-            let
-                players =
-                    Players.updateReveal cid card player model.players
+            case model.state of
+                Reveal2 ->
+                    reveal2Card cid card player model
 
-                allDone =
-                    Players.toList players
-                        |> List.map .hand
-                        |> List.map Hand.exposed
-                        |> List.map (\n -> n == 2)
-                        |> List.foldl (&&) True
+                RevealRest outPid ->
+                    revealRestCard outPid cid card player model
 
-                state =
-                    if allDone then
-                        Choose
-
-                    else
-                        Reveal
-            in
-            model
-                |> updatePlayers players
-                |> updateState state
+                _ ->
+                    model
 
         _ ->
             model
@@ -425,8 +417,8 @@ revealCard pid cid model =
 -- Private
 
 
-checkTurn : Model -> Model
-checkTurn model =
+checkOver : Model -> Model
+checkOver model =
     let
         toMove =
             Players.toMove model.players
@@ -435,7 +427,11 @@ checkTurn model =
             case toMove of
                 Just player ->
                     if Hand.out player.hand then
-                        ( HandOver, player.pid )
+                        if Players.allOut model.players then
+                            ( HandOver, player.pid )
+
+                        else
+                            ( RevealRest player.pid, 0 )
 
                     else
                         ( Choose, 0 )
@@ -444,11 +440,16 @@ checkTurn model =
                     ( HandOver, 0 )
 
         players =
-            if state == HandOver then
-                Players.unveilAll outPid model.players
+            case state of
+                HandOver ->
+                    Players.updatePenalty outPid model.players
+                        |> Players.updateRevealRestTurns
 
-            else
-                model.players
+                RevealRest pid ->
+                    Players.updateRevealRestTurns model.players
+
+                _ ->
+                    model.players
 
         gameOver =
             if state == HandOver then
@@ -516,6 +517,75 @@ playerHand pid nums model =
 
         Nothing ->
             model
+
+
+reveal2Card : Int -> Card -> Player -> Model -> Model
+reveal2Card cid card player model =
+    let
+        players =
+            Players.updateReveal cid card player model.players
+
+        allDone =
+            Players.toList players
+                |> List.map .hand
+                |> List.map Hand.exposed
+                |> List.map (\n -> n == 2)
+                |> List.foldl (&&) True
+
+        state =
+            if allDone then
+                Choose
+
+            else
+                Reveal2
+    in
+    model
+        |> updatePlayers players
+        |> updateState state
+
+
+revealRestCard : Int -> Int -> Card -> Player -> Model -> Model
+revealRestCard outPid cid card player model =
+    let
+        ( pPlayers, discard ) =
+            Players.replaceAndCheckPoof cid card player model.players
+
+        tPlayers =
+            Players.updateRevealRestTurns pPlayers
+
+        state =
+            if Players.allOut tPlayers then
+                HandOver
+
+            else
+                RevealRest outPid
+
+        uPlayers =
+            case state of
+                HandOver ->
+                    Players.updatePenalty outPid tPlayers
+
+                _ ->
+                    tPlayers
+
+        gameOver =
+            if state == HandOver then
+                Players.uptoExceeded model.upto uPlayers
+
+            else
+                False
+
+        uState =
+            if gameOver then
+                GameOver
+
+            else
+                state
+    in
+    model
+        |> updatePlayers uPlayers
+        |> updateDiscard (Maybe.withDefault model.discard.num discard)
+        |> updateState uState
 
 
 updateDiscard : Int -> Model -> Model

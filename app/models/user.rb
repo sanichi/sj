@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_secure_password
 
   MAX_NAME = 15
-  MAX_HANDLE = 10
+  MAX_HANDLE = 8
   MIN_HANDLE = 2
   MIN_PASSWORD = 6
 

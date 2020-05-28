@@ -1,17 +1,20 @@
 module Players exposing
     ( Players
     , all
+    , allOut
     , get
     , init
     , put
+    , replaceAndCheckPoof
     , size
     , toList
     , toMove
     , totalScore
     , totalScores
-    , unveilAll
     , updateCard
+    , updatePenalty
     , updateReveal
+    , updateRevealRestTurns
     , uptoExceeded
     )
 
@@ -31,6 +34,14 @@ all players =
     Dict.values players
 
 
+allOut : Players -> Bool
+allOut players =
+    all players
+        |> List.map .hand
+        |> List.map Hand.out
+        |> List.foldl (&&) True
+
+
 get : Int -> Players -> Maybe Player
 get pid players =
     Dict.get pid players
@@ -39,6 +50,18 @@ get pid players =
 init : Int -> List ProtoPlayer -> Players
 init pid list =
     build pid list Dict.empty
+
+
+replaceAndCheckPoof : Int -> Card -> Player -> Players -> ( Players, Maybe Int )
+replaceAndCheckPoof cid card player players =
+    let
+        ( uPlayer, discard ) =
+            Player.replaceAndCheckPoof cid card player
+
+        uPlayers =
+            put player.pid uPlayer players
+    in
+    ( uPlayers, discard )
 
 
 size : Players -> Int
@@ -92,14 +115,23 @@ put pid player players =
     Dict.insert pid player players
 
 
-unveilAll : Int -> Players -> Players
-unveilAll outPid players =
+updateCard : Int -> Card -> Player -> Players -> ( Players, Maybe Int )
+updateCard cid card player players =
     let
-        unveiled =
-            Dict.map Player.unveil players
+        ( uPlayers, discard ) =
+            replaceAndCheckPoof cid card player players
 
+        next =
+            updateNextTurn player.position (size uPlayers)
+    in
+    ( Dict.map next uPlayers, discard )
+
+
+updatePenalty : Int -> Players -> Players
+updatePenalty outPid players =
+    let
         totals =
-            all unveiled |> List.map (\p -> Hand.score p.hand)
+            all players |> List.map (\p -> Hand.score p.hand)
 
         lowest =
             List.minimum totals |> Maybe.withDefault 1000
@@ -114,26 +146,27 @@ unveilAll outPid players =
             else
                 player
     in
-    Dict.map penaliser unveiled
-
-
-updateCard : Int -> Card -> Player -> Players -> ( Players, Maybe Int )
-updateCard cid card player players =
-    let
-        ( uPlayers, discard ) =
-            replaceAndCheck cid card player players
-
-        next =
-            updateNextTurn player.position (size uPlayers)
-    in
-    ( Dict.map next uPlayers, discard )
+    Dict.map penaliser players
 
 
 updateReveal : Int -> Card -> Player -> Players -> Players
 updateReveal cid card player players =
     players
-        |> replace cid card player
+        |> replaceCard cid card player
         |> updateRevealTurns
+
+
+updateRevealRestTurns : Players -> Players
+updateRevealRestTurns players =
+    let
+        mover index player =
+            if Hand.out player.hand then
+                { player | turn = False }
+
+            else
+                { player | turn = True }
+    in
+    Dict.map mover players
 
 
 uptoExceeded : Int -> Players -> Bool
@@ -214,25 +247,13 @@ decode position =
             S
 
 
-replace : Int -> Card -> Player -> Players -> Players
-replace cid card player players =
+replaceCard : Int -> Card -> Player -> Players -> Players
+replaceCard cid card player players =
     let
         uPlayer =
             Player.replace cid card player
     in
     put player.pid uPlayer players
-
-
-replaceAndCheck : Int -> Card -> Player -> Players -> ( Players, Maybe Int )
-replaceAndCheck cid card player players =
-    let
-        ( uPlayer, discard ) =
-            Player.replaceAndCheck cid card player
-
-        uPlayers =
-            put player.pid uPlayer players
-    in
-    ( uPlayers, discard )
 
 
 updateNextTurn : Position -> Int -> Int -> Player -> Player
