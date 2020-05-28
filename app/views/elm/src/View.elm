@@ -61,11 +61,11 @@ debug model =
 -- Player badges
 
 
-badge : Player -> Svg Msg
-badge player =
+badge : State -> Player -> Svg Msg
+badge state player =
     Svg.g [ cc "badge", badgeOffset player.position ]
         [ badgeRect player
-        , badgeText player
+        , badgeText state player
         ]
 
 
@@ -92,9 +92,24 @@ badgeRect player =
     Svg.rect [ ww Nums.badgeWidth, hh Nums.badgeHeight, c, rx, ry ] []
 
 
-badgeText : Player -> Svg Msg
-badgeText player =
-    Svg.text_ [ xx Nums.badgeTextX, yy Nums.badgeTextY ] [ tx <| Player.badge player ]
+badgeText : State -> Player -> Svg Msg
+badgeText state player =
+    let
+        showTotal =
+            case state of
+                HandOver ->
+                    True
+
+                GameOver ->
+                    True
+
+                _ ->
+                    False
+
+        text =
+            Player.badge showTotal player
+    in
+    Svg.text_ [ xx Nums.badgeTextX, yy Nums.badgeTextY ] [ tx text ]
 
 
 
@@ -113,7 +128,7 @@ cardsAndName state player =
             groupedCards state player
 
         name =
-            badge player
+            badge state player
 
         translate =
             handOffset player.position

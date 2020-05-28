@@ -36,8 +36,8 @@ type Position
     | W
 
 
-badge : Player -> String
-badge player =
+badge : Bool -> Player -> String
+badge showTotal player =
     let
         old_ =
             if player.score == 0 then
@@ -63,7 +63,7 @@ badge player =
                 ""
 
         total_ =
-            if total == score then
+            if total == score || not showTotal then
                 ""
 
             else
