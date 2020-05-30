@@ -1,6 +1,6 @@
 server "thessaloniki.sanichi.me", user: "sanichi", roles: %w{web app db}
-set :deploy_to, "/var/www/me.sanichi.sj"
-set :rails_env, 'production'
+set :deploy_to, "/var/www/me.sj"
+set :rails_env, "production"
 
 set :rbenv_type, :user
 set :rbenv_ruby, File.read('.ruby-version').strip
