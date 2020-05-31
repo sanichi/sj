@@ -100,6 +100,9 @@ badgeText state player =
                 HandOver ->
                     True
 
+                Waiting ->
+                    True
+
                 GameOver ->
                     True
 
