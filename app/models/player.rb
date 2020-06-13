@@ -1,4 +1,6 @@
 class Player < ApplicationRecord
+  include Pageable
+
   belongs_to :user
   belongs_to :game
 

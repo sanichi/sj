@@ -29,7 +29,7 @@ class UsersController < ApplicationController
   end
 
   def scores
-    @players = @user.players.finished
+    @players = Player.paginate(@user.players.finished, params, scores_user_path, remote: true)
   end
 
   private

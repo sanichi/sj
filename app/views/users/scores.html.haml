@@ -1,6 +1,6 @@
 - set_meta_tags title: t("game.scores")
 
-- if @players.empty?
+- if @players.matches.empty?
   %p.faded.text-center
     = "No games finished yet. Start a"
     = succeed("?") do
@@ -20,10 +20,5 @@
                 %th.text-center= t("game.score")
                 %th= t("game.opponents")
                 %th.text-center= t("game.ended")
-            %tbody
-              - @players.each do |player|
-                %tr
-                  %td.text-center{class: player.place.abs == 1 ? 'font-weight-bold' : ''}= place(player.place)
-                  %td.text-center= player.score
-                  %td= render "players", players: player.game.players.where.not(user_id: @user.id)
-                  %td.text-center= link_to_if can?(:show, Game), time_ago(player.game.updated_at), game_path(player.game)
+            %tbody#results
+              = render "scores", players: @players
