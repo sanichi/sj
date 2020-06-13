@@ -1,6 +1,10 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
 
+  def index
+    @users = User.paginate(@users, params, users_path, remote: true)
+  end
+
   def create
     if @user.save
       redirect_to @user

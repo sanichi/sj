@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Pageable
+
   has_secure_password
 
   MAX_NAME = 15

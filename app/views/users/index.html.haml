@@ -11,10 +11,7 @@
             %tr
               %th= t("user.handle")
               %th= t("user.name.name")
-          %tbody
-            - @users.each do |user|
-              %tr
-                %td= link_to user.handle_extra, user
-                %td= user.name
+          %tbody#results
+            = render "results", users: @users
       .footer
         = link_to t("user.new"), new_user_path, class: "btn btn-info btn-sm"
