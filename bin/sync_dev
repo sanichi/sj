@@ -2,24 +2,19 @@
 use strict;
 
 # Setup.
-my $tsu_app = '/var/www/sj/current';
-my $tsu_db  = 'sni_sj_app_production';
-my $tmp_sql = '/tmp/wd.sql';
-my $loc_app = '/Users/mjo/Projects/sni_sj_app';
+my $rem_usr = 'sanichi@thessaloniki.sanichi.me';
+my $rem_db  = 'sni_sj_app_production';
 my $loc_db  = 'sni_sj_app_development';
-my $ssh_usr = 'sanichi@thessaloniki.sanichi.me';
-
-# Sanity check.
-&check(-d $loc_app, "directory $loc_app does not exist");
+my $tmp_sql = '/tmp/wd.sql';
 
 # Generate data on server.
-&run("ssh $ssh_usr 'pg_dump $tsu_db --no-owner --no-privileges --clean --file $tmp_sql'", "couldn't export DB on server");
+&run("ssh $rem_usr 'pg_dump $rem_db --no-owner --no-privileges --clean --file $tmp_sql'", "couldn't export DB on server");
 
 # Remove old local data.
 &run("rm -f $tmp_sql", "couldn't remove $tmp_sql") if -f $tmp_sql;
 
 # Copy new data from server.
-&run("scp $ssh_usr:$tmp_sql $tmp_sql", "couldn't copy SQL export from server");
+&run("scp $rem_usr:$tmp_sql $tmp_sql", "couldn't copy SQL export from server");
 
 # Does this all look good so far?
 my $ans = &ask('Proceed with sync [yN]', qr/^(Y(es)?|No?|)$/i);
