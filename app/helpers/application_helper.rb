@@ -32,7 +32,7 @@ module ApplicationHelper
     when days    < 1  then "#{hours.round}h ago"
     when days    < 7  then time.strftime('%a')
     when days    < 31 then "#{days.round}d ago"
-    when year    < 1  then time.strftime('%b')
+    when years   < 1  then time.strftime('%b')
     else                   time.strftime('%Y')
     end.gsub(" ", "&nbsp;").html_safe
   end
