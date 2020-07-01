@@ -75,7 +75,7 @@ def login(user)
 end
 
 def t(key, **opts)
-  I18n.t(key, opts)
+  I18n.t(key, **opts)
 end
 
 def expect_error(page, text)
