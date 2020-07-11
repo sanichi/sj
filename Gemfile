@@ -16,7 +16,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 group :development, :test do
   gem 'rspec-rails', '~> 4.0.0'
   gem 'capybara', '~> 3.28'
-  gem 'factory_bot_rails', '~> 5.2'
+  gem 'factory_bot_rails', '~> 6.0'
   gem 'faker', '~> 2.10'
   gem 'byebug', platform: :mri
 end
@@ -29,5 +29,5 @@ group :development do
   gem 'puma', '~> 4.3'
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-passenger', '~> 0.2', require: false
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'listen', '~> 3.2'
 end
