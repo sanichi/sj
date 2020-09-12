@@ -1,11 +1,15 @@
 source 'https://rubygems.org'
 
-gem 'rails', '6.0.3.2'
+gem 'rails', '6.0.3.3'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'haml-rails', '~> 2.0'
 gem 'jquery-rails', '~> 4.3'
 gem 'sassc-rails', '~> 2.1'
-gem 'bootstrap', '~> 4.3'
+# start: until problems solved
+# gem "bootstrap", '~> 4.5'
+gem "autoprefixer-rails", "9.8.5"
+gem "bootstrap", "4.5.0"
+# end: until problems solved
 gem 'uglifier', '~> 4.2'
 gem 'bcrypt', '~> 3.1.7'
 gem 'jbuilder', '~> 2.7'
