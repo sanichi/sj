@@ -11,7 +11,9 @@
       %section
         .header.text-center
           %h3= @user.handle
-          %span.faded= @user.name
+          %span.faded
+            = @user.name
+            = "#{@first}/#{@games}"
         .body
           %table{class: "table table-bordered table-sm mt-3"}
             %thead
