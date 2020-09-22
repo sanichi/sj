@@ -15,6 +15,7 @@ describe Game do
       click_link t("game.new")
       select data.participants.to_s, from: t("game.participants")
       select data.upto.to_s, from: t("game.upto")
+      select t("game.variant.#{data.variant}"), from: t("game.variant.variant")
       click_button t("game.save")
 
       expect(page).to have_title t("game.games")
@@ -24,6 +25,7 @@ describe Game do
       expect(g.user).to eq user
       expect(g.participants).to eq data.participants
       expect(g.upto).to eq data.upto
+      expect(g.variant).to eq data.variant
     end
 
     it "delete game" do

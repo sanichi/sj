@@ -4,6 +4,7 @@ class Game < ApplicationRecord
   CARDS = (-2..12).to_a
   PARTICIPANTS = [2, 3, 4]
   UPTO = [25, 50, 100, 200, 300, 400, 500]
+  VARIANTS = %w/standard peek/
 
   WAITING = "waiting"
   STARTED = "started"
@@ -15,6 +16,7 @@ class Game < ApplicationRecord
 
   validates :participants, numericality: { integer_only: true}, inclusion: { in: PARTICIPANTS }
   validates :upto, numericality: { integer_only: true, greater_than_or_equal_to: UPTO.first, less_than_or_equal_to: UPTO.last }
+  validates :variant, inclusion: { in: VARIANTS }
 
   default_scope { order(created_at: :desc) }
 

@@ -26,3 +26,7 @@ en:
     state: State
     upto: Upto
     votes: Votes
+    variant:
+      variant: Variant
+      standard: Standard
+      peek: Peek-a-Boo
