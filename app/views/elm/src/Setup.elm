@@ -25,9 +25,9 @@ decode value =
 type alias Setup =
     { player_id : Int
     , players : List ProtoPlayer
-    , debug : Bool
     , upto : Int
     , variant : String
+    , debug : Bool
     }
 
 
@@ -36,9 +36,9 @@ flags =
     D.map5 Setup
         (D.field "player_id" D.int |> withDefault default.player_id)
         (D.field "players" (D.list proto) |> withDefault default.players)
-        (D.field "debug" D.bool |> withDefault default.debug)
         (D.field "upto" D.int |> withDefault default.upto)
         (D.field "variant" D.string |> withDefault default.variant)
+        (D.field "debug" D.bool |> withDefault default.debug)
 
 
 proto : Decoder ProtoPlayer
@@ -51,7 +51,7 @@ proto =
 
 default : Setup
 default =
-    Setup 0 [] False 100 "standard"
+    Setup 0 [] 100 "standard" False
 
 
 

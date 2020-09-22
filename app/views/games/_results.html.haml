@@ -5,6 +5,7 @@
       - unless game.players.count == game.participants
         = "(#{game.players.count}/#{game.participants})"
     %td= link_to game.state, game
+    %td= link_to game.variant, game
     %td= link_to game.user.handle, scores_user_path(game.user)
     %td= time_ago(game.created_at)
-= render "utils/pagination/links", pager: games, columns: 4
+= render "utils/pagination/links", pager: games, columns: 5
