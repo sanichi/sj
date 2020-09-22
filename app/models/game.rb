@@ -4,7 +4,7 @@ class Game < ApplicationRecord
   CARDS = (-2..12).to_a
   PARTICIPANTS = [2, 3, 4]
   UPTO = [25, 50, 100, 200, 300, 400, 500]
-  VARIANTS = %w/standard peek/
+  VARIANTS = %w/stnd peek/
 
   WAITING = "waiting"
   STARTED = "started"

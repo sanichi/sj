@@ -51,7 +51,7 @@ proto =
 
 default : Setup
 default =
-    Setup 0 [] 100 "standard" False
+    Setup 0 [] 100 "stnd" False
 
 
 

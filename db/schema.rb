@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 2020_09_22_163050) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "hand", limit: 2, default: 1
-    t.string "variant", limit: 10, default: "standard"
+    t.string "variant", limit: 4, default: "stnd"
     t.index ["user_id"], name: "index_games_on_user_id"
   end
 
