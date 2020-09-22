@@ -121,22 +121,33 @@ badgeText state player =
 
 hands : Model -> List (Svg Msg)
 hands model =
-    List.map (cardsAndName model.state) <| Players.all model.players
+    List.map (cardsAndName model) <| Players.all model.players
 
 
-cardsAndName : State -> Player -> Svg Msg
-cardsAndName state player =
+cardsAndName : Model -> Player -> Svg Msg
+cardsAndName model player =
     let
         cards =
-            groupedCards state player
+            groupedCards model.state player
+
+        overlays =
+            overlayCards model player
 
         name =
-            badge state player
+            badge model.state player
+
+        elements =
+            case overlays of
+                Just more ->
+                    [ name, cards, more ]
+
+                Nothing ->
+                    [ name, cards ]
 
         translate =
             handOffset player.position
     in
-    Svg.g [ translate ] [ name, cards ]
+    Svg.g [ translate ] elements
 
 
 cardsOffset : Position -> Attribute Msg
@@ -292,6 +303,45 @@ handOffset position =
             Nums.handOffset position
     in
     tt x y
+
+
+overlayCards : Model -> Player -> Maybe (Svg Msg)
+overlayCards model player =
+    if model.variant /= "peek" || model.pid == player.pid then
+        Nothing
+
+    else
+        let
+            mapper =
+                overlayElement model player
+
+            elements =
+                Hand.map mapper player.hand
+                    |> List.filterMap identity
+        in
+        Just <| Svg.g [ cardsOffset player.position ] elements
+
+
+overlayElement : Model -> Player -> Int -> Card -> Maybe (Svg Msg)
+overlayElement model player cid card =
+    if card.exists && not card.exposed then
+        let
+            faded =
+                Atr.opacity "0.20"
+
+            frame =
+                [ cardX cid, cardY cid, cardWidth, cardHeight, faded ]
+
+            url =
+                cardUrl <| Card.exposed card.num
+
+            grp =
+                cardGroup frame url Noop
+        in
+        Just grp
+
+    else
+        Nothing
 
 
 
