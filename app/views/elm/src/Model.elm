@@ -35,6 +35,7 @@ type alias Model =
     , players : Players
     , state : State
     , upto : Int
+    , variant : String
     , debug : Bool
     }
 
@@ -63,6 +64,7 @@ init flags =
     , players = Players.init setup.player_id setup.players
     , state = Reveal2
     , upto = setup.upto
+    , variant = setup.variant
     , debug = setup.debug
     }
 
@@ -386,7 +388,7 @@ debug model =
             String.fromInt model.pack.num
 
         mdl =
-            String.join " " [ pid, pck, state ]
+            String.join " " [ pid, pck, state, model.variant ]
     in
     String.join " | " (mdl :: plrs)
 
