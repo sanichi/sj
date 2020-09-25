@@ -3,7 +3,7 @@ FactoryBot.define do
     user
     participants { Game::PARTICIPANTS.sample }
     upto         { Game::UPTO.sample }
-    variant      { Game::VARIANTS.sample }
+    peek         { [true, false].sample }
     debug        { [true, false].sample }
   end
 end

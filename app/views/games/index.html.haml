@@ -13,7 +13,8 @@
         %tr
           %th= t("game.players")
           %th= t("game.state")
-          %th= t("game.variant.variant")
+          %th.text-center= t("game.upto")
+          %th.text-center= t("game.short.peek")
           %th= t("game.started_by")
           %th= t("game.started_at")
       %tbody#results

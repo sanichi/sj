@@ -57,7 +57,7 @@ class GamesController < ApplicationController
   end
 
   def resource_params
-    permitted = [:participants, :upto, :variant]
+    permitted = [:participants, :peek, :upto]
     permitted.push :debug if current_user.admin?
     params.require(:game).permit(*permitted)
   end

@@ -2,7 +2,7 @@
   inputs = [
     [:participants, t("game.participants"),    :select,  menu: game_participants_menu(game.participants)],
     [:upto,         t("game.upto"),            :select,  menu: game_upto_menu(game.upto)],
-    [:variant,      t("game.variant.variant"), :select,  menu: game_variant_menu(game.variant)],
+    [:peek,         t("game.peek"),            :check],
   ]
   if current_user.admin?
     inputs.push [:debug, t("game.debug"), :check]

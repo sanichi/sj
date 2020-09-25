@@ -21,10 +21,6 @@ module GamesHelper
     options_for_select(Game::UPTO.map { |n| [n.to_s, n] }, selected)
   end
 
-  def game_variant_menu(selected)
-    options_for_select(Game::VARIANTS.map { |v| [t("game.variant.#{v}"), v] }, selected)
-  end
-
   def game_started_by_menu(selected)
     opts = User.pluck(:handle, :id)
     opts.unshift [t("any"), ""]

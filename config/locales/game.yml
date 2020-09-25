@@ -11,6 +11,7 @@ en:
     new: New Game
     opponents: Opponents
     participants: Participants
+    peek: Peek-a-Boo
     place: Place
     player: Player
     play: Play
@@ -26,7 +27,5 @@ en:
     state: State
     upto: Upto
     votes: Votes
-    variant:
-      peek: Peek-a-Boo
-      stnd: Standard
-      variant: Variant
+    short:
+      peek: PaB
