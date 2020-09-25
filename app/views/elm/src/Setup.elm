@@ -1,5 +1,6 @@
 module Setup exposing
-    ( ProtoPlayer
+    ( Options
+    , ProtoPlayer
     , decode
     )
 
@@ -22,23 +23,27 @@ decode value =
 -- Private
 
 
+type alias Options =
+    { debug : Bool
+    , peek : Bool
+    }
+
+
 type alias Setup =
     { player_id : Int
     , players : List ProtoPlayer
     , upto : Int
-    , variant : String
-    , debug : Bool
+    , options : Options
     }
 
 
 flags : Decoder Setup
 flags =
-    D.map5 Setup
+    D.map4 Setup
         (D.field "player_id" D.int |> withDefault default.player_id)
         (D.field "players" (D.list proto) |> withDefault default.players)
         (D.field "upto" D.int |> withDefault default.upto)
-        (D.field "variant" D.string |> withDefault default.variant)
-        (D.field "debug" D.bool |> withDefault default.debug)
+        (D.field "options" options |> withDefault default.options)
 
 
 proto : Decoder ProtoPlayer
@@ -49,9 +54,16 @@ proto =
         (D.field "position" D.string |> withDefault "S")
 
 
+options : Decoder Options
+options =
+    D.map2 Options
+        (D.field "debug" D.bool |> withDefault default.options.debug)
+        (D.field "peek" D.bool |> withDefault default.options.peek)
+
+
 default : Setup
 default =
-    Setup 0 [] 100 "stnd" False
+    Setup 0 [] 100 (Options False False)
 
 
 

@@ -24,7 +24,7 @@ import Json.Decode exposing (Value)
 import Msg exposing (Msg(..))
 import Player exposing (Player)
 import Players exposing (Players)
-import Setup
+import Setup exposing (Options)
 import Update exposing (Update)
 
 
@@ -35,8 +35,7 @@ type alias Model =
     , players : Players
     , state : State
     , upto : Int
-    , variant : String
-    , debug : Bool
+    , options : Options
     }
 
 
@@ -64,8 +63,7 @@ init flags =
     , players = Players.init setup.player_id setup.players
     , state = Reveal2
     , upto = setup.upto
-    , variant = setup.variant
-    , debug = setup.debug
+    , options = setup.options
     }
 
 
@@ -388,7 +386,7 @@ debug model =
             String.fromInt model.pack.num
 
         mdl =
-            String.join " " [ pid, pck, state, model.variant ]
+            String.join " " [ pid, pck, state ]
     in
     String.join " | " (mdl :: plrs)
 

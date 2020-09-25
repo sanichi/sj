@@ -17,7 +17,7 @@ view : Model -> Html Msg
 view model =
     let
         extras_ =
-            if model.debug then
+            if model.options.debug then
                 [ debug model ]
 
             else
@@ -307,10 +307,7 @@ handOffset position =
 
 overlayCards : Model -> Player -> Maybe (Svg Msg)
 overlayCards model player =
-    if model.variant /= "peek" || model.pid == player.pid then
-        Nothing
-
-    else
+    if model.options.peek && model.pid /= player.pid then
         let
             mapper =
                 overlayElement model player
@@ -320,6 +317,9 @@ overlayCards model player =
                     |> List.filterMap identity
         in
         Just <| Svg.g [ cardsOffset player.position ] elements
+
+    else
+        Nothing
 
 
 overlayElement : Model -> Player -> Int -> Card -> Maybe (Svg Msg)

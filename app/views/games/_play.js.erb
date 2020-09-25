@@ -66,8 +66,10 @@ $(function() {
       player_id: <%= @player.id %>,
       players: [ <%= game_js_player_list(@game, @player.id) %> ],
       upto: <%= @game.upto %>,
-      variant: '<%= @game.variant %>',
-      debug: <%= @game.debug ? 'true' : 'false' %>
+      options: {
+        debug: <%= @game.debug ? 'true' : 'false' %>,
+        peek: <%= @game.variant == 'peek' ? 'true' : 'false' %>
+      }
     }
   });
   app.ports.pushUpdates.subscribe(function(updates) {
