@@ -20,6 +20,11 @@ describe Game do
       else
         uncheck t("game.peek")
       end
+      if data.four
+        check t("game.four")
+      else
+        uncheck t("game.four")
+      end
       click_button t("game.save")
 
       expect(page).to have_title t("game.games")
@@ -28,8 +33,9 @@ describe Game do
       g = Game.first
       expect(g.user).to eq user
       expect(g.participants).to eq data.participants
-      expect(g.peek).to eq data.peek
       expect(g.upto).to eq data.upto
+      expect(g.peek).to eq data.peek
+      expect(g.four).to eq data.four
     end
 
     it "delete game" do

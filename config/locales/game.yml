@@ -4,6 +4,7 @@ en:
     debug: Debug
     delete: Abort
     ended: When
+    four: 4-in-a-Row
     game_id: 'Game %{id}'
     games: Games
     join: Join
@@ -28,4 +29,5 @@ en:
     upto: Upto
     votes: Votes
     short:
+      four: 4aR
       peek: PaB

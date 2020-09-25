@@ -7,6 +7,7 @@
     %td= link_to game.state, game
     %td.text-center= game.upto
     %td.text-center= game.peek ? "✔︎" : "✘"
+    %td.text-center= game.four ? "✔︎" : "✘"
     %td= link_to game.user.handle, scores_user_path(game.user)
     %td= time_ago(game.created_at)
-= render "utils/pagination/links", pager: games, columns: 6
+= render "utils/pagination/links", pager: games, columns: 7
