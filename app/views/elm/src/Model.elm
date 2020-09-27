@@ -217,10 +217,13 @@ chooseDiscardCard pid cid model =
             let
                 ( players, num ) =
                     Players.updateCard cid model.discard player model.players
+
+                discard =
+                    Maybe.withDefault card.num num
             in
             model
                 |> updatePlayers players
-                |> updateDiscard (Maybe.withDefault card.num num)
+                |> updateDiscard discard
                 |> checkOver
 
         _ ->
@@ -253,11 +256,14 @@ choosePackCard pid cid model =
             let
                 ( players, num ) =
                     Players.updateCard cid model.pack player model.players
+
+                discard =
+                    Maybe.withDefault card.num num
             in
             model
                 |> hidePack
                 |> updatePlayers players
-                |> updateDiscard (Maybe.withDefault card.num num)
+                |> updateDiscard discard
                 |> checkOver
 
         _ ->
@@ -547,7 +553,7 @@ reveal2Card cid card player model =
 revealRestCard : Int -> Int -> Card -> Player -> Model -> Model
 revealRestCard outPid cid card player model =
     let
-        ( pPlayers, discard ) =
+        ( pPlayers, num ) =
             Players.replaceAndCheckPoof cid card player model.players
 
         tPlayers =
@@ -581,10 +587,13 @@ revealRestCard outPid cid card player model =
 
             else
                 state
+
+        discard =
+            Maybe.withDefault model.discard.num num
     in
     model
         |> updatePlayers uPlayers
-        |> updateDiscard (Maybe.withDefault model.discard.num discard)
+        |> updateDiscard discard
         |> updateState uState
 
 
