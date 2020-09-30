@@ -133,7 +133,7 @@ replaceAndCheckPoof cid card player =
             { player | hand = uHand }
 
         ( cPlayer, discard ) =
-            checkPoof uPlayer
+            checkPoof cid uPlayer
     in
     ( cPlayer, discard )
 
@@ -173,11 +173,11 @@ totalScore player =
 -- Private
 
 
-checkPoof : Player -> ( Player, Maybe Int )
-checkPoof player =
+checkPoof : Int -> Player -> ( Player, Maybe Int )
+checkPoof cid player =
     let
         ( hand, discard ) =
-            Hand.checkPoof player.hand
+            Hand.checkPoof cid player.hand
 
         cPlayer =
             { player | hand = hand }

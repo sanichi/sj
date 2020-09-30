@@ -19,29 +19,30 @@ type alias Hand =
     Array Card
 
 
-checkPoof : Hand -> ( Hand, Maybe Int )
-checkPoof hand =
-    case matched 1 hand of
-        Just discard ->
-            ( poof 1 hand, Just discard )
+checkPoof : Int -> Hand -> ( Hand, Maybe Int )
+checkPoof cid hand =
+    let
+        cids =
+            matched cid hand
+    in
+    case cids of
+        [] ->
+            ( hand, Nothing )
 
         _ ->
-            case matched 2 hand of
-                Just discard ->
-                    ( poof 2 hand, Just discard )
+            let
+                uHand =
+                    poof cids hand
 
-                _ ->
-                    case matched 3 hand of
-                        Just discard ->
-                            ( poof 3 hand, Just discard )
+                discard =
+                    case get cid hand of
+                        Just card ->
+                            Just card.num
 
                         _ ->
-                            case matched 4 hand of
-                                Just discard ->
-                                    ( poof 4 hand, Just discard )
-
-                                _ ->
-                                    ( hand, Nothing )
+                            Nothing
+            in
+            ( uHand, discard )
 
 
 exposed : Hand -> Int
@@ -97,17 +98,22 @@ set cid card hand =
 
 
 columnIndexes : Int -> List Int
-columnIndexes col =
-    List.map (\d -> d + col) [ -1, 3, 7 ]
-
-
-matched : Int -> Hand -> Maybe Int
-matched col hand =
+columnIndexes cid =
     let
+        first =
+            remainderBy 4 cid
+    in
+    [ first, first + 4, first + 8 ]
+
+
+matched : Int -> Hand -> List Int
+matched cid hand =
+    let
+        cids =
+            columnIndexes cid
+
         cards =
-            columnIndexes col
-                |> List.map get
-                |> List.map (\f -> f hand)
+            List.map (\f -> f hand) <| List.map get cids
     in
     case cards of
         [ Just c1, Just c2, Just c3 ] ->
@@ -123,26 +129,21 @@ matched col hand =
                         |> List.foldl (&&) True
             in
             if allExist && allExposed && c1.num == c2.num && c1.num == c3.num then
-                Just c1.num
+                cids
 
             else
-                Nothing
+                []
 
         _ ->
-            Nothing
+            []
 
 
-poof : Int -> Hand -> Hand
-poof col hand =
-    remove (columnIndexes col) hand
-
-
-remove : List Int -> Hand -> Hand
-remove cids hand =
+poof : List Int -> Hand -> Hand
+poof cids hand =
     case cids of
         cid :: rest ->
             set cid Card.blank hand
-                |> remove rest
+                |> poof rest
 
         [] ->
             hand
