@@ -126,30 +126,31 @@ handWidth =
 
 
 
--- Pack
+-- Pack and discard pile
 
 
-packX : Int
-packX =
-    viewWidth // 2 - cardWidth - (cardMargin // 2)
-
-
-packY : Int
-packY =
-    viewHeight // 2 - (cardHeight // 2)
-
-
-
--- Discard pile
+extraSeparation : Int
+extraSeparation =
+    10
 
 
 discardX : Int
 discardX =
-    viewWidth // 2 + (cardMargin // 2)
+    viewWidth // 2 + (cardMargin // 2) + extraSeparation
 
 
 discardY : Int
 discardY =
+    viewHeight // 2 - (cardHeight // 2)
+
+
+packX : Int
+packX =
+    viewWidth // 2 - cardWidth - (cardMargin // 2) - extraSeparation
+
+
+packY : Int
+packY =
     viewHeight // 2 - (cardHeight // 2)
 
 
