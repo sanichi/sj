@@ -47,9 +47,9 @@ get pid players =
     Dict.get pid players
 
 
-init : Int -> List ProtoPlayer -> Players
-init pid list =
-    build pid list Dict.empty
+init : Int -> Bool -> List ProtoPlayer -> Players
+init pid four list =
+    build pid four list Dict.empty
 
 
 replaceAndCheckPoof : Int -> Card -> Player -> Players -> ( Players, Maybe Int )
@@ -186,8 +186,8 @@ uptoExceeded upto players =
 -- Private
 
 
-build : Int -> List ProtoPlayer -> Players -> Players
-build pid list players =
+build : Int -> Bool -> List ProtoPlayer -> Players -> Players
+build pid four list players =
     case list of
         [] ->
             players
@@ -195,16 +195,16 @@ build pid list players =
         proto :: rest ->
             let
                 nPlayer =
-                    convert pid proto
+                    convert pid four proto
 
                 uPlayers =
                     put proto.pid nPlayer players
             in
-            build pid rest uPlayers
+            build pid four rest uPlayers
 
 
-convert : Int -> ProtoPlayer -> Player
-convert pid proto =
+convert : Int -> Bool -> ProtoPlayer -> Player
+convert pid four proto =
     let
         position =
             decode proto.position
@@ -219,7 +219,7 @@ convert pid proto =
             else
                 False
     in
-    Player proto.pid proto.handle position hand True 1 active 0
+    Player proto.pid proto.handle position hand True 1 active 0 four
 
 
 decode : String -> Position

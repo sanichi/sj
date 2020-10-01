@@ -24,6 +24,7 @@ type alias Player =
     , penalty : Int
     , active : Bool
     , score : Int
+    , four : Bool
     }
 
 
