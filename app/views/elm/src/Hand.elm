@@ -13,17 +13,28 @@ module Hand exposing
 
 import Array exposing (Array)
 import Card exposing (Card)
+import Set
 
 
 type alias Hand =
     Array Card
 
 
-checkPoof : Int -> Hand -> ( Hand, Maybe Int )
-checkPoof cid hand =
+checkPoof : Int -> Bool -> Hand -> ( Hand, Maybe Int )
+checkPoof cid four hand =
     let
+        colCids =
+            matchedCol cid hand
+
+        rowCids =
+            if four then
+                matchedRow cid hand
+
+            else
+                []
+
         cids =
-            matched cid hand
+            Set.toList <| Set.fromList <| colCids ++ rowCids
     in
     case cids of
         [] ->
@@ -97,8 +108,8 @@ set cid card hand =
 -- Private
 
 
-columnIndexes : Int -> List Int
-columnIndexes cid =
+colIndexes : Int -> List Int
+colIndexes cid =
     let
         first =
             remainderBy 4 cid
@@ -106,11 +117,20 @@ columnIndexes cid =
     [ first, first + 4, first + 8 ]
 
 
-matched : Int -> Hand -> List Int
-matched cid hand =
+rowIndexes : Int -> List Int
+rowIndexes cid =
+    let
+        first =
+            4 * (cid // 4)
+    in
+    [ first, first + 1, first + 2, first + 3 ]
+
+
+matchedCol : Int -> Hand -> List Int
+matchedCol cid hand =
     let
         cids =
-            columnIndexes cid
+            colIndexes cid
 
         cards =
             List.map (\f -> f hand) <| List.map get cids
@@ -127,8 +147,46 @@ matched cid hand =
                     [ c1, c2, c3 ]
                         |> List.map .exposed
                         |> List.foldl (&&) True
+
+                allEqual =
+                    c1.num == c2.num && c1.num == c3.num
             in
-            if allExist && allExposed && c1.num == c2.num && c1.num == c3.num then
+            if allExist && allExposed && allEqual then
+                cids
+
+            else
+                []
+
+        _ ->
+            []
+
+
+matchedRow : Int -> Hand -> List Int
+matchedRow cid hand =
+    let
+        cids =
+            rowIndexes cid
+
+        cards =
+            List.map (\f -> f hand) <| List.map get cids
+    in
+    case cards of
+        [ Just c1, Just c2, Just c3, Just c4 ] ->
+            let
+                allExist =
+                    [ c1, c2, c3, c4 ]
+                        |> List.map .exists
+                        |> List.foldl (&&) True
+
+                allExposed =
+                    [ c1, c2, c3, c4 ]
+                        |> List.map .exposed
+                        |> List.foldl (&&) True
+
+                allEqual =
+                    c1.num == c2.num && c1.num == c3.num && c1.num == c4.num
+            in
+            if allExist && allExposed && allEqual then
                 cids
 
             else

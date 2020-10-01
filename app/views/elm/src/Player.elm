@@ -178,7 +178,7 @@ checkPoof : Int -> Player -> ( Player, Maybe Int )
 checkPoof cid player =
     let
         ( hand, discard ) =
-            Hand.checkPoof cid player.hand
+            Hand.checkPoof cid player.four player.hand
 
         cPlayer =
             { player | hand = hand }
