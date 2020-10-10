@@ -12,6 +12,8 @@
         %li= link_to t("user.users"), users_path
       - if can?(:index, Game)
         %li= link_to t("game.search"), games_path
+      - if can?(:env, :page)
+        %li= link_to t("pages.env.title"), env_path
     %ul.right
       - unless controller_name == "sessions"
         %li= link_to t("session.sign_out"), session_path, method: "delete"

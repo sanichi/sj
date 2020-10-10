@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root to: "sessions#new"
 
   %w/push pull/.each { |a| get a => "messages##{a}" }
+  get "env" => "pages#env"
 
   resources :users do
     get :scores, on: :member
