@@ -1,20 +1,20 @@
 - set_meta_tags title: t("game.scores")
 
-- if @players.matches.empty?
-  %p.faded.text-center
-    = "No games finished yet. Start a"
-    = succeed("?") do
-      = link_to t("game.new"), new_game_path
-- else
-  .row
-    %div{class: center(xl: 8, md: 10)}
-      %section
-        .header.text-center
-          %h3= @user.handle
-          %span.faded
-            = @user.name
-            = "#{@first}/#{@games}"
-        .body
+= content_for :javascript do
+  = render "choose.js"
+
+.row
+  %div{class: center(xl: 8, md: 10)}
+    %section
+      .header.text-center
+        = select_tag :user_id, user_menu(@user.id), class: "mr-2 auto-submit"
+        %span.faded
+          = @user.name
+          = "#{@first}/#{@games}"
+      .body
+        - if @players.matches.empty?
+          %p.text-center= "No games finished yet."
+        - else
           %table{class: "table table-bordered table-sm mt-3"}
             %thead
               %tr
