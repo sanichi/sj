@@ -28,6 +28,14 @@ en:
     state: State
     upto: Upto
     votes: Votes
+    first:
+      zero: no firsts
+      one: 1 first
+      other: '%{count} firsts'
     short:
       four: 4aR
       peek: PaB
+    total:
+      zero: no games yet
+      one: 1 game
+      other: '%{count} games'

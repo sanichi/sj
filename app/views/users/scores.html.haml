@@ -9,18 +9,19 @@
       .header.text-center
         = select_tag :user_id, user_menu(@user.id), class: "mr-2 auto-submit"
         %span.faded
-          = @user.name
-          = "#{@first}/#{@games}"
+          = succeed(":") do
+            = @user.name
+          = succeed(@total == 0 ? "" : ",") do
+            = t("game.total", count: @total)
+          - unless @total == 0
+            = t("game.first", count: @first)
       .body
-        - if @players.matches.empty?
-          %p.text-center= "No games finished yet."
-        - else
-          %table{class: "table table-bordered table-sm mt-3"}
-            %thead
-              %tr
-                %th.text-center= t("game.place")
-                %th.text-center= t("game.score")
-                %th= t("game.opponents")
-                %th.text-center= t("game.ended")
-            %tbody#results
-              = render "scores", players: @players
+        %table{class: "table table-bordered table-sm mt-3"}
+          %thead
+            %tr
+              %th.text-center= t("game.place")
+              %th.text-center= t("game.score")
+              %th= t("game.opponents")
+              %th.text-center= t("game.ended")
+          %tbody#results
+            = render "scores", players: @players

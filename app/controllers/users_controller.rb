@@ -31,7 +31,7 @@ class UsersController < ApplicationController
   def scores
     finished = @user.players.finished
     @players = Player.paginate(finished, params, scores_user_path, remote: true)
-    @games = finished.count
+    @total = finished.count
     @first = finished.where(place: [1, -1]).count
   end
 
