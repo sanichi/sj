@@ -1,7 +1,7 @@
 - set_meta_tags title: t("game.games")
 
 = content_for :javascript do
-  = render "wait.js"
+  = render partial: "wait", formats: :js
 
 .row
   %div#results{class: center(xl: 8, md: 10)}

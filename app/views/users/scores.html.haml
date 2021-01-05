@@ -1,7 +1,7 @@
 - set_meta_tags title: t("game.scores")
 
 = content_for :javascript do
-  = render "choose.js"
+  = render partial: "choose", formats: :js
 
 .row
   %div{class: center(xl: 8, md: 10)}

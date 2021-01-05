@@ -5,12 +5,23 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 /.bundle
+
 /log/*
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+/storage/*
+!/storage/.keep
+
 /public/assets
 .byebug_history
-/config/database.yml
+
 /config/master.key
+/config/database.yml
+
 elm-stuff/
