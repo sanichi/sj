@@ -11,7 +11,7 @@ class GamesController < ApplicationController
   end
 
   def new
-    @game = Game.new
+    @game = Game.new(four: true)
   end
 
   def create
