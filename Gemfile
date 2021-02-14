@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '6.1.1'
+gem 'rails', '6.1.2.1'
 gem 'haml-rails', '~> 2.0'
 gem 'jquery-rails', '~> 4.3'
 gem 'sassc-rails', '~> 2.1'
@@ -23,7 +23,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'database_cleaner-active_record', '~> 1.8'
+  gem 'database_cleaner-active_record', '~> 2.0'
 end
 
 group :development do
