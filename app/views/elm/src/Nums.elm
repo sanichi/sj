@@ -131,7 +131,7 @@ handWidth =
 
 extraSeparation : Int
 extraSeparation =
-    10
+    35
 
 
 discardX : Int
