@@ -1,19 +1,20 @@
 %nav
-  %button{type: "button", "data-toggle" => "collapse", "data-target" => "#navbar"}
-    %span
-  #navbar.collapse.navbar-collapse
-    %ul.left
-      %li= link_to t("game.games"), waiting_games_path
-      - if can?(:create, Game)
-        %li= link_to t("game.new"), new_game_path
-      - if can?(:scores, User)
-        %li= link_to t("game.scores"), scores_user_path(current_user)
-      - if can?(:index, User)
-        %li= link_to t("user.users"), users_path
-      - if can?(:index, Game)
-        %li= link_to t("game.search"), games_path
-      - if can?(:env, :page)
-        %li= link_to t("pages.env.title"), env_path
-    %ul.right
-      - unless controller_name == "sessions"
-        %li= link_to t("session.sign_out"), session_path, method: "delete"
+  .container-fluid
+    %button{type: "button", "data-bs-toggle" => "collapse", "data-bs-target" => "#navbar"}
+      %span
+    #navbar.collapse.navbar-collapse
+      %ul.me-auto
+        %li= link_to t("game.games"), waiting_games_path
+        - if can?(:create, Game)
+          %li= link_to t("game.new"), new_game_path
+        - if can?(:scores, User)
+          %li= link_to t("game.scores"), scores_user_path(current_user)
+        - if can?(:index, User)
+          %li= link_to t("user.users"), users_path
+        - if can?(:index, Game)
+          %li= link_to t("game.search"), games_path
+        - if can?(:env, :page)
+          %li= link_to t("pages.env.title"), env_path
+      %ul.ms-auto
+        - unless controller_name == "sessions"
+          %li= link_to t("session.sign_out"), session_path, method: "delete"

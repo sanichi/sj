@@ -15,6 +15,6 @@
               %th= t("user.name.last")
               %td= @user.last_name
       .footer
-        = link_to t("edit"), edit_user_path(@user), class: "btn btn-info btn-sm"
+        = link_to t("edit"), edit_user_path(@user), class: "btn btn-primary btn-sm"
         = link_to t("game.scores"), scores_user_path(@user), class: "btn btn-success btn-sm"
         = link_to t("user.users"), users_path, class: "btn btn-success btn-sm"

@@ -6,15 +6,19 @@
 .row
   %div{class: center(xl: 8, md: 10)}
     %section
-      .header.text-center
-        = select_tag :user_id, user_menu(@user.id), class: "mr-2 auto-submit"
-        %span.faded
-          = succeed(":") do
-            = @user.name
-          = succeed(@total == 0 ? "" : ",") do
-            = t("game.total", count: @total)
-          - unless @total == 0
-            = t("game.first", count: @first)
+      .header
+        .row.mb-2.mt-1
+          %div{class: Layout.new(xs: [4], md: [3], xl: [2]).to_a.first}
+            = select_tag :user_id, user_menu(@user.id), class: "form-select auto-submit"
+        .row
+          .text-center
+            %span.faded
+              = succeed(":") do
+                = @user.name
+              = succeed(@total == 0 ? "" : ",") do
+                = t("game.total", count: @total)
+              - unless @total == 0
+                = t("game.first", count: @first)
       .body
         %table{class: "table table-bordered table-sm mt-3"}
           %thead

@@ -1,10 +1,11 @@
 :ruby
+  lo = Layout.new(xs: [4], md: [3], xl: [2]).to_a
   inputs = [
-    [:user_id, t("game.started_by"), :select, menu: game_started_by_menu(params[:user_id])],
+    [:user_id, t("game.started_by"), :select, lo[0], menu: game_started_by_menu(params[:user_id])],
   ]
   set_meta_tags title: t("game.search")
 
-= render "utils/search/form", index: games_path, inputs: inputs, button: true
+= render "utils/search/form", index: games_path, inputs: inputs
 
 .row
   %div{class: center(xl: 6, lg: 8, md: 10)}

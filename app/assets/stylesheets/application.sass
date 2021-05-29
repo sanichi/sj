@@ -6,13 +6,7 @@ $link-color: #5c749c
 
 // Navbar
 nav
-  @extend .navbar, .navbar-expand-md, .navbar-light, .bg-light, .mb-3
-
-  &>a
-    @extend .navbar-brand
-
-    span
-      @extend .d-lg-inline, .d-none
+  @extend .navbar, .navbar-expand-md, .navbar-light, .bg-light, .mb-3, .rounded
 
   button
     @extend .navbar-toggler
@@ -21,14 +15,8 @@ nav
       @extend .navbar-toggler-icon
 
   #navbar
-    ul
+    &>ul
       @extend .navbar-nav
-
-      &.left
-        @extend .mr-auto
-
-      &.right
-        @extend .ml-auto
 
       &>li
         @extend .nav-item
@@ -36,34 +24,19 @@ nav
         &>a
           @extend .nav-link
 
-        .dropdown-menu
-          @extend .p-2, .p-md-0
-
-          &>a
-            @extend .nav-link, .dropdown-item
+      &>li.dropdown
+        &>ul
+          &>li
+            &>a
+              @extend .dropdown-item
 
 // Crud forms
 form.crud
-  margin-top: 1.5rem
-
-  label
-    font-size: 1.1rem
-    font-weight: 600
-    display: block
-
-  input:not([type="checkbox"]):not([type="submit"]), textarea, select:not(.datetime)
-    @extend .form-control
-    margin-bottom: 0.75rem
-    width: 100%
 
   textarea
-    @extend .text-monospace
+    @extend .font-monospace
     font-size: 0.9rem
-
-  input[type="checkbox"]
-    // @extend .form-check-input   // this is causing problems
-    width: 20px
-    height: 20px
+    height: 100%
 
   div.field_with_errors
     display: inline
@@ -81,6 +54,7 @@ article, section
 
   .body
     @extend .card-body
+    overflow: hidden
 
   .footer
     @extend .card-footer
@@ -101,13 +75,18 @@ article, section
 pre
   @extend .border, .border-dark, .p-2
 
-// Faded paragraphs or spans
+// Links
+a
+  text-decoration: none
 
+  &:hover
+    text-decoration: underline
+
+// Faded paragraphs or spans
 p.faded, span.faded
   opacity: 0.5
 
 // Elm stuff
-
 #card-table
 
   // Background.
@@ -120,7 +99,6 @@ p.faded, span.faded
     font-weight: normal
     text-anchor: middle
     fill: black
-
 
   // Badge
   g.badge
@@ -179,7 +157,6 @@ p.faded, span.faded
     font-size: 20px
     fill: white
     opacity: 0.5
-
 
 // Other style files
 @import "pretty-print-json"
