@@ -77,10 +77,14 @@ pre
 
 // Links
 a
-  text-decoration: none
+  @extend .text-decoration-none
 
   &:hover
-    text-decoration: underline
+    @extend .text-decoration-underline
+  
+  &.btn:hover
+    @extend .text-decoration-none
+
 
 // Faded paragraphs or spans
 p.faded, span.faded
