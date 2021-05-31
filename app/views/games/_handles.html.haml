@@ -2,4 +2,4 @@
 - handles.each_with_index do |handle, i|
   = precede(i == 0 ? '(' : (i == size - 1 ? 'and ' : '')) do
     = succeed(i == size - 1 ? ')' : (i < size - 2 ? ',' : '')) do
-      %span.font-weight-bold= handle
+      %span.fw-bold= handle

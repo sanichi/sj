@@ -4,7 +4,7 @@
   needed = game.participants - count
 
 %section
-  .header.font-weight-bold= "#{game.participants} player game to #{game.upto}"
+  .header.fw-bold= "#{game.participants} player game to #{game.upto}"
   .body
     %span
       = "Status:"
@@ -17,10 +17,10 @@
           = "hand."
       - else
         - if count == 0
-          %span.font-weight-bold= "no players"
+          %span.fw-bold= "no players"
           = "have joined yet."
           = "Started by"
-          %span.font-weight-bold= game.user.handle
+          %span.fw-bold= game.user.handle
           = succeed(".") do
             = time_ago(game.created_at)
         - elsif count == 1
@@ -28,20 +28,20 @@
           = render "handles", handles: handles
           = "has joined, waiting for"
           = succeed(".") do
-            %span.font-weight-bold= "#{needed} more"
+            %span.fw-bold= "#{needed} more"
         - else
           - if needed > 0
             = "some players"
             = render "handles", handles: handles
             = "have joined, waiting for"
             = succeed(".") do
-              %span.font-weight-bold= "#{needed} more"
+              %span.fw-bold= "#{needed} more"
           - else
             = "enough players"
             = render "handles", handles: handles
             = "have joined,"
             = succeed(".") do
-              %span.font-weight-bold= "ready to play"
+              %span.fw-bold= "ready to play"
   .footer
     - links = false
     - if game.can_be_joined_by?(current_user)
