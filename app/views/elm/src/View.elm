@@ -1,13 +1,13 @@
 module View exposing (view)
 
 import Card exposing (Card)
-import Hand exposing (Hand)
+import Hand
 import Html exposing (Html)
 import Model exposing (Model, State(..))
 import Msg exposing (Msg(..))
 import Nums
 import Player exposing (Player, Position(..))
-import Players exposing (Players)
+import Players
 import Svg exposing (Attribute, Svg)
 import Svg.Attributes as Atr
 import Svg.Events exposing (onClick)
@@ -229,7 +229,7 @@ cardMsg state player cid card =
                 else
                     Noop
 
-            RevealRest outPid ->
+            RevealRest _ ->
                 if not card.exposed then
                     RevealCard cid
 
@@ -310,7 +310,7 @@ overlayCards model player =
     if model.options.peek && model.pid /= player.pid then
         let
             mapper =
-                overlayElement model player
+                overlayElement
 
             elements =
                 Hand.map mapper player.hand
@@ -322,8 +322,8 @@ overlayCards model player =
         Nothing
 
 
-overlayElement : Model -> Player -> Int -> Card -> Maybe (Svg Msg)
-overlayElement model player cid card =
+overlayElement : Int -> Card -> Maybe (Svg Msg)
+overlayElement cid card =
     if card.exists && not card.exposed then
         let
             faded =

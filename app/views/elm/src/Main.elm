@@ -5,9 +5,8 @@ import Html exposing (Html)
 import Json.Decode exposing (Value)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
-import Platform.Sub
 import Ports
-import Update exposing (Update)
+import Update
 import View
 
 
@@ -17,7 +16,7 @@ main =
         { init = \flags -> ( Model.init flags, Cmd.none )
         , view = view
         , update = update
-        , subscriptions = subscriptions
+        , subscriptions = \_ -> subscriptions
         }
 
 
@@ -56,15 +55,15 @@ update msg model =
         NextHand score ->
             ( Model.newHand model.pid score model, push msg )
 
-        EndGame score ->
+        EndGame _ ->
             ( Model.endGame model.pid model, push msg )
 
         Noop ->
             ( model, Cmd.none )
 
 
-subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions : Sub Msg
+subscriptions =
     Ports.pullUpdate (NewUpdate << Update.decode)
 
 

@@ -20,7 +20,7 @@ module Players exposing
 
 import Card exposing (Card)
 import Dict exposing (Dict)
-import Hand exposing (Hand)
+import Hand
 import Player exposing (Player, Position(..))
 import Setup exposing (ProtoPlayer)
 
@@ -139,7 +139,7 @@ updatePenalty outPid players =
         duplicates =
             List.filter (\t -> t == lowest) totals |> List.length
 
-        penaliser pid player =
+        penaliser _ player =
             if player.pid == outPid && (Hand.score player.hand > lowest || duplicates > 1) then
                 { player | penalty = 2 }
 
@@ -159,7 +159,7 @@ updateReveal cid card player players =
 updateRevealRestTurns : Players -> Players
 updateRevealRestTurns players =
     let
-        mover index player =
+        mover _ player =
             if Hand.out player.hand then
                 { player | turn = False }
 
@@ -257,7 +257,7 @@ replaceCard cid card player players =
 
 
 updateNextTurn : Position -> Int -> Int -> Player -> Player
-updateNextTurn position number pid player =
+updateNextTurn position number _ player =
     if player.position == position then
         { player | turn = False }
 
@@ -319,7 +319,7 @@ updateRevealTurns players =
 
 
 updateRevealTurn : Int -> Player -> Player
-updateRevealTurn pid player =
+updateRevealTurn _ player =
     if Hand.exposed player.hand == 2 then
         { player | turn = False }
 
@@ -333,19 +333,14 @@ updateRevealWho players =
         mapper =
             \p -> ( Hand.score p.hand, Hand.highest p.hand, p.pid )
 
-        sorted =
-            Dict.values players
+        playerToMove =
+            players
+                |> Dict.values
                 |> List.map mapper
                 |> List.sort
                 |> List.reverse
-
-        playerToMove =
-            case List.head sorted of
-                Just ( score, highest, pid ) ->
-                    get pid players
-
-                Nothing ->
-                    Nothing
+                |> List.head
+                |> Maybe.andThen (\( _, _, pid ) -> get pid players)
     in
     case playerToMove of
         Just player ->

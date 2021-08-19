@@ -19,7 +19,7 @@ module Model exposing
     )
 
 import Card exposing (Card)
-import Hand exposing (Hand)
+import Hand
 import Json.Decode exposing (Value)
 import Msg exposing (Msg(..))
 import Player exposing (Player)
@@ -312,7 +312,7 @@ choosePackDiscardCard pid cid model =
 
 
 newHand : Int -> Int -> Model -> Model
-newHand pid score model =
+newHand pid _ model =
     if pid == model.pid then
         updateState Waiting model
 
@@ -451,7 +451,7 @@ checkOver model =
                     Players.updatePenalty outPid model.players
                         |> Players.updateRevealRestTurns
 
-                RevealRest pid ->
+                RevealRest _ ->
                     Players.updateRevealRestTurns model.players
 
                 _ ->
@@ -486,12 +486,7 @@ getPlayerCard pid cid model =
             Players.get pid model.players
 
         card =
-            case player of
-                Just p ->
-                    Hand.get cid p.hand
-
-                Nothing ->
-                    Nothing
+            Maybe.andThen (\p -> Hand.get cid p.hand) player
     in
     ( player, card )
 

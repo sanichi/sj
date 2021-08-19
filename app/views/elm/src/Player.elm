@@ -12,7 +12,6 @@ module Player exposing
 import Card exposing (Card)
 import Hand exposing (Hand)
 import Msg exposing (Msg(..))
-import Setup exposing (ProtoPlayer)
 
 
 type alias Player =
