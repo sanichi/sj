@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '6.1.4.1'
+gem 'rails', '7.0.1'
 gem 'haml-rails', '~> 2.0'
 gem 'jquery-rails', '~> 4.3'
 gem 'sassc-rails', '~> 2.1'
@@ -11,6 +11,7 @@ gem 'meta-tags', '~> 2.12'
 gem 'jbuilder', '~> 2.7'
 gem 'cancancan', '~> 3.0'
 gem 'bcrypt', '~> 3.1.7'
+gem 'sprockets-rails', '~> 3.4'
 
 group :development, :test do
   gem 'rspec-rails', '~> 5.0'
