@@ -49,23 +49,24 @@
               = link_to t("game.play"), play_game_path(@game), class: "btn btn-success btn-sm"
             = link_to t("game.delete"), @game, class: "btn btn-danger btn-sm", method: :delete, data: { confirm: t("sure") }
 
-.row
-  %div{class: center(xl: 8, md: 10)}
-    %table{class: "table table-bordered table-sm mt-3"}
-      %thead
-        %tr
-          %th.text-center{colspan: 5}= t("game.messages")
-        %tr
-          %th.text-center= t("id")
-          %th.text-center= t("created")
-          %th.text-center= t("message.target")
-          %th.text-center= t("message.only_start")
-          %th= t("data")
-      %tbody
-        - @game.messages.each do |m|
+- if @messages > 0
+  .row
+    %div{class: center(xl: 8, md: 10)}
+      %table{class: "table table-bordered table-sm mt-3"}
+        %thead
           %tr
-            %td.text-center= m.id
-            %td.text-center= m.created_at.strftime("%M:%S.%L")
-            %td.text-center= m.target
-            %td.text-center= m.only_start ? "T" : "F"
-            %td= m.json
+            %th.text-center{colspan: 5}= t("game.messages")
+          %tr
+            %th.text-center= t("id")
+            %th.text-center= t("created")
+            %th.text-center= t("message.target")
+            %th.text-center= t("message.only_start")
+            %th= t("data")
+        %tbody
+          - @game.messages.each do |m|
+            %tr
+              %td.text-center= m.id
+              %td.text-center= m.created_at.strftime("%M:%S.%L")
+              %td.text-center= m.target
+              %td.text-center= m.only_start ? "T" : "F"
+              %td= m.json
