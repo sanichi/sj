@@ -36,7 +36,7 @@
           %td= @game.total_dealt
         %tr
           %td= t("game.messages")
-          %td= @game.messages.count
+          %td= @messages
         %tr
           %td= t("game.votes")
           %td= @game.votes
@@ -45,7 +45,7 @@
           %td= @game.debug
         %tr
           %td.text-center{colspan: 2}
-            - if @game.can_be_played_by(current_user)
+            - if @game.can_be_played_by(current_user) && @messages > 0
               = link_to t("game.play"), play_game_path(@game), class: "btn btn-success btn-sm"
             = link_to t("game.delete"), @game, class: "btn btn-danger btn-sm", method: :delete, data: { confirm: t("sure") }
 

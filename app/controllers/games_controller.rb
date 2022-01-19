@@ -26,6 +26,10 @@ class GamesController < ApplicationController
     end
   end
 
+  def show
+    @messages = @game.messages.count
+  end
+
   def destroy
     @game.destroy if @game
     redirect_to waiting_games_path
