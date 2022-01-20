@@ -5,9 +5,11 @@ namespace :games do
   task :compact, [:print] => :environment do |task, args|
     cut1 = 62.days.ago
     cut2 = 31.days.ago
-    ids = Game.where(state: Game::FINISHED).where("updated_at < ?", cut2).where("updated_at > ?", cut1).pluck(:id)
+    # ids = Game.where(state: Game::FINISHED).where("updated_at < ?", cut2).where("updated_at > ?", cut1).pluck(:id)
+    ids = Game.where(state: Game::FINISHED).where("updated_at < ?", cut2).pluck(:id)
+    ids.reject!{|id| id % 100 == 0}
     before = Message.count
-    Message.where(game_id: ids).delete_all
+    Message.where(game_id: ids).delete_all unless ids.empty?
     after = Message.count
     if args[:print] == 'p'
       puts "games considered: #{ids.length}"
