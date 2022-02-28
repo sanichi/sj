@@ -2,7 +2,7 @@
 use strict;
 
 # Setup.
-my $rem_usr = 'sanichi@thessaloniki.sanichi.me';
+my $rem_usr = 'sanichi@nihon.sanichi.me';
 my $rem_db  = 'sj_production';
 my $loc_db  = 'sj_development';
 my $tmp_sql = '/tmp/wd.sql';
