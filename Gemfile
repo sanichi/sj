@@ -6,6 +6,7 @@ gem 'jquery-rails', '~> 4.3'
 gem 'sassc-rails', '~> 2.1'
 gem 'bootstrap', '~> 5.0'
 gem 'uglifier', '~> 4.2'
+gem 'terser', '~> 1.1'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'meta-tags', '~> 2.12'
 gem 'jbuilder', '~> 2.7'
@@ -32,8 +33,4 @@ group :development do
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-passenger', '~> 0.2', require: false
   gem 'listen', '~> 3.2'
-end
-
-group :production do
-  gem 'terser', '~> 1.1'
 end
