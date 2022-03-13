@@ -1,27 +1,23 @@
-var refresher = (function() {
-
+var refresher = (function () {
   function refresh() {
-    $.ajax('/games/waiting.js', {
-
-      dataType: 'script',
-
-      error: function(xhr) {
+    $.ajax('/games/refresh', {
+      dataType: 'html',
+      error: function (xhr) {
         console.log("ajax error: " + xhr.status);
       },
-
-      complete: function(xhr) {
+      success: function (data) {
+        $('#results').html(data);
+      },
+      complete: function (xhr) {
         setTimeout(refresh, 3000);
       }
-
     });
   }
-
   return {
     refresh: refresh,
   };
-
 })();
 
-$(function() {
+$(function () {
   refresher.refresh();
 });

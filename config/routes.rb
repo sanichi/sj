@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get :join, on: :member
     get :play, on: :member
     get :waiting, on: :collection
+    get :refresh, on: :collection
   end
 
   resource :session, only: [:new, :create, :destroy]

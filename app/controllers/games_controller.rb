@@ -6,6 +6,11 @@ class GamesController < ApplicationController
     @games = Game.where.not(state: Game::FINISHED)
   end
 
+  def refresh
+    @games = Game.where.not(state: Game::FINISHED)
+    render :refresh, layout: false
+  end
+
   def index
     @games = Game.search(params, games_path, remote: true)
   end
