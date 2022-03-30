@@ -3,7 +3,6 @@
     [:participants, t("game.participants"),    :select,  menu: game_participants_menu(game.participants)],
     [:upto,         t("game.upto"),            :select,  menu: game_upto_menu(game.upto)],
     [:four,         t("game.four"),            :check],
-    [:peek,         t("game.peek"),            :check],
   ]
   if current_user.admin?
     inputs.push [:debug, t("game.debug"), :check]

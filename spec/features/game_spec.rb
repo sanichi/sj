@@ -15,11 +15,6 @@ describe Game do
       click_link t("game.new")
       select data.participants.to_s, from: t("game.participants")
       select data.upto.to_s, from: t("game.upto")
-      if data.peek
-        check t("game.peek")
-      else
-        uncheck t("game.peek")
-      end
       if data.four
         check t("game.four")
       else
@@ -34,7 +29,6 @@ describe Game do
       expect(g.user).to eq user
       expect(g.participants).to eq data.participants
       expect(g.upto).to eq data.upto
-      expect(g.peek).to eq data.peek
       expect(g.four).to eq data.four
     end
 

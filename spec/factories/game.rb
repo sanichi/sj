@@ -4,7 +4,6 @@ FactoryBot.define do
     participants { Game::PARTICIPANTS.sample }
     upto         { Game::UPTO.sample }
     four         { [true, false].sample }
-    peek         { [true, false].sample }
     debug        { [true, false].sample }
   end
 end

@@ -12,7 +12,6 @@ en:
     new: New Game
     opponents: Opponents
     participants: Participants
-    peek: Peek-a-Boo
     place: Place
     player: Player
     play: Play
@@ -34,7 +33,6 @@ en:
       other: '%{count} firsts'
     short:
       four: 4aR
-      peek: PaB
     total:
       zero: no games yet
       one: 1 game
