@@ -130,24 +130,13 @@ cardsAndName model player =
         cards =
             groupedCards model.state player
 
-        overlays =
-            overlayCards model player
-
         name =
             badge model.state player
-
-        elements =
-            case overlays of
-                Just more ->
-                    [ name, cards, more ]
-
-                Nothing ->
-                    [ name, cards ]
 
         translate =
             handOffset player.position
     in
-    Svg.g [ translate ] elements
+    Svg.g [ translate ] [ name, cards ]
 
 
 cardsOffset : Position -> Attribute Msg
@@ -303,45 +292,6 @@ handOffset position =
             Nums.handOffset position
     in
     tt x y
-
-
-overlayCards : Model -> Player -> Maybe (Svg Msg)
-overlayCards model player =
-    if model.options.peek && model.pid /= player.pid then
-        let
-            mapper =
-                overlayElement
-
-            elements =
-                Hand.map mapper player.hand
-                    |> List.filterMap identity
-        in
-        Just <| Svg.g [ cardsOffset player.position ] elements
-
-    else
-        Nothing
-
-
-overlayElement : Int -> Card -> Maybe (Svg Msg)
-overlayElement cid card =
-    if card.exists && not card.exposed then
-        let
-            faded =
-                Atr.opacity "0.20"
-
-            frame =
-                [ cardX cid, cardY cid, cardWidth, cardHeight, faded ]
-
-            url =
-                cardUrl <| Card.exposed card.num
-
-            grp =
-                cardGroup frame url Noop
-        in
-        Just grp
-
-    else
-        Nothing
 
 
 

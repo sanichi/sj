@@ -16,7 +16,6 @@ type alias ProtoPlayer =
 
 type alias Options =
     { debug : Bool
-    , peek : Bool
     , four : Bool
     }
 
@@ -57,15 +56,14 @@ proto =
 
 options : Decoder Options
 options =
-    D.map3 Options
+    D.map2 Options
         (D.field "debug" D.bool |> withDefault default.options.debug)
-        (D.field "peek" D.bool |> withDefault default.options.peek)
         (D.field "four" D.bool |> withDefault default.options.four)
 
 
 default : Setup
 default =
-    Setup 0 [] 100 (Options False False False)
+    Setup 0 [] 100 (Options False False)
 
 
 
