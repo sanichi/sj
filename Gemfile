@@ -13,7 +13,6 @@ gem 'cancancan', '~> 3.0'
 gem 'bcrypt', '~> 3.1.7'
 gem 'sprockets-rails', '~> 3.4'
 gem 'awesome_print', '~> 1.9'
-gem 'strscan', '3.0.1'
 
 group :development, :test do
   gem 'rspec-rails', '~> 5.0'
