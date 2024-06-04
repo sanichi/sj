@@ -24,8 +24,7 @@ test:
   database: sj_test
 ```
 * Run `bin/rails db:create`.
-* Sync the development database with the production database if you can.
-* If you can't sync then at least create two users (one admin) with `bin/rails c`:
+* Create two users (at least one admin) with `bin/rails c`:
 ```
 User.create!(first_name: "...", last_name: "...", handle: "...", password: "...", admin: true);
 User.create!(first_name: "...", last_name: "...", handle: "...", password: "...", admin: false);
