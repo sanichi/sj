@@ -12,7 +12,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'cancancan', '~> 3.0'
 gem 'bcrypt', '~> 3.1.7'
 gem 'sprockets-rails', '~> 3.4'
-gem 'awesome_print', '~> 1.9', require: false
+gem "importmap-rails", "~> 2.1"
 
 # Temporary to silence warnings about gem no longer being standard library
 gem 'ostruct', '~> 0.6.1'
@@ -39,3 +39,4 @@ group :development do
   gem 'capistrano-passenger', '~> 0.2', require: false
   gem 'listen', '~> 3.2'
 end
+
