@@ -78,7 +78,6 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     autoprefixer-rails (10.4.19.0)
       execjs (~> 2)
-    awesome_print (1.9.2)
     base64 (0.2.0)
     bcrypt (3.1.20)
     benchmark (0.4.0)
@@ -124,8 +123,8 @@ GEM
     drb (2.2.1)
     erubi (1.13.1)
     execjs (2.10.0)
-    factory_bot (6.5.0)
-      activesupport (>= 5.0.0)
+    factory_bot (6.5.1)
+      activesupport (>= 6.1.0)
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
@@ -216,7 +215,7 @@ GEM
     puma (6.6.0)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (3.1.8)
+    rack (3.1.9)
     rack-session (2.1.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -326,7 +325,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  awesome_print (~> 1.9)
   bcrypt (~> 3.1.7)
   bootstrap (~> 5.0)
   byebug
