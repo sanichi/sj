@@ -1,15 +1,12 @@
 - set_meta_tags title: t("game.scores")
 
-= content_for :javascript do
-  = render partial: "choose", formats: :js
-
 .row
   %div{class: center(xl: 8, md: 10)}
     %section
       .header
         .row.mb-2.mt-1
           %div{class: Layout.new(xs: [4], md: [3], xl: [2]).to_a.first}
-            = select_tag :user_id, user_menu(@user.id), class: "form-select auto-submit"
+            = select_tag :user_id, user_menu(@user.id), class: "form-select", "data-controller" => "choose-user", "data-action" => "choose-user#go"
         .row
           .text-center
             %span.faded
