@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe User do
+describe User, js: true do
   let!(:admin)  { create(:user, admin: true) }
   let!(:player) { create(:user, admin: false) }
   let(:data)    { build(:user) }
@@ -141,7 +141,9 @@ describe User do
     it "delete user" do
       click_link player.handle_extra
       click_link t("edit")
-      click_link t("delete")
+      accept_confirm do
+        click_link t("delete")
+      end
 
       expect(page).to have_title t("user.users")
       expect(User.where(admin: false).count).to eq 0

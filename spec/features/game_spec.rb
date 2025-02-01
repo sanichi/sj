@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Game do
+describe Game, js: true do
   let(:user) { create(:user, admin: false) }
   let(:data) { build(:game) }
 
@@ -32,10 +32,13 @@ describe Game do
       expect(g.four).to eq data.four
     end
 
-    it "delete game" do
+    # FIX: something is wrong with JS here
+    it "delete game", js: false do
       expect(Game.count).to eq 1
 
-      click_link t("game.delete")
+      # accept_confirm do
+        click_link t("game.delete")
+      # end
 
       expect(page).to have_title t("game.games")
       expect(Game.count).to eq 0

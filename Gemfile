@@ -13,6 +13,7 @@ gem 'cancancan', '~> 3.0'
 gem 'bcrypt', '~> 3.1.7'
 gem 'sprockets-rails', '~> 3.4'
 gem "importmap-rails", "~> 2.1"
+gem "stimulus-rails", "~> 1.3"
 
 # Temporary to silence warnings about gem no longer being standard library
 gem 'ostruct', '~> 0.6.1'
@@ -27,6 +28,7 @@ group :development, :test do
   gem 'launchy', '< 4'
   gem 'factory_bot_rails', '< 7'
   gem 'faker', '< 4'
+  gem "selenium-webdriver", "~> 4.28"
 end
 
 group :test do
@@ -39,5 +41,3 @@ group :development do
   gem 'capistrano-passenger', '~> 0.2', require: false
   gem 'listen', '~> 3.2'
 end
-
-gem "stimulus-rails", "~> 1.3"
