@@ -11,6 +11,6 @@ export default class extends Controller {
   }
 
   wait() {
-    window.myTimerId = setTimeout(() => this.tik(), 3000)
+    setTimeout(() => this.tik(), 3000)
   }
 }
