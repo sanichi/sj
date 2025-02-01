@@ -32,13 +32,12 @@ describe Game, js: true do
       expect(g.four).to eq data.four
     end
 
-    # FIX: something is wrong with JS here
-    it "delete game", js: false do
+    it "delete game" do
       expect(Game.count).to eq 1
 
-      # accept_confirm do
+      accept_confirm do
         click_link t("game.delete")
-      # end
+      end
 
       expect(page).to have_title t("game.games")
       expect(Game.count).to eq 0
