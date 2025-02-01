@@ -17,4 +17,5 @@
           %li= link_to t("pages.env.title"), env_path
       %ul.ms-auto
         - unless controller_name == "sessions"
-          %li= link_to t("session.sign_out"), session_path, method: "delete"
+          %span{"data-turbo" => "true"}
+            %li= link_to t("session.sign_out"), session_path, "data-turbo-method" => :delete

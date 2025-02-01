@@ -54,7 +54,8 @@
       = link_to t("game.show"), game, class: "btn btn-primary btn-sm"
       - links = true
     - if game.can_be_deleted_by?(current_user)
-      = link_to t("game.delete"), game, class: "btn btn-danger btn-sm", method: :delete, data: { confirm: t("sure") }
+      %span{"data-turbo" => "true"}
+        = link_to t("game.delete"), game, class: "btn btn-danger btn-sm", data: { turbo_method: :delete, turbo_confirm: t("sure") }
       - links = true
     - unless links
       = "Started by"

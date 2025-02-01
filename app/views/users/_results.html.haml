@@ -1,5 +1,5 @@
 - users.matches.each do |user|
   %tr
-    %td= link_to user.handle_extra, user
+    %td= link_to user.handle_extra, user, "data-turbo" => "false"
     %td= user.name
 = render "utils/pagination/links", pager: users, columns: 2

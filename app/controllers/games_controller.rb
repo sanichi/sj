@@ -12,7 +12,7 @@ class GamesController < ApplicationController
   end
 
   def index
-    @games = Game.search(params, games_path, remote: true)
+    @games = Game.search(params, games_path)
   end
 
   def new

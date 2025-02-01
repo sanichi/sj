@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @users = User.paginate(@users, params, users_path, remote: true)
+    @users = User.paginate(@users, params, users_path)
   end
 
   def create
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
   def scores
     finished = @user.players.finished
-    @players = Player.paginate(finished, params, scores_user_path, remote: true)
+    @players = Player.paginate(finished, params, scores_user_path)
     @total = finished.count
     @first = finished.where(place: [1, -1]).count
   end

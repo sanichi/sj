@@ -16,13 +16,14 @@
                 = t("game.total", count: @total)
               - unless @total == 0
                 = t("game.first", count: @first)
-      .body
-        %table{class: "table table-bordered table-sm mt-3"}
-          %thead
-            %tr
-              %th.text-center= t("game.place")
-              %th.text-center= t("game.score")
-              %th= t("game.opponents")
-              %th.text-center= t("game.ended")
-          %tbody#results
-            = render "scores", players: @players
+      .body{"data-turbo" => "true"}
+        = turbo_frame_tag :results, "data-turbo-action" => "advance" do
+          %table{class: "table table-bordered table-sm mt-3"}
+            %thead
+              %tr
+                %th.text-center= t("game.place")
+                %th.text-center= t("game.score")
+                %th= t("game.opponents")
+                %th.text-center= t("game.ended")
+            %tbody
+              = render "scores", players: @players

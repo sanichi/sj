@@ -47,7 +47,8 @@
           %td.text-center{colspan: 2}
             - if @game.can_be_played_by(current_user) && @messages > 0
               = link_to t("game.play"), play_game_path(@game), class: "btn btn-success btn-sm"
-            = link_to t("game.delete"), @game, class: "btn btn-danger btn-sm", method: :delete, data: { confirm: t("sure") }
+            %span{"data-turbo" => "true"}
+              = link_to t("game.delete"), @game, class: "btn btn-danger btn-sm", data: { turbo_method: :delete, turbo_confirm: t("sure") }
 
 - if @messages > 0
   .row

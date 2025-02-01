@@ -5,13 +5,14 @@
     %section
       .header.text-center
         %h3= t("user.users")
-      .body
-        %table{class: "table table-bordered table-sm mt-3"}
-          %thead
-            %tr
-              %th= t("user.handle")
-              %th= t("user.name.name")
-          %tbody#results
-            = render "results", users: @users
+      .body{"data-turbo" => "true"}
+        = turbo_frame_tag :results, "data-turbo-action" => "advance" do
+          %table{class: "table table-bordered table-sm mt-3"}
+            %thead
+              %tr
+                %th= t("user.handle")
+                %th= t("user.name.name")
+            %tbody
+              = render "results", users: @users
       .footer
         = link_to t("user.new"), new_user_path, class: "btn btn-primary btn-sm"

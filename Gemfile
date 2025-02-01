@@ -13,6 +13,7 @@ gem 'cancancan', '~> 3.0'
 gem 'bcrypt', '~> 3.1.7'
 gem 'sprockets-rails', '~> 3.4'
 gem "importmap-rails", "~> 2.1"
+gem "turbo-rails", "~> 2.0"
 gem "stimulus-rails", "~> 1.3"
 
 # Temporary to silence warnings about gem no longer being standard library

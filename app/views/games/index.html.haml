@@ -7,16 +7,17 @@
 
 = render "utils/search/form", index: games_path, inputs: inputs
 
-.row
+.row{"data-turbo" => "true"}
   %div{class: center(xl: 6, lg: 8, md: 10)}
-    %table{class: "table table-bordered table-sm mt-3"}
-      %thead
-        %tr
-          %th= t("game.players")
-          %th= t("game.state")
-          %th.text-center= t("game.upto")
-          %th.text-center= t("game.short.four")
-          %th= t("game.started_by")
-          %th= t("game.started_at")
-      %tbody#results
-        = render "results", games: @games
+    = turbo_frame_tag :results, "data-turbo-action" => "advance" do
+      %table{class: "table table-bordered table-sm mt-3"}
+        %thead
+          %tr
+            %th= t("game.players")
+            %th= t("game.state")
+            %th.text-center= t("game.upto")
+            %th.text-center= t("game.short.four")
+            %th= t("game.started_by")
+            %th= t("game.started_at")
+        %tbody
+          = render "results", games: @games

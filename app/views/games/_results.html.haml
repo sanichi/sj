@@ -4,9 +4,9 @@
       = game.players.map { |p| p.user.handle }.join(", ")
       - unless game.players.count == game.participants
         = "(#{game.players.count}/#{game.participants})"
-    %td= link_to game.state, game
+    %td= link_to game.state, game, "data-turbo" => "false"
     %td.text-center= game.upto
     %td.text-center= game.four ? "✔︎" : "✘"
-    %td= link_to game.user.handle, scores_user_path(game.user)
+    %td= link_to game.user.handle, scores_user_path(game.user), "data-turbo" => "false"
     %td= time_ago(game.created_at)
 = render "utils/pagination/links", pager: games, columns: 6
