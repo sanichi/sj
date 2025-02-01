@@ -45,13 +45,13 @@
   .footer
     - links = false
     - if game.can_be_joined_by?(current_user)
-      = link_to t("game.join"), join_game_path(game), class: "btn btn-success btn-sm"
+      = link_to t("game.join"), join_game_path(game), class: "btn btn-success btn-sm", "data-turbo" => "false"
       - links = true
     - if game.can_be_played_by(current_user)
-      = link_to t("game.play"), play_game_path(game), class: "btn btn-success btn-sm"
+      = link_to t("game.play"), play_game_path(game), class: "btn btn-success btn-sm", "data-turbo" => "false"
       - links = true
     - if can?(:show, game)
-      = link_to t("game.show"), game, class: "btn btn-primary btn-sm"
+      = link_to t("game.show"), game, class: "btn btn-primary btn-sm", "data-turbo" => "false"
       - links = true
     - if game.can_be_deleted_by?(current_user)
       %span{"data-turbo" => "true"}
