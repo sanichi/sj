@@ -1,27 +1,28 @@
 import { Elm } from "elm"
 import { prettyPrintJson } from "pretty-print-json"
 
-var skyjo = (function() {
+const skyjo = (function() {
 
-  var elm;
-  var more = <%= @game.finished? ? 'false' : 'true' %>;
-  var debug = <%= @game.debug ? 'true' : 'false' %>;
-  var data = {
+  let elm;
+  const data = {
     player_id: <%= @player.id %>,
     last_message_id: 0
   };
+  const more = <%= @game.finished? ? "false" : "true" %>;
+  const debug = <%= @game.debug ? "true" : "false" %>;
+  const responses = debug ? document.getElementById("responses") : undefined;
 
   function pull() {
-    $.ajax('/pull.json', {
+    $.ajax("/pull.json", {
       data: data,
-      dataType: 'json',
+      dataType: "json",
       success: function(json, status, xhr) {
-        if (json.abort) window.location.href = '<%= waiting_games_path %>';
+        if (json.abort) window.location.href = "<%= waiting_games_path %>";
         $.each(json.updates, function(i, update) {
           if (update.mid > data.last_message_id) data.last_message_id = update.mid;
           elm.ports.pullUpdate.send(update);
         });
-        if (debug && !empty(json)) $('#responses').append('<pre>' + prettyPrintJson.toHtml(json) + '</pre>');
+        if (debug && !empty(json)) responses.insertAdjacentHTML("afterbegin", "<pre>" + prettyPrintJson.toHtml(json) + "</pre>", );
       },
       error: function(xhr) {
         console.log("ajax pull error: " + xhr.status);
@@ -34,20 +35,20 @@ var skyjo = (function() {
 
   function push(updates) {
     updates.player_id = data.player_id;
-    $.ajax('/push.json', {
+    $.ajax("/push.json", {
       data: updates,
-      dataType: 'json',
+      dataType: "json",
       error: function(xhr) {
         console.log("ajax push error: " + xhr.status);
       },
       complete: function(xhr) {
-        if (updates.end_game) window.location.href = '<%= scores_user_path(@player.user) %>';
+        if (updates.end_game) window.location.href = "<%= scores_user_path(@player.user) %>";
       }
     });
   }
 
   function empty(obj) {
-    return $.type(obj.updates) == 'array' && obj.updates.length == 0
+    return $.type(obj.updates) == "array" && obj.updates.length == 0
   }
 
   function set_elm(app) {
@@ -64,14 +65,14 @@ var skyjo = (function() {
 
 $(function() {
   var app = Elm.Main.init({
-    node: $('#elm-main').get(0),
+    node: document.getElementById("elm-main"),
     flags: {
       player_id: <%= @player.id %>,
       players: [ <%= game_js_player_list(@game, @player.id) %> ],
       upto: <%= @game.upto %>,
       options: {
-        debug: <%= @game.debug ? 'true' : 'false' %>,
-        four: <%= @game.four ? 'true' : 'false' %>
+        debug: <%= @game.debug ? "true" : "false" %>,
+        four: <%= @game.four ? "true" : "false" %>
       }
     }
   });
