@@ -13,42 +13,44 @@ const skyjo = (function() {
   const responses = debug ? document.getElementById("responses") : undefined;
 
   function pull() {
-    $.ajax("/pull.json", {
-      data: data,
-      dataType: "json",
-      success: function(json, status, xhr) {
+    const params = new URLSearchParams(data);
+    fetch("/pull.json?" + params.toString())
+      .then(response => {
+        if (!response.ok) throw new Error('bad response: ' + response.statusText);
+        return response.json();
+      })
+      .then(json => {
         if (json.abort) window.location.href = "<%= waiting_games_path %>";
-        $.each(json.updates, function(i, update) {
+        json.updates.forEach((update) => {
           if (update.mid > data.last_message_id) data.last_message_id = update.mid;
           elm.ports.pullUpdate.send(update);
         });
-        if (debug && !empty(json)) responses.insertAdjacentHTML("afterbegin", "<pre>" + prettyPrintJson.toHtml(json) + "</pre>", );
-      },
-      error: function(xhr) {
-        console.log("ajax pull error: " + xhr.status);
-      },
-      complete: function(xhr) {
+        if (debug && !boring(json)) responses.insertAdjacentHTML("afterbegin", "<pre>" + prettyPrintJson.toHtml(json) + "</pre>");
         if (more) setTimeout(pull, 1000);
-      }
-    });
+      }).
+      catch(error => {
+        console.error("pull error:", error);
+      });
   }
 
   function push(updates) {
     updates.player_id = data.player_id;
-    $.ajax("/push.json", {
-      data: updates,
-      dataType: "json",
-      error: function(xhr) {
-        console.log("ajax push error: " + xhr.status);
-      },
-      complete: function(xhr) {
+    const params = new URLSearchParams(updates);
+    fetch("/push.json?" + params.toString())
+      .then(response => {
+        if (!response.ok) throw new Error('bad response: ' + response.statusText);
+        return response.json();
+      })
+      .then(json => {
         if (updates.end_game) window.location.href = "<%= scores_user_path(@player.user) %>";
-      }
-    });
+      })
+      .catch(error => {
+        console.error("push error:", error);
+      });
   }
 
-  function empty(obj) {
-    return $.type(obj.updates) == "array" && obj.updates.length == 0
+  function boring(obj) {
+    return obj.hasOwnProperty("updates") && Array.isArray(obj.updates) && obj.updates.length == 0
   }
 
   function set_elm(app) {
@@ -63,8 +65,8 @@ const skyjo = (function() {
 
 })();
 
-$(function() {
-  var app = Elm.Main.init({
+document.addEventListener("DOMContentLoaded", () => {
+  const app = Elm.Main.init({
     node: document.getElementById("elm-main"),
     flags: {
       player_id: <%= @player.id %>,
@@ -76,9 +78,9 @@ $(function() {
       }
     }
   });
+  skyjo.set_elm(app);
   app.ports.pushUpdates.subscribe(function(updates) {
     skyjo.push(updates);
   });
-  skyjo.set_elm(app);
   skyjo.pull();
 });
