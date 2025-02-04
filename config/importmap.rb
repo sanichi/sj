@@ -1,5 +1,4 @@
 pin "application"
-pin "jquery", to: "jquery3.min.js"
 pin "popper", to: "popper.js"
 pin "bootstrap", to: "bootstrap.min.js"
 pin "@hotwired/stimulus", to: "stimulus.min.js"

@@ -57,10 +57,10 @@ class MessagesController < ApplicationController
   PARAMS.each { |k| define_method(k) { params[k].to_i } }
 
   def end_game?
-    params[:end_game].is_a?(Array)
+    params[:end_game].match?(/\A\d+(,\d+)+\z/)
   end
 
   def end_game
-    params[:end_game].map(&:to_i)
+    params[:end_game].split(",").map(&:to_i)
   end
 end
