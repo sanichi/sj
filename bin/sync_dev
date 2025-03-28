@@ -1,2 +1,2 @@
 #!/bin/sh
-sd -d sj -s nhn $1
+sd -d sj -s mor $1
