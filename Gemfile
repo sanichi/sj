@@ -19,7 +19,7 @@ gem "stimulus-rails", "~> 1.3"
 gem 'ostruct', '~> 0.6.1'
 
 group :development, :test do
-  gem 'rspec-rails', '< 8'
+  gem 'rspec-rails', '< 9'
   gem 'capybara', '< 4'
   gem 'byebug', platforms: :mri
   gem 'launchy', '< 4'
