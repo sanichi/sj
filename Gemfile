@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '8.0.3'
+gem 'rails', '8.1.0'
 gem 'haml-rails', '< 4.0'
 gem 'sassc-rails', '~> 2.1'
 gem 'bootstrap', '~> 5.0'

@@ -5,7 +5,7 @@
     %section
       .header
         .row.mb-2.mt-1
-          %div{class: Layout.new(xs: [4], md: [3], xl: [2]).to_a.first}
+          %div{class: Sni::Layout.call(xs: [4], md: [3], xl: [2]).first}
             = select_tag :user_id, user_menu(@user.id), class: "form-select", "data-controller" => "choose-user", "data-action" => "choose-user#go"
         .row
           .text-center
