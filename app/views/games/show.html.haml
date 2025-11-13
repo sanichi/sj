@@ -1,7 +1,7 @@
 - set_meta_tags title: t("game.game_id", id: @game.id)
 
 .row
-  %div{class: center(xl: 4, lg: 6, md: 8, sm: 10)}
+  %div{class: Sni::Center.call(xl: 4, lg: 6, md: 8, sm: 10)}
     %table{class: "table table-bordered table-sm mt-3"}
       %thead
         %tr
@@ -52,7 +52,7 @@
 
 - if @messages > 0
   .row
-    %div{class: center(xl: 8, md: 10)}
+    %div{class: Sni::Center.call(xl: 8, md: 10)}
       %table{class: "table table-bordered table-sm mt-3"}
         %thead
           %tr

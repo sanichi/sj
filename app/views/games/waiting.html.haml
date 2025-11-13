@@ -1,6 +1,6 @@
 - set_meta_tags title: t("game.games")
 
 .row
-  %div{class: center(xl: 8, md: 10), "data-controller" => "refresh"}
+  %div{class: Sni::Center.call(xl: 8, md: 10), "data-controller" => "refresh"}
     = turbo_frame_tag :refresh do
       = render "waitings", games: @games;

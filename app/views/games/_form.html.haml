@@ -8,4 +8,4 @@
     inputs.push [:debug, t("game.debug"), :check]
   end
 
-= render "utils/crud/form", object: game, index: waiting_games_path, inputs: inputs, title: title, center: center(xl: 4, lg: 6, md: 8, sm: 10), save: t("game.save")
+= render "utils/crud/form", object: game, index: waiting_games_path, inputs: inputs, title: title, center: Sni::Center.call(xl: 4, lg: 6, md: 8, sm: 10), save: t("game.save")
