@@ -388,4 +388,4 @@ DEPENDENCIES
   turbo-rails (~> 2.0)
 
 BUNDLED WITH
-  4.0.12
+  4.0.17
