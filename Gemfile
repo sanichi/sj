@@ -11,9 +11,9 @@ gem 'jbuilder', '~> 2.7'
 gem 'cancancan', '~> 3.0'
 gem 'bcrypt', '~> 3.1.7'
 gem 'sprockets-rails', '~> 3.4'
-gem "importmap-rails", "~> 2.1"
-gem "turbo-rails", "~> 2.0"
-gem "stimulus-rails", "~> 1.3"
+gem 'importmap-rails', '~> 2.1'
+gem 'turbo-rails', '~> 2.0'
+gem 'stimulus-rails', '~> 1.3'
 gem 'sni', git: 'https://github.com/sanichi/sni'
 
 group :development, :test do
@@ -23,7 +23,8 @@ group :development, :test do
   gem 'launchy', '< 4'
   gem 'factory_bot_rails', '< 7'
   gem 'faker', '< 4'
-  gem "selenium-webdriver", "~> 4.28"
+  gem 'selenium-webdriver', '~> 4.28'
+  gem 'active_record_doctor'
 end
 
 group :test do
