@@ -149,5 +149,19 @@ describe User, js: true do
       expect(User.where(admin: false).count).to eq 0
       expect(User.where(admin: true).count).to eq 1
     end
+
+    it "can't delete a user who has games" do
+      create(:game, user: player)
+
+      click_link player.handle_extra
+      click_link t("edit")
+      accept_confirm do
+        click_link t("delete")
+      end
+
+      expect(page).to have_title player.handle
+      expect(page).to have_css ".alert"
+      expect(User.where(admin: false).count).to eq 1
+    end
   end
 end

@@ -9,10 +9,11 @@ class Game < ApplicationRecord
   STARTED = "started"
   FINISHED = "finished"
 
-  has_many :players, dependent: :destroy
-  has_many :messages, dependent: :destroy
+  has_many :players, dependent: :delete_all
+  has_many :messages, dependent: :delete_all
   belongs_to :user
 
+  validates :state, length: { maximum: 10 }
   validates :participants, numericality: { integer_only: true}, inclusion: { in: PARTICIPANTS }
   validates :upto, numericality: { integer_only: true, greater_than_or_equal_to: UPTO.first, less_than_or_equal_to: UPTO.last }
 
@@ -183,7 +184,7 @@ class Game < ApplicationRecord
   end
 
   def forget(from)
-    messages.where("id >= ?", from).each { |m| m.destroy }
+    messages.where("id >= ?", from).delete_all
     update_column(:state, STARTED)
   end
 

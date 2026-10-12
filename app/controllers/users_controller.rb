@@ -24,8 +24,11 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user.destroy
-    redirect_to users_path
+    if @user.destroy
+      redirect_to users_path
+    else
+      redirect_to @user, alert: @user.errors.full_messages.join(", ")
+    end
   end
 
   def scores

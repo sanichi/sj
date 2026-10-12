@@ -8,8 +8,8 @@ class User < ApplicationRecord
   MIN_HANDLE = 2
   MIN_PASSWORD = 6
 
-  has_many :players
-  has_many :games
+  has_many :players, dependent: :restrict_with_error
+  has_many :games, dependent: :restrict_with_error
 
   before_validation :normalize_attributes
 
